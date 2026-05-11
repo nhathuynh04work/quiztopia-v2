@@ -1,6 +1,9 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { CreateUserDTO } from "src/users/schemas/create-user.schema";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { compare } from "bcrypt";
 import { UsersService } from "src/users/users.service";
+import { SignupDTO } from "./schemas/signup.schema";
+
+const FAKE_HASH = "quiztopia-fake-hash";
 
 @Injectable()
 export class AuthService {
@@ -8,9 +11,24 @@ export class AuthService {
 
   constructor(private readonly usersService: UsersService) {}
 
-  async signup(payload: CreateUserDTO) {
-    const user = await this.usersService.create(payload);
+  async authenticateWithPassword(email: string, password: string) {
+    const existingUser = await this.usersService.findByEmailWithPassword(email);
+    const hashedPassword = existingUser?.password ?? FAKE_HASH;
 
-    return user;
+    const isPasswordValid = await compare(password, hashedPassword);
+
+    if (!existingUser || !isPasswordValid) {
+      throw new UnauthorizedException("Invalid credentials");
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...safeUser } = existingUser;
+    return safeUser;
+  }
+
+  async signup(payload: SignupDTO) {
+    const newUser = await this.usersService.create(payload);
+
+    return newUser;
   }
 }

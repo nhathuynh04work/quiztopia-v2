@@ -4,9 +4,9 @@ import {
   UnprocessableEntityException,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { CreateUserDTO } from "./schemas/create-user.schema";
 import { hash } from "bcrypt";
 import { Prisma } from "../generated/prisma/client";
+import { SignupDTO } from "src/auth/schemas/signup.schema";
 
 @Injectable()
 export class UsersService {
@@ -14,7 +14,22 @@ export class UsersService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(payload: CreateUserDTO) {
+  findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+      omit: {
+        password: true,
+      },
+    });
+  }
+
+  findByEmailWithPassword(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
+  async create(payload: SignupDTO) {
     const hashedPassword = await hash(payload.password, 10);
     try {
       const user = await this.prisma.user.create({
