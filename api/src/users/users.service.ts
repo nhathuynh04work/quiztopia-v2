@@ -22,9 +22,9 @@ export class UsersService {
     private readonly authConfig: ConfigType<typeof authConfiguration>,
   ) {}
 
-  findByEmail(email: string) {
+  findById(id: string) {
     return this.prisma.user.findUnique({
-      where: { email },
+      where: { id },
       omit: {
         password: true,
       },

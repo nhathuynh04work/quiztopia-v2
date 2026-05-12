@@ -3,7 +3,6 @@ import { TOKEN_TYPES } from "src/config/constants/auth.constant";
 
 export type JwtAccessTokenPayload = {
   sub: string;
-  email: string;
   type: typeof TOKEN_TYPES.ACCESS;
 };
 

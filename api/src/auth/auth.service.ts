@@ -64,7 +64,6 @@ export class AuthService {
 
     const accessToken = this.generateAccessToken({
       userId: user.id,
-      email: user.email,
     });
 
     const refreshToken = this.generateRefreshToken({
@@ -78,10 +77,9 @@ export class AuthService {
     };
   }
 
-  generateAccessToken(payload: { userId: string; email: string }) {
+  generateAccessToken(payload: { userId: string }) {
     const accessTokenPayload: JwtAccessTokenPayload = {
       sub: payload.userId,
-      email: payload.email,
       type: TOKEN_TYPES.ACCESS,
     };
 
