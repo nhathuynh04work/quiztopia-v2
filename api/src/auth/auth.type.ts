@@ -1,8 +1,14 @@
 import { Request } from "express";
 
-export type JwtPayload = {
+export type JwtAccessTokenPayload = {
   sub: string;
   email: string;
+  type: "access";
+};
+
+export type JwtRefreshTokenPayload = {
+  sub: string;
+  type: "refresh";
 };
 
 export type AuthenticatedUser = {

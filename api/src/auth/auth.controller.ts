@@ -19,11 +19,11 @@ export class AuthController {
 
   @Post("login")
   async login(@Body() payload: LoginDTO) {
-    const user = await this.authService.authenticateWithPassword(
+    const tokens = await this.authService.loginWithPassword(
       payload.email,
       payload.password,
     );
 
-    return user;
+    return tokens;
   }
 }
