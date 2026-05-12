@@ -8,9 +8,10 @@ import { compare, hashSync } from "bcrypt";
 import { UsersService } from "src/users/users.service";
 import { SignupDTO } from "./schemas/signup.schema";
 import {
-  AuthenticatedUser,
+  AuthUser,
   JwtAccessTokenPayload,
   JwtRefreshTokenPayload,
+  RefreshAuthUser,
 } from "./auth.type";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -33,6 +34,12 @@ export class AuthService {
     private readonly authConfig: ConfigType<typeof authConfiguration>,
   ) {}
 
+  async signup(payload: SignupDTO) {
+    const newUser = await this.usersService.create(payload);
+
+    return newUser;
+  }
+
   async authenticateWithPassword(email: string, password: string) {
     const existingUser = await this.usersService.findByEmailWithPassword(email);
     const hashedPassword = existingUser?.password ?? FAKE_HASH;
@@ -48,13 +55,7 @@ export class AuthService {
     return safeUser;
   }
 
-  async signup(payload: SignupDTO) {
-    const newUser = await this.usersService.create(payload);
-
-    return newUser;
-  }
-
-  async login(user: AuthenticatedUser) {
+  async login(user: AuthUser) {
     const session = await this.prisma.session.create({
       data: {
         userId: user.id,
@@ -77,7 +78,55 @@ export class AuthService {
     };
   }
 
-  generateAccessToken(payload: { userId: string }) {
+  async loginWithPassword(email: string, password: string) {
+    const user = await this.authenticateWithPassword(email, password);
+    const tokens = await this.login(user);
+
+    return tokens;
+  }
+
+  async refresh(user: RefreshAuthUser) {
+    const newSession = await this.prisma.$transaction(async (tx) => {
+      const updated = await tx.session.updateMany({
+        where: {
+          id: user.jti,
+          userId: user.id,
+          revoked: false,
+          expiresAt: { gt: new Date() },
+        },
+        data: { revoked: true },
+      });
+
+      if (updated.count === 0) {
+        throw new UnauthorizedException();
+      }
+
+      return tx.session.create({
+        data: {
+          userId: user.id,
+          expiresAt: new Date(
+            Date.now() + this.authConfig.refreshTokenExpiresMs,
+          ),
+        },
+      });
+    });
+
+    const accessToken = this.generateAccessToken({
+      userId: user.id,
+    });
+
+    const refreshToken = this.generateRefreshToken({
+      userId: user.id,
+      sessionId: newSession.id,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  private generateAccessToken(payload: { userId: string }) {
     const accessTokenPayload: JwtAccessTokenPayload = {
       sub: payload.userId,
       type: TOKEN_TYPES.ACCESS,
@@ -89,7 +138,7 @@ export class AuthService {
     });
   }
 
-  generateRefreshToken(payload: { userId: string; sessionId: string }) {
+  private generateRefreshToken(payload: { userId: string; sessionId: string }) {
     const refreshTokenPayload: JwtRefreshTokenPayload = {
       sub: payload.userId,
       jti: payload.sessionId,
@@ -100,12 +149,5 @@ export class AuthService {
       secret: this.authConfig.jwtRefreshSecret,
       expiresIn: this.authConfig.refreshTokenExpiresMs / 1000,
     });
-  }
-
-  async loginWithPassword(email: string, password: string) {
-    const user = await this.authenticateWithPassword(email, password);
-    const tokens = await this.login(user);
-
-    return tokens;
   }
 }

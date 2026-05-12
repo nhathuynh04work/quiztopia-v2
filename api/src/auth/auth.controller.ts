@@ -1,11 +1,21 @@
-import authConfiguration from "../config/auth.config";
-import { Body, Controller, Inject, Post, Res } from "@nestjs/common";
+import authConfiguration from "src/config/auth.config";
+import {
+  Body,
+  Controller,
+  Inject,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignupDTO } from "./schemas/signup.schema";
 import { LoginDTO } from "./schemas/login.schema";
 import { type Response } from "express";
 import { type ConfigType } from "@nestjs/config";
 import { AUTH_COOKIE_NAMES } from "src/config/constants/auth.constant";
+import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
+import { AuthTokens, type RefreshAuthenticatedRequest } from "./auth.type";
 
 @Controller("auth")
 export class AuthController {
@@ -36,6 +46,25 @@ export class AuthController {
       payload.password,
     );
 
+    this.setAuthCookies(res, tokens);
+
+    return { message: "Log in successfully" };
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Post("refresh")
+  async refresh(
+    @Req() req: RefreshAuthenticatedRequest,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const tokens = await this.authService.refresh(req.user);
+
+    this.setAuthCookies(res, tokens);
+
+    return { message: "Refresh successfully" };
+  }
+
+  private setAuthCookies(res: Response, tokens: AuthTokens) {
     res.cookie(AUTH_COOKIE_NAMES.ACCESS_TOKEN, tokens.accessToken, {
       ...this.authConfig.cookie,
       maxAge: this.authConfig.accessTokenExpiresMs,
@@ -45,7 +74,5 @@ export class AuthController {
       ...this.authConfig.cookie,
       maxAge: this.authConfig.refreshTokenExpiresMs,
     });
-
-    return { message: "Log in successfully" };
   }
 }

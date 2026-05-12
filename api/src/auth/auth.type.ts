@@ -12,14 +12,23 @@ export type JwtRefreshTokenPayload = {
   type: typeof TOKEN_TYPES.REFRESH;
 };
 
-export type AuthenticatedUser = {
+export type AuthTokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type AuthUser = {
   id: string;
   email: string;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
+export type RefreshAuthUser = AuthUser & { jti: string };
+
 export interface AuthenticatedRequest extends Request {
-  user: AuthenticatedUser;
+  user: AuthUser;
+}
+
+export interface RefreshAuthenticatedRequest extends Request {
+  user: RefreshAuthUser;
 }
