@@ -1,4 +1,9 @@
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { compare, hashSync } from "bcrypt";
 import { UsersService } from "src/users/users.service";
 import { SignupDTO } from "./schemas/signup.schema";
@@ -9,6 +14,9 @@ import {
 } from "./auth.type";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
+import authConfiguration from "../config/auth.config";
+import { type ConfigType } from "@nestjs/config";
+import { TOKEN_TYPES } from "src/config/constants/auth.constant";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 
@@ -20,6 +28,9 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+
+    @Inject(authConfiguration.KEY)
+    private readonly authConfig: ConfigType<typeof authConfiguration>,
   ) {}
 
   async authenticateWithPassword(email: string, password: string) {
@@ -47,7 +58,7 @@ export class AuthService {
     const session = await this.prisma.session.create({
       data: {
         userId: user.id,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+        expiresAt: new Date(Date.now() + this.authConfig.refreshTokenExpiresMs),
       },
     });
 
@@ -71,20 +82,26 @@ export class AuthService {
     const accessTokenPayload: JwtAccessTokenPayload = {
       sub: payload.userId,
       email: payload.email,
-      type: "access",
+      type: TOKEN_TYPES.ACCESS,
     };
 
-    return this.jwtService.sign(accessTokenPayload, { expiresIn: "15m" });
+    return this.jwtService.sign(accessTokenPayload, {
+      secret: this.authConfig.jwtAccessSecret,
+      expiresIn: this.authConfig.accessTokenExpiresMs / 1000,
+    });
   }
 
   generateRefreshToken(payload: { userId: string; sessionId: string }) {
     const refreshTokenPayload: JwtRefreshTokenPayload = {
       sub: payload.userId,
       jti: payload.sessionId,
-      type: "refresh",
+      type: TOKEN_TYPES.REFRESH,
     };
 
-    return this.jwtService.sign(refreshTokenPayload, { expiresIn: "30d" });
+    return this.jwtService.sign(refreshTokenPayload, {
+      secret: this.authConfig.jwtRefreshSecret,
+      expiresIn: this.authConfig.refreshTokenExpiresMs / 1000,
+    });
   }
 
   async loginWithPassword(email: string, password: string) {

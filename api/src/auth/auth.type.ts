@@ -1,15 +1,16 @@
 import { Request } from "express";
+import { TOKEN_TYPES } from "src/config/constants/auth.constant";
 
 export type JwtAccessTokenPayload = {
   sub: string;
   email: string;
-  type: "access";
+  type: typeof TOKEN_TYPES.ACCESS;
 };
 
 export type JwtRefreshTokenPayload = {
   sub: string;
   jti: string;
-  type: "refresh";
+  type: typeof TOKEN_TYPES.REFRESH;
 };
 
 export type AuthenticatedUser = {

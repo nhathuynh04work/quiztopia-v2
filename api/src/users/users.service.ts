@@ -1,4 +1,6 @@
+import authConfiguration from "src/config/auth.config";
 import {
+  Inject,
   Injectable,
   Logger,
   UnprocessableEntityException,
@@ -7,12 +9,18 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { hash } from "bcrypt";
 import { Prisma } from "../generated/prisma/client";
 import { SignupDTO } from "src/auth/schemas/signup.schema";
+import { type ConfigType } from "@nestjs/config";
 
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+
+    @Inject(authConfiguration.KEY)
+    private readonly authConfig: ConfigType<typeof authConfiguration>,
+  ) {}
 
   findByEmail(email: string) {
     return this.prisma.user.findUnique({
@@ -30,7 +38,10 @@ export class UsersService {
   }
 
   async create(payload: SignupDTO) {
-    const hashedPassword = await hash(payload.password, 10);
+    const hashedPassword = await hash(
+      payload.password,
+      this.authConfig.bcryptRounds,
+    );
     try {
       const user = await this.prisma.user.create({
         data: {
