@@ -6,12 +6,14 @@ import { LoginDTO } from "./schemas/login.schema";
 import { type Response } from "express";
 import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
 import { type RefreshAuthenticatedRequest } from "./auth.type";
+import { SessionsService } from "src/sessions/sessions.service";
 
 @Controller("auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly cookiesService: CookiesService,
+    private readonly sessionsService: SessionsService,
   ) {}
 
   @Post("signup")
@@ -20,7 +22,7 @@ export class AuthController {
 
     return {
       user,
-      message: "User signed up successfully",
+      message: "Signed up successfully",
     };
   }
 
@@ -36,7 +38,7 @@ export class AuthController {
 
     this.cookiesService.setAuthCookies(res, tokens);
 
-    return { message: "Log in successfully" };
+    return { message: "Logged in successfully" };
   }
 
   @UseGuards(JwtRefreshGuard)
@@ -49,6 +51,30 @@ export class AuthController {
 
     this.cookiesService.setAuthCookies(res, tokens);
 
-    return { message: "Refresh successfully" };
+    return { message: "Refreshed successfully" };
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Post("logout")
+  async logout(
+    @Req() req: RefreshAuthenticatedRequest,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    await this.sessionsService.revokeSession(req.user.jti);
+    this.cookiesService.clearAuthCookies(res);
+
+    return { message: "Logged out successfully" };
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Post("logout/all")
+  async logoutAll(
+    @Req() req: RefreshAuthenticatedRequest,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    await this.sessionsService.revokeAllSessionsOfUser(req.user.id);
+    this.cookiesService.clearAuthCookies(res);
+
+    return { message: "Logged out of all device" };
   }
 }

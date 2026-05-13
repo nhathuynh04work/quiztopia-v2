@@ -23,4 +23,9 @@ export class CookiesService {
       maxAge: this.authConfig.refreshTokenExpiresMs,
     });
   }
+
+  clearAuthCookies(res: Response) {
+    res.clearCookie(AUTH_COOKIE_NAMES.ACCESS_TOKEN, this.authConfig.cookie);
+    res.clearCookie(AUTH_COOKIE_NAMES.REFRESH_TOKEN, this.authConfig.cookie);
+  }
 }

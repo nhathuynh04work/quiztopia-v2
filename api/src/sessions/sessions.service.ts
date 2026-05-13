@@ -48,6 +48,30 @@ export class SessionsService {
     });
   }
 
+  async revokeSession(sessionId: string) {
+    return this.prisma.session.updateMany({
+      where: {
+        id: sessionId,
+        revoked: false,
+      },
+      data: {
+        revoked: true,
+      },
+    });
+  }
+
+  async revokeAllSessionsOfUser(userId: string) {
+    return this.prisma.session.updateMany({
+      where: {
+        userId,
+        revoked: false,
+      },
+      data: {
+        revoked: true,
+      },
+    });
+  }
+
   cleanupExpiredSessions() {
     return this.prisma.session.deleteMany({
       where: { expiresAt: { lt: new Date() } },
