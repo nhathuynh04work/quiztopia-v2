@@ -7,6 +7,7 @@ import { AuthModule } from "./auth/auth.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SessionsModule } from "./sessions/sessions.module";
 import { TokensModule } from "./tokens/tokens.module";
+import { CookiesModule } from "./cookies/cookies.module";
 import configuration from "./config/configuration";
 
 @Module({
@@ -20,6 +21,7 @@ import configuration from "./config/configuration";
     AuthModule,
     SessionsModule,
     TokensModule,
+    CookiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
