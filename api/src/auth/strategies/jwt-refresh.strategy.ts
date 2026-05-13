@@ -2,7 +2,7 @@ import authConfiguration from "src/config/auth.config";
 import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { JwtRefreshTokenPayload, RefreshAuthUser } from "../auth.type";
+import { RefreshAuthUser } from "../auth.type";
 import {
   AUTH_STRATEGY_NAMES,
   TOKEN_TYPES,
@@ -10,6 +10,7 @@ import {
 import { UsersService } from "src/users/users.service";
 import { type ConfigType } from "@nestjs/config";
 import { refreshTokenExtractor } from "../extractors/jwt-refresh.extractor";
+import { JwtRefreshTokenPayload } from "src/tokens/tokens.type";
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -18,6 +19,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
 ) {
   constructor(
     private readonly usersService: UsersService,
+
     @Inject(authConfiguration.KEY)
     private readonly authConfig: ConfigType<typeof authConfiguration>,
   ) {

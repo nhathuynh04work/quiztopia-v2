@@ -1,24 +1,10 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { compare, hashSync } from "bcrypt";
 import { UsersService } from "src/users/users.service";
 import { SignupDTO } from "./schemas/signup.schema";
-import {
-  AuthUser,
-  JwtAccessTokenPayload,
-  JwtRefreshTokenPayload,
-  RefreshAuthUser,
-} from "./auth.type";
-import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "src/prisma/prisma.service";
-import authConfiguration from "../config/auth.config";
-import { type ConfigType } from "@nestjs/config";
-import { TOKEN_TYPES } from "src/config/constants/auth.constant";
+import { AuthUser, RefreshAuthUser } from "./auth.type";
 import { SessionsService } from "src/sessions/sessions.service";
+import { TokensService } from "src/tokens/tokens.service";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 
@@ -27,13 +13,9 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
     private readonly sessionsService: SessionsService,
-
-    @Inject(authConfiguration.KEY)
-    private readonly authConfig: ConfigType<typeof authConfiguration>,
+    private readonly tokensService: TokensService,
   ) {}
 
   async signup(payload: SignupDTO) {
@@ -58,21 +40,9 @@ export class AuthService {
   }
 
   async login(user: AuthUser) {
-    const session = await this.sessionsService.createSession(user.id);
+    const newSession = await this.sessionsService.createSession(user.id);
 
-    const accessToken = this.generateAccessToken({
-      userId: user.id,
-    });
-
-    const refreshToken = this.generateRefreshToken({
-      userId: user.id,
-      sessionId: session.id,
-    });
-
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return this.tokensService.generateAuthTokens(user.id, newSession.id);
   }
 
   async loginWithPassword(email: string, password: string) {
@@ -88,43 +58,6 @@ export class AuthService {
       user.id,
     );
 
-    const accessToken = this.generateAccessToken({
-      userId: user.id,
-    });
-
-    const refreshToken = this.generateRefreshToken({
-      userId: user.id,
-      sessionId: newSession.id,
-    });
-
-    return {
-      accessToken,
-      refreshToken,
-    };
-  }
-
-  private generateAccessToken(payload: { userId: string }) {
-    const accessTokenPayload: JwtAccessTokenPayload = {
-      sub: payload.userId,
-      type: TOKEN_TYPES.ACCESS,
-    };
-
-    return this.jwtService.sign(accessTokenPayload, {
-      secret: this.authConfig.jwtAccessSecret,
-      expiresIn: this.authConfig.accessTokenExpiresMs / 1000,
-    });
-  }
-
-  private generateRefreshToken(payload: { userId: string; sessionId: string }) {
-    const refreshTokenPayload: JwtRefreshTokenPayload = {
-      sub: payload.userId,
-      jti: payload.sessionId,
-      type: TOKEN_TYPES.REFRESH,
-    };
-
-    return this.jwtService.sign(refreshTokenPayload, {
-      secret: this.authConfig.jwtRefreshSecret,
-      expiresIn: this.authConfig.refreshTokenExpiresMs / 1000,
-    });
+    return this.tokensService.generateAuthTokens(user.id, newSession.id);
   }
 }
