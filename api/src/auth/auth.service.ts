@@ -18,6 +18,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import authConfiguration from "../config/auth.config";
 import { type ConfigType } from "@nestjs/config";
 import { TOKEN_TYPES } from "src/config/constants/auth.constant";
+import { SessionsService } from "src/sessions/sessions.service";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 
@@ -29,6 +30,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly sessionsService: SessionsService,
 
     @Inject(authConfiguration.KEY)
     private readonly authConfig: ConfigType<typeof authConfiguration>,
@@ -56,12 +58,7 @@ export class AuthService {
   }
 
   async login(user: AuthUser) {
-    const session = await this.prisma.session.create({
-      data: {
-        userId: user.id,
-        expiresAt: new Date(Date.now() + this.authConfig.refreshTokenExpiresMs),
-      },
-    });
+    const session = await this.sessionsService.createSession(user.id);
 
     const accessToken = this.generateAccessToken({
       userId: user.id,
@@ -86,30 +83,10 @@ export class AuthService {
   }
 
   async refresh(user: RefreshAuthUser) {
-    const newSession = await this.prisma.$transaction(async (tx) => {
-      const updated = await tx.session.updateMany({
-        where: {
-          id: user.jti,
-          userId: user.id,
-          revoked: false,
-          expiresAt: { gt: new Date() },
-        },
-        data: { revoked: true },
-      });
-
-      if (updated.count === 0) {
-        throw new UnauthorizedException();
-      }
-
-      return tx.session.create({
-        data: {
-          userId: user.id,
-          expiresAt: new Date(
-            Date.now() + this.authConfig.refreshTokenExpiresMs,
-          ),
-        },
-      });
-    });
+    const newSession = await this.sessionsService.rotateSession(
+      user.jti,
+      user.id,
+    );
 
     const accessToken = this.generateAccessToken({
       userId: user.id,
