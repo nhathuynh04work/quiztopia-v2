@@ -5,7 +5,7 @@ import {
   Logger,
   UnprocessableEntityException,
 } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "src/common/prisma/prisma.service";
 import { hash } from "bcrypt";
 import { Prisma } from "../generated/prisma/client";
 import { SignupDTO } from "src/auth/schemas/signup.schema";

@@ -1,6 +1,6 @@
 import authConfiguration from "src/config/auth.config";
 import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "src/common/prisma/prisma.service";
 import { type ConfigType } from "@nestjs/config";
 
 @Injectable()
@@ -46,5 +46,15 @@ export class SessionsService {
         },
       });
     });
+  }
+
+  cleanupExpiredSessions() {
+    return this.prisma.session.deleteMany({
+      where: { expiresAt: { lt: new Date() } },
+    });
+  }
+
+  cleanupRevokedSessions() {
+    return this.prisma.session.deleteMany({ where: { revoked: true } });
   }
 }
