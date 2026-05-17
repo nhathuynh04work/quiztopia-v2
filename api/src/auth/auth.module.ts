@@ -7,16 +7,9 @@ import { JwtAccessStrategy } from "./strategies/jwt-access.strategy";
 import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
 import { SessionsModule } from "src/sessions/sessions.module";
 import { TokensModule } from "src/tokens/tokens.module";
-import { CookiesModule } from "src/cookies/cookies.module";
 
 @Module({
-  imports: [
-    UsersModule,
-    PassportModule,
-    SessionsModule,
-    TokensModule,
-    CookiesModule,
-  ],
+  imports: [UsersModule, PassportModule, SessionsModule, TokensModule],
   controllers: [AuthController],
   providers: [AuthService, JwtAccessStrategy, JwtRefreshStrategy],
 })

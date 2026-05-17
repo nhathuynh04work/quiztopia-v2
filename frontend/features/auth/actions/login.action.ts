@@ -1,0 +1,44 @@
+"use server";
+
+import { apiFetch } from "@/lib/api/api-fetch";
+import { ApiClientError } from "@/lib/api/api-client-error";
+import { formDataEntryToString, formDataToObject } from "@/lib/utils/form-data";
+import { LoginFormState } from "@/features/auth/types/login-form-state";
+import { redirect } from "next/navigation";
+import { AuthTokens } from "@/features/auth/types/auth-tokens";
+import { setAuthCookies } from "@/lib/auth/cookies";
+import { cookies } from "next/headers";
+
+export async function loginAction(
+	_prevState: LoginFormState,
+	formData: FormData,
+): Promise<LoginFormState> {
+	try {
+		const tokens = await apiFetch<AuthTokens>("/auth/login", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(formDataToObject(formData)),
+		});
+
+		const cookieStore = await cookies();
+		setAuthCookies(cookieStore, tokens);
+
+		redirect("/");
+	} catch (error) {
+		if (error instanceof ApiClientError) {
+			return {
+				defaultValues: {
+					email: formDataEntryToString(formData.get("email")),
+				},
+				errors: {
+					form: [error.response.error.message],
+					fieldErrors: error.response.error.fieldErrors,
+				},
+			};
+		}
+
+		throw error;
+	}
+}
