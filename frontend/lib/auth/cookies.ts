@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { AuthTokens } from "../types/auth/auth-tokens";
+import { AuthTokens } from "../../features/auth/types/auth-tokens";
 import { authConstants } from "@/constants/auth.constant";
 import { authConfig } from "@/config/auth.config";
 

@@ -1,7 +1,7 @@
 "use server";
 
 import { apiConfig } from "@/config/api.config";
-import { ApiClientError } from "./api-client.error";
+import { ApiClientError } from "./api-client-error";
 
 export async function apiFetch<T>(
 	endpoint: string,

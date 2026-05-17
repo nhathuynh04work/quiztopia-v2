@@ -1,9 +1,9 @@
 "use server";
 
 import { apiFetch } from "@/lib/api/api-fetch";
-import { ApiClientError } from "@/lib/api/api-client.error";
+import { ApiClientError } from "@/lib/api/api-client-error";
 import { formDataToObject } from "@/lib/utils/form-data";
-import { SignupFormState } from "@/lib/types/auth/signup-form-state";
+import { SignupFormState } from "@/features/auth/types/signup-form-state";
 
 export async function signupAction(
 	_prevState: SignupFormState,
