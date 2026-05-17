@@ -1,15 +1,11 @@
 import authConfiguration from "src/config/auth.config";
-import {
-  Inject,
-  Injectable,
-  Logger,
-  UnprocessableEntityException,
-} from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { PrismaService } from "src/common/prisma/prisma.service";
 import { hash } from "bcrypt";
 import { Prisma } from "../generated/prisma/client";
 import { SignupDTO } from "src/auth/schemas/signup.schema";
 import { type ConfigType } from "@nestjs/config";
+import { EmailAlreadyExistsError } from "src/common/errors/user/email-already-exists.error";
 
 @Injectable()
 export class UsersService {
@@ -64,7 +60,7 @@ export class UsersService {
 
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2002") {
-          throw new UnprocessableEntityException("Email already in use");
+          throw new EmailAlreadyExistsError();
         }
       }
 
