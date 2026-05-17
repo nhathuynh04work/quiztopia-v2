@@ -1,9 +1,15 @@
-import { CookiesService } from "./../cookies/cookies.service";
-import { Body, Controller, Post, Req, Res, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignupDTO } from "./schemas/signup.schema";
 import { LoginDTO } from "./schemas/login.schema";
-import { type Response } from "express";
 import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
 import { type RefreshAuthenticatedRequest } from "./auth.type";
 import { SessionsService } from "src/sessions/sessions.service";
@@ -12,7 +18,6 @@ import { SessionsService } from "src/sessions/sessions.service";
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly cookiesService: CookiesService,
     private readonly sessionsService: SessionsService,
   ) {}
 
@@ -20,61 +25,38 @@ export class AuthController {
   async signup(@Body() payload: SignupDTO) {
     const user = await this.authService.signup(payload);
 
-    return {
-      user,
-      message: "Signed up successfully",
-    };
+    return user;
   }
 
   @Post("login")
-  async login(
-    @Body() payload: LoginDTO,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async login(@Body() payload: LoginDTO) {
     const tokens = await this.authService.loginWithPassword(
       payload.email,
       payload.password,
     );
 
-    this.cookiesService.setAuthCookies(res, tokens);
-
-    return { message: "Logged in successfully" };
+    return tokens;
   }
 
   @UseGuards(JwtRefreshGuard)
   @Post("refresh")
-  async refresh(
-    @Req() req: RefreshAuthenticatedRequest,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async refresh(@Req() req: RefreshAuthenticatedRequest) {
     const tokens = await this.authService.refresh(req.user);
 
-    this.cookiesService.setAuthCookies(res, tokens);
-
-    return { message: "Refreshed successfully" };
+    return tokens;
   }
 
   @UseGuards(JwtRefreshGuard)
   @Post("logout")
-  async logout(
-    @Req() req: RefreshAuthenticatedRequest,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logout(@Req() req: RefreshAuthenticatedRequest) {
     await this.sessionsService.revokeSession(req.user.jti);
-    this.cookiesService.clearAuthCookies(res);
-
-    return { message: "Logged out successfully" };
   }
 
   @UseGuards(JwtRefreshGuard)
   @Post("logout/all")
-  async logoutAll(
-    @Req() req: RefreshAuthenticatedRequest,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logoutAll(@Req() req: RefreshAuthenticatedRequest) {
     await this.sessionsService.revokeAllSessionsOfUser(req.user.id);
-    this.cookiesService.clearAuthCookies(res);
-
-    return { message: "Logged out of all device" };
   }
 }
