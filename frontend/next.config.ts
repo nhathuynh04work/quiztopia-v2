@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { parseEnv } from "./app/config/env";
+import { parseEnv } from "./config/env";
 
 parseEnv();
 

@@ -3,14 +3,18 @@
 import { apiFetch } from "@/lib/api/api-fetch";
 import { ApiClientError } from "@/lib/api/api-client.error";
 import { formDataToObject } from "@/lib/utils/form-data";
-import { SignupFormState } from "@/lib/types/auth/signup-form-state";
+import { LoginFormState } from "@/lib/types/auth/login-form-state";
+import { redirect } from "next/navigation";
+import { AuthTokens } from "@/lib/types/auth/auth-tokens";
+import { setAuthCookies } from "@/lib/auth/cookies";
+import { cookies } from "next/headers";
 
-export async function signupAction(
-	_prevState: SignupFormState,
+export async function loginAction(
+	_prevState: LoginFormState,
 	formData: FormData,
-): Promise<SignupFormState> {
+): Promise<LoginFormState> {
 	try {
-		await apiFetch("/auth/signup", {
+		const tokens = await apiFetch<AuthTokens>("/auth/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -18,12 +22,14 @@ export async function signupAction(
 			body: JSON.stringify(formDataToObject(formData)),
 		});
 
-		return {};
+		const cookieStore = await cookies();
+		setAuthCookies(cookieStore, tokens);
+
+		redirect("/");
 	} catch (error) {
 		if (error instanceof ApiClientError) {
 			return {
 				defaultValues: {
-					name: String(formData.get("name")),
 					email: String(formData.get("email")),
 				},
 				errors: {

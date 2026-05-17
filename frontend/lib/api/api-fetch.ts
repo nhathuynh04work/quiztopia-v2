@@ -1,6 +1,6 @@
 "use server";
 
-import { apiConfig } from "@/app/config/api.config";
+import { apiConfig } from "@/config/api.config";
 import { ApiClientError } from "./api-client.error";
 
 export async function apiFetch<T>(

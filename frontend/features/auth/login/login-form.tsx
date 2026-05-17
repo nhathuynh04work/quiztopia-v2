@@ -1,37 +1,23 @@
 "use client";
 
-import { signupAction } from "@/app/actions/auth/signup.action";
 import { authConstants } from "@/constants/auth.constant";
 import { useActionState } from "react";
-import { SignupFormState } from "../../../lib/types/auth/signup-form-state";
+import { loginAction } from "@/app/actions/auth/login.action";
+import { LoginFormState } from "@/lib/types/auth/login-form-state";
 
-const initialState: SignupFormState = {};
+const initialState: LoginFormState = {};
 
-export default function SignupForm() {
+export default function LoginForm() {
 	const [state, formAction, isPending] = useActionState<
-		SignupFormState,
+		LoginFormState,
 		FormData
-	>(signupAction, initialState);
+	>(loginAction, initialState);
 
 	return (
 		<form action={formAction} className="flex flex-col gap-4">
 			{state.errors?.form?.map((error) => (
 				<p key={error}>{error}</p>
 			))}
-			<div className="flex flex-col gap-2">
-				<label htmlFor="name">Name</label>
-				<input
-					type="text"
-					name="name"
-					placeholder="John Doe"
-					defaultValue={state.defaultValues?.name}
-					required
-					className="border"
-				/>
-				{state.errors?.fieldErrors?.name?.map((error) => (
-					<p key={error}>{error}</p>
-				))}
-			</div>
 
 			<div className="flex flex-col gap-2">
 				<label htmlFor="email">Email</label>
@@ -63,7 +49,7 @@ export default function SignupForm() {
 			</div>
 
 			<button type="submit" disabled={isPending} className="border mt-4">
-				{isPending ? "Signing you up..." : "Submit"}
+				{isPending ? "Logging in..." : "Submit"}
 			</button>
 		</form>
 	);
