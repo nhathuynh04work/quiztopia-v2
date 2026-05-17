@@ -2,7 +2,7 @@
 
 import { apiFetch } from "@/lib/api/api-fetch";
 import { ApiClientError } from "@/lib/api/api-client-error";
-import { formDataToObject } from "@/lib/utils/form-data";
+import { formDataEntryToString, formDataToObject } from "@/lib/utils/form-data";
 import { SignupFormState } from "@/features/auth/types/signup-form-state";
 
 export async function signupAction(
@@ -23,8 +23,8 @@ export async function signupAction(
 		if (error instanceof ApiClientError) {
 			return {
 				defaultValues: {
-					name: String(formData.get("name")),
-					email: String(formData.get("email")),
+					name: formDataEntryToString(formData.get("name")),
+					email: formDataEntryToString(formData.get("email")),
 				},
 				errors: {
 					form: [error.response.error.message],

@@ -2,7 +2,7 @@
 
 import { apiFetch } from "@/lib/api/api-fetch";
 import { ApiClientError } from "@/lib/api/api-client-error";
-import { formDataToObject } from "@/lib/utils/form-data";
+import { formDataEntryToString, formDataToObject } from "@/lib/utils/form-data";
 import { LoginFormState } from "@/features/auth/types/login-form-state";
 import { redirect } from "next/navigation";
 import { AuthTokens } from "@/features/auth/types/auth-tokens";
@@ -30,7 +30,7 @@ export async function loginAction(
 		if (error instanceof ApiClientError) {
 			return {
 				defaultValues: {
-					email: String(formData.get("email")),
+					email: formDataEntryToString(formData.get("email")),
 				},
 				errors: {
 					form: [error.response.error.message],
