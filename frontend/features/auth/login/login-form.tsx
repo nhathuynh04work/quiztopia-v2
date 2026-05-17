@@ -22,6 +22,7 @@ export default function LoginForm() {
 			<div className="flex flex-col gap-2">
 				<label htmlFor="email">Email</label>
 				<input
+					id="email"
 					type="email"
 					name="email"
 					placeholder="johndoe@gmail.com"
@@ -37,6 +38,7 @@ export default function LoginForm() {
 			<div className="flex flex-col gap-2">
 				<label htmlFor="password">Password</label>
 				<input
+					id="password"
 					type="password"
 					name="password"
 					minLength={authConstants.PASSWORD_MIN_LENGTH}

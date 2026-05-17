@@ -21,6 +21,7 @@ export default function SignupForm() {
 			<div className="flex flex-col gap-2">
 				<label htmlFor="name">Name</label>
 				<input
+					id="name"
 					type="text"
 					name="name"
 					placeholder="John Doe"
@@ -36,6 +37,7 @@ export default function SignupForm() {
 			<div className="flex flex-col gap-2">
 				<label htmlFor="email">Email</label>
 				<input
+					id="email"
 					type="email"
 					name="email"
 					placeholder="johndoe@gmail.com"
@@ -51,6 +53,7 @@ export default function SignupForm() {
 			<div className="flex flex-col gap-2">
 				<label htmlFor="password">Password</label>
 				<input
+					id="password"
 					type="password"
 					name="password"
 					minLength={authConstants.PASSWORD_MIN_LENGTH}
