@@ -1,7 +1,8 @@
 import authConfiguration from "src/config/auth.config";
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/common/prisma/prisma.service";
 import { type ConfigType } from "@nestjs/config";
+import { InvalidCredentialsError } from "src/common/errors/auth/invalid-credentials.error";
 
 @Injectable()
 export class SessionsService {
@@ -34,7 +35,7 @@ export class SessionsService {
       });
 
       if (updated.count === 0) {
-        throw new UnauthorizedException();
+        throw new InvalidCredentialsError();
       }
 
       return tx.session.create({

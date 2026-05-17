@@ -1,5 +1,5 @@
 import authConfiguration from "src/config/auth.config";
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { AuthUser } from "../auth.type";
@@ -11,6 +11,7 @@ import { UsersService } from "src/users/users.service";
 import { type ConfigType } from "@nestjs/config";
 import { accessTokenExtractor } from "../extractors/jwt-access.extractor";
 import { JwtAccessTokenPayload } from "src/tokens/tokens.type";
+import { InvalidCredentialsError } from "src/common/errors/auth/invalid-credentials.error";
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(
@@ -34,13 +35,13 @@ export class JwtAccessStrategy extends PassportStrategy(
 
   async validate(payload: JwtAccessTokenPayload): Promise<AuthUser> {
     if (payload.type !== TOKEN_TYPES.ACCESS) {
-      throw new UnauthorizedException();
+      throw new InvalidCredentialsError();
     }
 
     const user = await this.usersService.findById(payload.sub);
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new InvalidCredentialsError();
     }
 
     return {

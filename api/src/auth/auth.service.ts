@@ -1,10 +1,11 @@
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { compare, hashSync } from "bcrypt";
 import { UsersService } from "src/users/users.service";
 import { SignupDTO } from "./schemas/signup.schema";
 import { AuthUser, RefreshAuthUser } from "./auth.type";
 import { SessionsService } from "src/sessions/sessions.service";
 import { TokensService } from "src/tokens/tokens.service";
+import { InvalidCredentialsError } from "src/common/errors/auth/invalid-credentials.error";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 
@@ -31,7 +32,7 @@ export class AuthService {
     const isPasswordValid = await compare(password, hashedPassword);
 
     if (!existingUser || !isPasswordValid) {
-      throw new UnauthorizedException("Invalid credentials");
+      throw new InvalidCredentialsError();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
