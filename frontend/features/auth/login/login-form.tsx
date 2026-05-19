@@ -2,7 +2,7 @@
 
 import { authConstants } from "@/constants/auth.constant";
 import { useActionState } from "react";
-import { loginAction } from "@/features/auth/actions/login.action";
+import { loginAction } from "@/features/auth/actions/login";
 import { LoginFormState } from "@/features/auth/types/login-form-state";
 
 const initialState: LoginFormState = {};

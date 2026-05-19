@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -11,8 +12,12 @@ import { AuthService } from "./auth.service";
 import { SignupDTO } from "./schemas/signup.schema";
 import { LoginDTO } from "./schemas/login.schema";
 import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
-import { type RefreshAuthenticatedRequest } from "./auth.type";
+import type {
+  AuthenticatedRequest,
+  RefreshAuthenticatedRequest,
+} from "./auth.type";
 import { SessionsService } from "src/sessions/sessions.service";
+import { JwtAccessGuard } from "./guards/jwt-access.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -58,5 +63,11 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async logoutAll(@Req() req: RefreshAuthenticatedRequest) {
     await this.sessionsService.revokeAllSessionsOfUser(req.user.id);
+  }
+
+  @UseGuards(JwtAccessGuard)
+  @Get("me")
+  getCurrentUser(@Req() req: AuthenticatedRequest) {
+    return req.user;
   }
 }

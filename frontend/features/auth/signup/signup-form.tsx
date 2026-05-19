@@ -1,6 +1,6 @@
 "use client";
 
-import { signupAction } from "@/features/auth/actions/signup.action";
+import { signupAction } from "@/features/auth/actions/signup";
 import { authConstants } from "@/constants/auth.constant";
 import { useActionState } from "react";
 import { SignupFormState } from "../types/signup-form-state";

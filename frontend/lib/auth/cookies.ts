@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
-import { AuthTokens } from "../../features/auth/types/auth-tokens";
 import { authConstants } from "@/constants/auth.constant";
 import { authConfig } from "@/config/auth.config";
+import { AuthTokens } from "@/features/auth/types/auth-tokens";
 
 type CookieStore = Awaited<ReturnType<typeof cookies>>;
 
@@ -19,4 +19,13 @@ export function setAuthCookies(cookieStore: CookieStore, tokens: AuthTokens) {
 			maxAge: authConfig.refreshTokenExpiresMs / 1000,
 		},
 	);
+}
+
+export function getAuthCookies(cookieStore: CookieStore): Partial<AuthTokens> {
+	return {
+		accessToken: cookieStore.get(authConstants.COOKIE_NAMES.ACCESS_TOKEN)
+			?.value,
+		refreshToken: cookieStore.get(authConstants.COOKIE_NAMES.REFRESH_TOKEN)
+			?.value,
+	};
 }
