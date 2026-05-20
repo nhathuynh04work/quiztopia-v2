@@ -1,12 +1,21 @@
 model Session {
-  id        String   @id @default(uuid())
-  revoked   Boolean  @default(false)
-  expiresAt DateTime
+  id                      String   @id @default(uuid())
+  currentVersion          Int      @default(1)
+  currentVersionTokenHash String
+  currentVersionIssuedAt  DateTime @default(now())
+  currentVersionExpiresAt DateTime
 
-  createdAt DateTime @default(now())
+  previousVersionTokenHash String?
+  previousVersionExpiresAt DateTime?
+
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
   @@index([userId])
+  @@index([currentVersionExpiresAt])
+  @@index([revokedAt])
 }

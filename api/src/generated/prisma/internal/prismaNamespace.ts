@@ -681,9 +681,15 @@ export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof Quiz
 
 export const SessionScalarFieldEnum = {
   id: 'id',
-  revoked: 'revoked',
-  expiresAt: 'expiresAt',
+  currentVersion: 'currentVersion',
+  currentVersionTokenHash: 'currentVersionTokenHash',
+  currentVersionIssuedAt: 'currentVersionIssuedAt',
+  currentVersionExpiresAt: 'currentVersionExpiresAt',
+  previousVersionTokenHash: 'previousVersionTokenHash',
+  previousVersionExpiresAt: 'previousVersionExpiresAt',
+  revokedAt: 'revokedAt',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   userId: 'userId'
 } as const
 
@@ -716,6 +722,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -770,6 +784,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
