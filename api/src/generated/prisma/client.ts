@@ -29,8 +29,8 @@ export * from "./enums.js"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Quizzes
+ * const quizzes = await prisma.quiz.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -40,17 +40,17 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model User
+ * Model Quiz
  * 
  */
-export type User = Prisma.UserModel
+export type Quiz = Prisma.QuizModel
 /**
  * Model Session
  * 
  */
 export type Session = Prisma.SessionModel
 /**
- * Model Quiz
+ * Model User
  * 
  */
-export type Quiz = Prisma.QuizModel
+export type User = Prisma.UserModel
