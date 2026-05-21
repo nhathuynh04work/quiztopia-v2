@@ -38,7 +38,7 @@ export class JwtAccessStrategy extends PassportStrategy(
       throw new InvalidCredentialsError();
     }
 
-    const user = await this.usersService.findById(payload.sub);
+    const user = await this.usersService.findById(payload.uid);
 
     if (!user) {
       throw new InvalidCredentialsError();

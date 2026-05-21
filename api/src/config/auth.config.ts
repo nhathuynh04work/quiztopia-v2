@@ -10,5 +10,7 @@ export default registerAs("auth", () => {
     refreshTokenExpiresMs: 1000 * 60 * 60 * 24 * 30,
 
     bcryptRounds: 10,
+
+    graceWindowMs: 5000,
   };
 });

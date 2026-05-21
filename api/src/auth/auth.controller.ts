@@ -18,12 +18,14 @@ import type {
 } from "./auth.type";
 import { SessionsService } from "src/sessions/sessions.service";
 import { JwtAccessGuard } from "./guards/jwt-access.guard";
+import { SessionRotationService } from "src/sessions/session-rotation.service";
 
 @Controller("auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly sessionsService: SessionsService,
+    private readonly sessionRotationService: SessionRotationService,
   ) {}
 
   @Post("signup")
@@ -46,16 +48,19 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @Post("refresh")
   async refresh(@Req() req: RefreshAuthenticatedRequest) {
-    const tokens = await this.authService.refresh(req.user);
+    const newTokens = await this.sessionRotationService.rotateSession(
+      req.user.sid,
+      req.user.refreshToken,
+    );
 
-    return tokens;
+    return newTokens;
   }
 
   @UseGuards(JwtRefreshGuard)
   @Post("logout")
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Req() req: RefreshAuthenticatedRequest) {
-    await this.sessionsService.revokeSession(req.user.jti);
+    await this.sessionsService.revokeSession(req.user.sid);
   }
 
   @UseGuards(JwtRefreshGuard)

@@ -1,13 +1,13 @@
 import { TOKEN_TYPES } from "src/config/constants/auth.constant";
 
 export type JwtAccessTokenPayload = {
-  sub: string;
+  uid: string;
   type: typeof TOKEN_TYPES.ACCESS;
 };
 
 export type JwtRefreshTokenPayload = {
-  sub: string;
-  jti: string;
+  uid: string;
+  sid: string;
   type: typeof TOKEN_TYPES.REFRESH;
 };
 

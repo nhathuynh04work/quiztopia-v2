@@ -1,13 +1,11 @@
+import { JwtRefreshTokenPayload } from "src/tokens/tokens.type";
 import authConfiguration from "src/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { type ConfigType } from "@nestjs/config";
+import { AuthTokens, JwtAccessTokenPayload } from "./tokens.type";
 import { TOKEN_TYPES } from "src/config/constants/auth.constant";
-import {
-  AuthTokens,
-  JwtAccessTokenPayload,
-  JwtRefreshTokenPayload,
-} from "./tokens.type";
+import { createHash } from "crypto";
 
 @Injectable()
 export class TokensService {
@@ -18,21 +16,34 @@ export class TokensService {
     private readonly jwtService: JwtService,
   ) {}
 
-  generateAuthTokens(userId: string, sessionId: string): AuthTokens {
+  hashToken(token: string) {
+    return createHash("sha256").update(token).digest("hex");
+  }
+
+  buildAuthTokensPayloads(userId: string, sessionId: string) {
     const accessTokenPayload: JwtAccessTokenPayload = {
-      sub: userId,
+      uid: userId,
       type: TOKEN_TYPES.ACCESS,
     };
 
     const refreshTokenPayload: JwtRefreshTokenPayload = {
-      sub: userId,
-      jti: sessionId,
+      uid: userId,
+      sid: sessionId,
       type: TOKEN_TYPES.REFRESH,
     };
 
     return {
-      accessToken: this.generateAccessToken(accessTokenPayload),
-      refreshToken: this.generateRefreshToken(refreshTokenPayload),
+      accessTokenPayload,
+      refreshTokenPayload,
+    };
+  }
+
+  generateAuthTokens(userId: string, sessionId: string): AuthTokens {
+    const payloads = this.buildAuthTokensPayloads(userId, sessionId);
+
+    return {
+      accessToken: this.generateAccessToken(payloads.accessTokenPayload),
+      refreshToken: this.generateRefreshToken(payloads.refreshTokenPayload),
     };
   }
 

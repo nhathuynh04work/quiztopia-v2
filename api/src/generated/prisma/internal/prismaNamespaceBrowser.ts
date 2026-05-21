@@ -86,12 +86,10 @@ export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof Quiz
 
 export const SessionScalarFieldEnum = {
   id: 'id',
-  currentVersion: 'currentVersion',
-  currentVersionTokenHash: 'currentVersionTokenHash',
-  currentVersionIssuedAt: 'currentVersionIssuedAt',
-  currentVersionExpiresAt: 'currentVersionExpiresAt',
-  previousVersionTokenHash: 'previousVersionTokenHash',
-  previousVersionExpiresAt: 'previousVersionExpiresAt',
+  currentHash: 'currentHash',
+  previousHash: 'previousHash',
+  previousValidUntil: 'previousValidUntil',
+  expiresAt: 'expiresAt',
   revokedAt: 'revokedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
