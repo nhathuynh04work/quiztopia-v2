@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigType } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { PrismaModule } from "./common/prisma/prisma.module";
@@ -10,6 +10,9 @@ import { TokensModule } from "./tokens/tokens.module";
 import configuration from "./config/configuration";
 import { ScheduleModule } from "@nestjs/schedule";
 import { JobsModule } from "./common/jobs/jobs.module";
+import { CacheModule } from "@nestjs/cache-manager";
+import KeyvRedis from "@keyv/redis";
+import cacheConfiguration from "./config/cache.config";
 
 @Module({
   imports: [
@@ -17,7 +20,16 @@ import { JobsModule } from "./common/jobs/jobs.module";
       isGlobal: true,
       load: configuration,
     }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      inject: [cacheConfiguration.KEY],
+      useFactory: (cacheConfig: ConfigType<typeof cacheConfiguration>) => ({
+        stores: [new KeyvRedis(cacheConfig.storeUrl)],
+        ttl: cacheConfig.defaultTTL,
+      }),
+    }),
     ScheduleModule.forRoot(),
+
     PrismaModule,
     UsersModule,
     AuthModule,
