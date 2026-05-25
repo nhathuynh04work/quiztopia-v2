@@ -302,16 +302,6 @@ export type QuizUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type QuizListRelationFilter = {
-  every?: Prisma.QuizWhereInput
-  some?: Prisma.QuizWhereInput
-  none?: Prisma.QuizWhereInput
-}
-
-export type QuizOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type QuizCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
@@ -337,6 +327,28 @@ export type QuizMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+}
+
+export type QuizListRelationFilter = {
+  every?: Prisma.QuizWhereInput
+  some?: Prisma.QuizWhereInput
+  none?: Prisma.QuizWhereInput
+}
+
+export type QuizOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
 }
 
 export type QuizCreateNestedManyWithoutUserInput = {

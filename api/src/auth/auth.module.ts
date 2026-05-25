@@ -7,9 +7,16 @@ import { JwtAccessStrategy } from "./strategies/jwt-access.strategy";
 import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
 import { SessionsModule } from "src/sessions/sessions.module";
 import { TokensModule } from "src/tokens/tokens.module";
+import { PrismaModule } from "src/common/prisma/prisma.module";
 
 @Module({
-  imports: [UsersModule, PassportModule, SessionsModule, TokensModule],
+  imports: [
+    UsersModule,
+    PassportModule,
+    SessionsModule,
+    TokensModule,
+    PrismaModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtAccessStrategy, JwtRefreshStrategy],
 })

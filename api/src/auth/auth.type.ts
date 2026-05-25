@@ -6,7 +6,10 @@ export type AuthUser = {
   name: string;
 };
 
-export type RefreshAuthUser = AuthUser & { jti: string };
+export type RefreshAuthUser = AuthUser & {
+  sid: string;
+  refreshToken: string;
+};
 
 export interface AuthenticatedRequest extends Request {
   user: AuthUser;

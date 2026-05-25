@@ -12,6 +12,7 @@ import { type ConfigType } from "@nestjs/config";
 import { refreshTokenExtractor } from "../extractors/jwt-refresh.extractor";
 import { JwtRefreshTokenPayload } from "src/tokens/tokens.type";
 import { InvalidCredentialsError } from "src/common/errors/auth/invalid-credentials.error";
+import { Request } from "express";
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -30,15 +31,25 @@ export class JwtRefreshStrategy extends PassportStrategy(
       ]),
       secretOrKey: authConfig.jwtRefreshSecret,
       ignoreExpiration: false,
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: JwtRefreshTokenPayload): Promise<RefreshAuthUser> {
+  async validate(
+    req: Request,
+    payload: JwtRefreshTokenPayload,
+  ): Promise<RefreshAuthUser> {
+    const refreshToken = refreshTokenExtractor.fromCookie(req);
+
+    if (!refreshToken) {
+      throw new InvalidCredentialsError();
+    }
+
     if (payload.type !== TOKEN_TYPES.REFRESH) {
       throw new InvalidCredentialsError();
     }
 
-    const user = await this.usersService.findById(payload.sub);
+    const user = await this.usersService.findById(payload.uid);
 
     if (!user) {
       throw new InvalidCredentialsError();
@@ -48,7 +59,8 @@ export class JwtRefreshStrategy extends PassportStrategy(
       id: user.id,
       email: user.email,
       name: user.name,
-      jti: payload.jti,
+      sid: payload.sid,
+      refreshToken: refreshToken,
     };
   }
 }
