@@ -1,16 +1,16 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import type { ConfigType } from "@nestjs/config";
 import { addSeconds } from "date-fns";
-import { InvalidCredentialsError } from "src/common/errors/auth/invalid-credentials.error";
-import { ReplayAttackDetectedError } from "src/common/errors/session/replay-attack-detected.error";
-import { PrismaService } from "src/common/prisma/prisma.service";
-import authConfiguration from "src/config/auth.config";
-import { Session } from "src/generated/prisma/client";
-import { TokensService } from "src/tokens/tokens.service";
+import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
+import { ReplayAttackDetectedError } from "@/common/errors/session/replay-attack-detected.error";
+import { PrismaService } from "@/common/prisma/prisma.service";
+import authConfiguration from "@/config/auth.config";
+import { Session } from "@/generated/prisma/client";
+import { TokensService } from "@/tokens/tokens.service";
 import { SessionsService } from "./sessions.service";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { type Cache } from "cache-manager";
-import { AuthTokens } from "src/tokens/tokens.type";
+import { AuthTokens } from "@/tokens/tokens.type";
 
 @Injectable()
 export class SessionRotationService {

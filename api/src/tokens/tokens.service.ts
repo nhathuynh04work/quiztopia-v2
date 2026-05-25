@@ -1,10 +1,10 @@
-import { JwtRefreshTokenPayload } from "src/tokens/tokens.type";
-import authConfiguration from "src/config/auth.config";
+import { JwtRefreshTokenPayload } from "@/tokens/tokens.type";
+import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { type ConfigType } from "@nestjs/config";
 import { AuthTokens, JwtAccessTokenPayload } from "./tokens.type";
-import { TOKEN_TYPES } from "src/config/constants/auth.constant";
+import { TOKEN_TYPES } from "@/config/constants/auth.constant";
 import { createHash } from "crypto";
 
 @Injectable()

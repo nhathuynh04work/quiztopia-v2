@@ -1,6 +1,6 @@
 import { registerAs } from "@nestjs/config";
 import { env } from "./env";
-import { Prisma } from "src/generated/prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 
 export default registerAs("database", () => {
   const isProd = env.NODE_ENV === "production";

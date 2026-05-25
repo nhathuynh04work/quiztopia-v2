@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { AUTH_COOKIE_NAMES } from "src/config/constants/auth.constant";
+import { AUTH_COOKIE_NAMES } from "@/config/constants/auth.constant";
 
 export const refreshTokenExtractor = {
   fromCookie: (req: Request) => {

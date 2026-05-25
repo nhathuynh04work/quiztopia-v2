@@ -1,4 +1,4 @@
-import { TOKEN_TYPES } from "src/config/constants/auth.constant";
+import { TOKEN_TYPES } from "@/config/constants/auth.constant";
 
 export type JwtAccessTokenPayload = {
   uid: string;
