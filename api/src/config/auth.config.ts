@@ -12,5 +12,7 @@ export default registerAs("auth", () => {
     bcryptRounds: 10,
 
     graceWindowMs: 5000,
+
+    maxActiveSessionCount: 5,
   };
 });

@@ -9,6 +9,7 @@ import { PrismaService } from "src/common/prisma/prisma.service";
 import type { ConfigType } from "@nestjs/config";
 import authConfiguration from "src/config/auth.config";
 import { addMilliseconds } from "date-fns";
+import { ActiveSessionLimitReachedError } from "src/common/errors/auth/active-session-limit-reached.error";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 
@@ -48,29 +49,54 @@ export class AuthService {
 
   async login(user: AuthUser) {
     return await this.prisma.$transaction(async (tx) => {
-      const tempSession = await tx.session.create({
-        data: {
+      /* 
+        This `executeRaw` statement will lock a user row.
+        When 2 concurrent requests happen, the second one will wait for the transaction
+        to release the lock on the user row before counting the session.
+        This prevents the case where both request gets the same count of 4
+        and 2 new sessions get created with no error thrown. 
+        With the lock, the latter requests will get the count of 5 instead of 4
+        and therefore the error will throw normally.
+        Note: we choose the User row because it's more reliable than locking a Session row.
+        This mechanism is to ensure the 2nd request wait for the 1st one to execute all commands,
+        not for data integrity.
+       */
+      await tx.$executeRaw`
+        SELECT id
+        FROM "User"
+        WHERE id = ${user.id}
+        FOR UPDATE
+      `;
+
+      const activeSessionCount = await tx.session.count({
+        where: {
           userId: user.id,
-          currentHash: "",
-          expiresAt: addMilliseconds(
-            new Date(),
-            this.authConfig.refreshTokenExpiresMs,
-          ),
+          revokedAt: null,
+          expiresAt: { gt: new Date() },
         },
       });
 
-      const tokens = this.tokensService.generateAuthTokens(
-        user.id,
-        tempSession.id,
-      );
+      if (activeSessionCount >= this.authConfig.maxActiveSessionCount) {
+        throw new ActiveSessionLimitReachedError();
+      }
+
+      const sessionId = crypto.randomUUID();
+      const tokens = this.tokensService.generateAuthTokens(user.id, sessionId);
 
       const refreshTokenHash = this.tokensService.hashToken(
         tokens.refreshToken,
       );
 
-      await tx.session.update({
-        where: { id: tempSession.id },
-        data: { currentHash: refreshTokenHash },
+      await tx.session.create({
+        data: {
+          id: sessionId,
+          userId: user.id,
+          currentHash: refreshTokenHash,
+          expiresAt: addMilliseconds(
+            new Date(),
+            this.authConfig.refreshTokenExpiresMs,
+          ),
+        },
       });
 
       return tokens;
