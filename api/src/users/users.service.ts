@@ -1,11 +1,11 @@
-import authConfiguration from "src/config/auth.config";
+import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable, Logger } from "@nestjs/common";
-import { PrismaService } from "src/common/prisma/prisma.service";
+import { PrismaService } from "@/common/prisma/prisma.service";
 import { hash } from "bcrypt";
-import { Prisma } from "../generated/prisma/client";
-import { SignupDTO } from "src/auth/schemas/signup.schema";
+import { SignupDTO } from "@/auth/schemas/signup.schema";
 import { type ConfigType } from "@nestjs/config";
-import { EmailAlreadyExistsError } from "src/common/errors/user/email-already-exists.error";
+import { EmailAlreadyExistsError } from "@/common/errors/user/email-already-exists.error";
+import { Prisma } from "@/generated/prisma/client";
 
 @Injectable()
 export class UsersService {

@@ -16,9 +16,9 @@ import type {
   AuthenticatedRequest,
   RefreshAuthenticatedRequest,
 } from "./auth.type";
-import { SessionsService } from "src/sessions/sessions.service";
+import { SessionsService } from "@/sessions/sessions.service";
 import { JwtAccessGuard } from "./guards/jwt-access.guard";
-import { SessionRotationService } from "src/sessions/session-rotation.service";
+import { SessionRotationService } from "@/sessions/session-rotation.service";
 
 @Controller("auth")
 export class AuthController {

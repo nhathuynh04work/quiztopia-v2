@@ -3,7 +3,7 @@ import { SessionsService } from "./sessions.service";
 import { ExpiredSessionsCleanupJob } from "./cleanup/expired-sessions-cleanup.job";
 import { RevokedSessionsCleanupJob } from "./cleanup/revoked-sessions-cleanup.job";
 import { SessionRotationService } from "./session-rotation.service";
-import { TokensModule } from "src/tokens/tokens.module";
+import { TokensModule } from "@/tokens/tokens.module";
 
 @Module({
   imports: [TokensModule],

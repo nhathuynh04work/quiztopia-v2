@@ -1,15 +1,15 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { compare, hashSync } from "bcrypt";
-import { UsersService } from "src/users/users.service";
+import { UsersService } from "@/users/users.service";
 import { SignupDTO } from "./schemas/signup.schema";
 import { AuthUser } from "./auth.type";
-import { TokensService } from "src/tokens/tokens.service";
-import { InvalidCredentialsError } from "src/common/errors/auth/invalid-credentials.error";
-import { PrismaService } from "src/common/prisma/prisma.service";
+import { TokensService } from "@/tokens/tokens.service";
+import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
+import { PrismaService } from "@/common/prisma/prisma.service";
 import type { ConfigType } from "@nestjs/config";
-import authConfiguration from "src/config/auth.config";
+import authConfiguration from "@/config/auth.config";
 import { addMilliseconds } from "date-fns";
-import { ActiveSessionLimitReachedError } from "src/common/errors/auth/active-session-limit-reached.error";
+import { ActiveSessionLimitReachedError } from "@/common/errors/auth/active-session-limit-reached.error";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 

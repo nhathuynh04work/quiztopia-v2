@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { SessionsService } from "../sessions.service";
-import { JobRunnerService } from "src/common/jobs/job-runner.service";
+import { JobRunnerService } from "@/common/jobs/job-runner.service";
 
 @Injectable()
 export class ExpiredSessionsCleanupJob {

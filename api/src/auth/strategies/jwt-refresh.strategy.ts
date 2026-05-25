@@ -1,4 +1,4 @@
-import authConfiguration from "src/config/auth.config";
+import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
@@ -6,12 +6,12 @@ import { RefreshAuthUser } from "../auth.type";
 import {
   AUTH_STRATEGY_NAMES,
   TOKEN_TYPES,
-} from "src/config/constants/auth.constant";
-import { UsersService } from "src/users/users.service";
+} from "@/config/constants/auth.constant";
+import { UsersService } from "@/users/users.service";
 import { type ConfigType } from "@nestjs/config";
 import { refreshTokenExtractor } from "../extractors/jwt-refresh.extractor";
-import { JwtRefreshTokenPayload } from "src/tokens/tokens.type";
-import { InvalidCredentialsError } from "src/common/errors/auth/invalid-credentials.error";
+import { JwtRefreshTokenPayload } from "@/tokens/tokens.type";
+import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
 import { Request } from "express";
 
 @Injectable()
