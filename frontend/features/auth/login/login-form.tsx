@@ -1,6 +1,6 @@
 "use client";
 
-import { authConstants } from "@/constants/auth.constant";
+import { authConstants } from "@/constants/auth";
 import { useActionState } from "react";
 import { loginAction } from "@/features/auth/actions/login";
 import { LoginFormState } from "@/features/auth/types/login-form-state";

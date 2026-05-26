@@ -6,7 +6,7 @@
   import { AuthTokens } from "@/features/auth/types/auth-tokens";
   import { ApiClientError } from "./api-client-error";
   import { throwApiError } from "./throw-api-error";
-  import { authConstants } from "@/constants/auth.constant";
+  import { authConstants } from "@/constants/auth";
   import { parseResponse } from "./parse-response";
   import { buildInitWithCookie } from "./build-init";
 
