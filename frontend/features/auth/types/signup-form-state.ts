@@ -1,7 +1,8 @@
 export type SignupFormState = {
 	defaultValues?: {
 		email?: string;
-		name?: string;
+		firstName?: string;
+		lastName?: string;
 	};
 	errors?: {
 		form?: string[];

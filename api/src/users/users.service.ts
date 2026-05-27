@@ -41,13 +41,15 @@ export class UsersService {
     try {
       const user = await this.prisma.user.create({
         data: {
-          email: payload.email.toLowerCase().trim(),
+          email: payload.email,
           password: hashedPassword,
-          name: payload.name.trim(),
+          firstName: payload.firstName,
+          lastName: payload.lastName,
         },
         select: {
           email: true,
-          name: true,
+          firstName: true,
+          lastName: true,
         },
       });
 

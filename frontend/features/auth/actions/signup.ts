@@ -23,7 +23,8 @@ export async function signupAction(
 		if (error instanceof ApiClientError) {
 			return {
 				defaultValues: {
-					name: formDataEntryToString(formData.get("name")),
+					firstName: formDataEntryToString(formData.get("firstName")),
+					lastName: formDataEntryToString(formData.get("lastName")),
 					email: formDataEntryToString(formData.get("email")),
 				},
 				errors: {

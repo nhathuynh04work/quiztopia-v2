@@ -19,17 +19,33 @@ export default function SignupForm() {
 				<p key={error}>{error}</p>
 			))}
 			<div className="flex flex-col gap-2">
-				<label htmlFor="name">Name</label>
+				<label htmlFor="firstName">First name</label>
 				<input
-					id="name"
+					id="firstName"
 					type="text"
-					name="name"
-					placeholder="John Doe"
-					defaultValue={state.defaultValues?.name}
+					name="firstName"
+					placeholder="John"
+					defaultValue={state.defaultValues?.firstName}
 					required
 					className="border"
 				/>
-				{state.errors?.fieldErrors?.name?.map((error) => (
+				{state.errors?.fieldErrors?.firstName?.map((error) => (
+					<p key={error}>{error}</p>
+				))}
+			</div>
+
+			<div className="flex flex-col gap-2">
+				<label htmlFor="name">Last name</label>
+				<input
+					id="lastName"
+					type="text"
+					name="lastName"
+					placeholder="Doe"
+					defaultValue={state.defaultValues?.lastName}
+					required
+					className="border"
+				/>
+				{state.errors?.fieldErrors?.lastName?.map((error) => (
 					<p key={error}>{error}</p>
 				))}
 			</div>
