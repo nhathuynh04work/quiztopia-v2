@@ -2,9 +2,23 @@ import { ReactNode } from "react";
 
 type Props = {
 	children: ReactNode;
-	onClick: () => void;
+	className?: string;
+	onClick?: () => void;
+	type?: "button" | "submit" | "reset";
 };
 
-export function Button({ children, onClick }: Props) {
-	return <button onClick={onClick}>{children}</button>;
+export function Button({
+	type = "button",
+	children,
+	className,
+	onClick,
+}: Props) {
+	return (
+		<button
+			type={type}
+			onClick={onClick}
+			className={`cursor-pointer ${className ?? ""}`}>
+			{children}
+		</button>
+	);
 }
