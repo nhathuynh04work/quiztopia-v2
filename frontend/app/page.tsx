@@ -6,9 +6,12 @@ export default async function Home() {
 	const user = await getCurrentUser();
 
 	return (
-		<div>
+		<div className="min-h-screen flex flex-col">
 			<TopBar user={user} />
-			{user && <Sidebar user={user} />}
+			<div className="flex flex-1 min-h-0">
+				{user && <Sidebar />}
+				<div className="flex-1 bg-gray-50"></div>
+			</div>
 		</div>
 	);
 }

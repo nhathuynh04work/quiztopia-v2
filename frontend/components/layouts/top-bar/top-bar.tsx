@@ -13,7 +13,7 @@ type Props = {
 export function TopBar({ user }: Props) {
 	return (
 		<header>
-			<nav className={`flex items-center py-4 px-6 shadow-sm`}>
+			<nav className={`flex items-center py-4 px-6 border-b border-gray-200`}>
 				<div className="flex items-center">
 					<Link href="/" className="mr-6">
 						<Logo size="lg" />
