@@ -1,7 +1,7 @@
 import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
+import { Strategy } from "passport-jwt";
 import { RefreshAuthUser } from "../auth.type";
 import {
   AUTH_STRATEGY_NAMES,
@@ -9,10 +9,10 @@ import {
 } from "@/config/constants/auth.constant";
 import { UsersService } from "@/users/users.service";
 import { type ConfigType } from "@nestjs/config";
-import { refreshTokenExtractor } from "../extractors/jwt-refresh.extractor";
 import { JwtRefreshTokenPayload } from "@/tokens/tokens.type";
 import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
 import { Request } from "express";
+import { extractJwtFromAuthBearer } from "../helpers/token-extractor";
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -26,9 +26,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     private readonly authConfig: ConfigType<typeof authConfiguration>,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        refreshTokenExtractor.fromCookie,
-      ]),
+      jwtFromRequest: extractJwtFromAuthBearer,
       secretOrKey: authConfig.jwtRefreshSecret,
       ignoreExpiration: false,
       passReqToCallback: true,
@@ -39,7 +37,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     req: Request,
     payload: JwtRefreshTokenPayload,
   ): Promise<RefreshAuthUser> {
-    const refreshToken = refreshTokenExtractor.fromCookie(req);
+    const refreshToken = extractJwtFromAuthBearer(req);
 
     if (!refreshToken) {
       throw new InvalidCredentialsError();
