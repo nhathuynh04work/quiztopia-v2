@@ -1,7 +1,7 @@
 import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
+import { Strategy } from "passport-jwt";
 import { AuthUser } from "../auth.type";
 import {
   AUTH_STRATEGY_NAMES,
@@ -9,9 +9,9 @@ import {
 } from "@/config/constants/auth.constant";
 import { UsersService } from "@/users/users.service";
 import { type ConfigType } from "@nestjs/config";
-import { accessTokenExtractor } from "../extractors/jwt-access.extractor";
 import { JwtAccessTokenPayload } from "@/tokens/tokens.type";
 import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
+import { extractJwtFromAuthBearer } from "../helpers/token-extractor";
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(
@@ -25,9 +25,7 @@ export class JwtAccessStrategy extends PassportStrategy(
     private readonly authConfig: ConfigType<typeof authConfiguration>,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        accessTokenExtractor.fromCookie,
-      ]),
+      jwtFromRequest: extractJwtFromAuthBearer,
       secretOrKey: authConfig.jwtAccessSecret,
       ignoreExpiration: false,
     });

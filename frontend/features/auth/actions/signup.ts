@@ -4,6 +4,7 @@ import { apiFetch } from "@/lib/api/api-fetch";
 import { ApiClientError } from "@/lib/api/api-client-error";
 import { formDataEntryToString, formDataToObject } from "@/lib/utils/form-data";
 import { SignupFormState } from "@/features/auth/types/signup-form-state";
+import { redirect } from "next/navigation";
 
 export async function signupAction(
 	_prevState: SignupFormState,
@@ -18,7 +19,7 @@ export async function signupAction(
 			body: JSON.stringify(formDataToObject(formData)),
 		});
 
-		return {};
+		redirect("/login");
 	} catch (error) {
 		if (error instanceof ApiClientError) {
 			return {
