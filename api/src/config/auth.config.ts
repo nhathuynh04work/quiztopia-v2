@@ -6,7 +6,7 @@ export default registerAs("auth", () => {
     jwtAccessSecret: env.JWT_ACCESS_SECRET,
     jwtRefreshSecret: env.JWT_REFRESH_SECRET,
 
-    accessTokenExpiresMs: 1000 * 60 * 15,
+    accessTokenExpiresMs: 1000 * 60 * 5,
     refreshTokenExpiresMs: 1000 * 60 * 60 * 24 * 30,
 
     bcryptRounds: 10,
