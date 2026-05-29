@@ -1,3 +1,5 @@
+import "server-only";
+
 import { ApiClientError } from "./api-client-error";
 import { parseResponse } from "./parse-response";
 

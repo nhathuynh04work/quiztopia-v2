@@ -1,3 +1,5 @@
+import "server-only";
+
 import { ApiClientError } from "./api-client-error";
 
 export async function parseResponse<T>(response: Response): Promise<T> {
