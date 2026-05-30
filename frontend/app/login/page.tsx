@@ -1,11 +1,18 @@
-import LoginForm from "@/features/auth/login/login-form";
+import { AuthShell } from "@/features/auth/components/auth-shell";
+import LoginForm from "@/features/auth/components/login-form";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
+import { redirect } from "next/navigation";
 
-export default function Login() {
+export default async function Login() {
+	const user = await getCurrentUser();
+
+	if (user) {
+		redirect("/");
+	}
+
 	return (
-		<div className="py-8 flex flex-col gap-4 items-center">
-			<h1 className="text-3xl font-bold text-center">Login</h1>
-
+		<AuthShell heroImageUrl="/login-hero.jpg" formName="Login">
 			<LoginForm />
-		</div>
+		</AuthShell>
 	);
 }

@@ -1,11 +1,10 @@
-import SignupForm from "@/features/auth/signup/signup-form";
+import { AuthShell } from "@/features/auth/components/auth-shell";
+import SignupForm from "@/features/auth/components/signup-form";
 
 export default function Signup() {
 	return (
-		<div className="py-8 flex flex-col gap-4 items-center">
-			<h1 className="text-3xl font-bold text-center">Signup</h1>
-
+		<AuthShell heroImageUrl="/signup-hero.jpg" formName="Signup">
 			<SignupForm />
-		</div>
+		</AuthShell>
 	);
 }

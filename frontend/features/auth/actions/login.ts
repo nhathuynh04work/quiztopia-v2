@@ -9,34 +9,49 @@ import { AuthTokens } from "@/features/auth/types/auth-tokens";
 import { setAuthCookies } from "@/lib/auth/cookies";
 
 export async function loginAction(
-  _prevState: LoginFormState,
-  formData: FormData,
+	_prevState: LoginFormState,
+	formData: FormData,
 ): Promise<LoginFormState> {
-  try {
-    const tokens = await apiFetch<AuthTokens>("/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formDataToObject(formData)),
-    });
+	try {
+		const tokens = await apiFetch<AuthTokens>("/auth/login", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(formDataToObject(formData)),
+		});
 
-    await setAuthCookies(tokens);
+		await setAuthCookies(tokens);
 
-    redirect("/");
-  } catch (error) {
-    if (error instanceof ApiClientError) {
-      return {
-        defaultValues: {
-          email: formDataEntryToString(formData.get("email")),
-        },
-        errors: {
-          form: [error.response.error.message],
-          fieldErrors: error.response.error.fieldErrors,
-        },
-      };
-    }
+		redirect("/");
+	} catch (error) {
+		if (error instanceof ApiClientError) {
+			if (error.status === 400) {
+				return {
+					defaultValues: {
+						email: formDataEntryToString(formData.get("email")),
+					},
+					errors: {
+						fieldErrors: error.response.error.fieldErrors,
+					},
+				};
+			}
 
-    throw error;
-  }
+			if (error.status === 401) {
+				return {
+					defaultValues: {
+						email: formDataEntryToString(formData.get("email")),
+					},
+					errors: {
+						form: [error.response.error.message],
+					},
+				};
+			}
+
+			if (error.status === 409) {
+			}
+		}
+
+		throw error;
+	}
 }

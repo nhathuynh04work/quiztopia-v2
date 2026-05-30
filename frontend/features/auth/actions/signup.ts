@@ -22,17 +22,31 @@ export async function signupAction(
 		redirect("/login");
 	} catch (error) {
 		if (error instanceof ApiClientError) {
-			return {
-				defaultValues: {
-					firstName: formDataEntryToString(formData.get("firstName")),
-					lastName: formDataEntryToString(formData.get("lastName")),
-					email: formDataEntryToString(formData.get("email")),
-				},
-				errors: {
-					form: [error.response.error.message],
-					fieldErrors: error.response.error.fieldErrors,
-				},
-			};
+			if (error.status == 400) {
+				return {
+					defaultValues: {
+						firstName: formDataEntryToString(formData.get("firstName")),
+						lastName: formDataEntryToString(formData.get("lastName")),
+						email: formDataEntryToString(formData.get("email")),
+					},
+					errors: {
+						fieldErrors: error.response.error.fieldErrors,
+					},
+				};
+			}
+
+			if (error.status == 422) {
+				return {
+					defaultValues: {
+						firstName: formDataEntryToString(formData.get("firstName")),
+						lastName: formDataEntryToString(formData.get("lastName")),
+						email: formDataEntryToString(formData.get("email")),
+					},
+					errors: {
+						form: [error.response.error.message],
+					},
+				};
+			}
 		}
 
 		throw error;

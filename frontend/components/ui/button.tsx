@@ -1,23 +1,12 @@
-import { ReactNode } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Props = {
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 	children: ReactNode;
-	className?: string;
-	onClick?: () => void;
-	type?: "button" | "submit" | "reset";
 };
 
-export function Button({
-	type = "button",
-	children,
-	className,
-	onClick,
-}: Props) {
+export function Button({ children, className, ...props }: Props) {
 	return (
-		<button
-			type={type}
-			onClick={onClick}
-			className={`cursor-pointer ${className ?? ""}`}>
+		<button {...props} className={`cursor-pointer ${className ?? ""}`}>
 			{children}
 		</button>
 	);
