@@ -11,6 +11,11 @@ export type JwtRefreshTokenPayload = {
   type: typeof TOKEN_TYPES.REFRESH;
 };
 
+export type JwtSessionManagementPayload = {
+  uid: string;
+  type: typeof TOKEN_TYPES.SESSION_MANAGEMENT;
+};
+
 export type AuthTokens = {
   accessToken: string;
   refreshToken: string;

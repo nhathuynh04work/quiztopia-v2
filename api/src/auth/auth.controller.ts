@@ -21,11 +21,13 @@ import { JwtAccessGuard } from "./guards/jwt-access.guard";
 import { SessionRotationService } from "@/sessions/rotation/session-rotation.service";
 import { type Request } from "express";
 import { SessionMetadataService } from "@/sessions/metadata/session-metadata.service";
+import { TokensService } from "@/tokens/tokens.service";
 
 @Controller("auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly tokensService: TokensService,
     private readonly sessionsService: SessionsService,
     private readonly sessionRotationService: SessionRotationService,
     private readonly sessionMetadataService: SessionMetadataService,
@@ -76,5 +78,15 @@ export class AuthController {
   @Get("me")
   getCurrentUser(@Req() req: AuthenticatedRequest) {
     return req.user;
+  }
+
+  @Post("/session-management-token")
+  async getSessionManagementToken(@Body() payload: LocalLoginDTO) {
+    const user = await this.authService.authenticateWithPassword(payload);
+    const token = this.tokensService.generateSessionManagementToken(user.id);
+
+    return {
+      sessionManagementToken: token,
+    };
   }
 }

@@ -5,6 +5,7 @@ import { AuthService } from "./auth.service";
 import { PassportModule } from "@nestjs/passport";
 import { JwtAccessStrategy } from "./strategies/jwt-access.strategy";
 import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
+import { JwtSessionManagementStrategy } from "./strategies/jwt-session-management.strategy";
 import { SessionsModule } from "@/sessions/sessions.module";
 import { TokensModule } from "@/tokens/tokens.module";
 import { PrismaModule } from "@/common/prisma/prisma.module";
@@ -18,6 +19,11 @@ import { PrismaModule } from "@/common/prisma/prisma.module";
     PrismaModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAccessStrategy, JwtRefreshStrategy],
+  providers: [
+    AuthService,
+    JwtAccessStrategy,
+    JwtRefreshStrategy,
+    JwtSessionManagementStrategy,
+  ],
 })
 export class AuthModule {}

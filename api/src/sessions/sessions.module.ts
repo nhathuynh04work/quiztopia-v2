@@ -5,6 +5,7 @@ import { RevokedSessionsCleanupJob } from "./cleanup/revoked-sessions-cleanup.jo
 import { SessionRotationService } from "./rotation/session-rotation.service";
 import { TokensModule } from "@/tokens/tokens.module";
 import { SessionMetadataService } from "./metadata/session-metadata.service";
+import { SessionsController } from "./sessions.controller";
 
 @Module({
   imports: [TokensModule],
@@ -16,5 +17,6 @@ import { SessionMetadataService } from "./metadata/session-metadata.service";
     RevokedSessionsCleanupJob,
   ],
   exports: [SessionsService, SessionRotationService, SessionMetadataService],
+  controllers: [SessionsController],
 })
 export class SessionsModule {}
