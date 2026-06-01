@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { fieldErrorStyle, labelStyle } from "../styles/form";
+import { fieldErrorStyle, labelStyle } from "../../styles/form";
 
 type Props = {
 	label: string;

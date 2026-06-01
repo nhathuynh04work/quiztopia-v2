@@ -5,8 +5,6 @@ export const inputStyle =
 
 export const labelStyle = "font-bold text-lg";
 
-export const formErrorStyle = "";
-
 export const fieldErrorStyle = "text-red-600 font-medium";
 
 export const submitBtnStyle =

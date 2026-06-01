@@ -3,18 +3,18 @@
 import { signupAction } from "@/features/auth/actions/signup";
 import { authConstants } from "@/constants/auth";
 import { useActionState } from "react";
-import { SignupFormState } from "../types/signup-form-state";
 import { AuthField } from "./auth-field";
 import { Button } from "@/components/ui/button";
-import { formStyle, inputStyle, submitBtnStyle } from "../styles/form";
+import { formStyle, inputStyle, submitBtnStyle } from "../../styles/form";
 import { cn } from "@/lib/utils/cn";
 import Link from "next/link";
 import { FormErrors } from "./form-errors";
 import { PasswordField } from "./password-field";
+import { SignupFormState } from "../../types/signup-form-state";
 
 const initialState: SignupFormState = {};
 
-export default function SignupForm() {
+export function SignupForm() {
 	const [state, formAction, isPending] = useActionState<
 		SignupFormState,
 		FormData

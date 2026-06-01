@@ -3,17 +3,20 @@
 import { apiFetch } from "@/lib/api/api-fetch";
 import { ApiClientError } from "@/lib/api/api-client-error";
 import { formDataEntryToString, formDataToObject } from "@/lib/utils/form-data";
-import { LoginFormState } from "@/features/auth/types/login-form-state";
 import { redirect } from "next/navigation";
-import { AuthTokens } from "@/features/auth/types/auth-tokens";
-import { setAuthCookies } from "@/lib/auth/cookies";
+import { SessionsVerifyFormState } from "../types/sessions-verify-form-state";
+import { cookies } from "next/headers";
+import { authConstants } from "@/constants/auth";
+import { authConfig } from "@/config/auth.config";
 
-export async function loginAction(
-	_prevState: LoginFormState,
+export async function getSessionManagementTokenAction(
+	_prevState: SessionsVerifyFormState,
 	formData: FormData,
-): Promise<LoginFormState> {
+): Promise<SessionsVerifyFormState> {
 	try {
-		const tokens = await apiFetch<AuthTokens>("/auth/login", {
+		const { sessionManagementToken } = await apiFetch<{
+			sessionManagementToken: string;
+		}>("/auth/session-management-token", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -21,9 +24,16 @@ export async function loginAction(
 			body: JSON.stringify(formDataToObject(formData)),
 		});
 
-		await setAuthCookies(tokens);
+		(await cookies()).set(
+			authConstants.COOKIE_NAMES.SESSION_MANAGEMENT_TOKEN,
+			sessionManagementToken,
+			{
+				...authConfig.cookie,
+				maxAge: authConfig.sessionManagementExpiresMs,
+			},
+		);
 
-		redirect("/");
+		redirect("/sessions");
 	} catch (error) {
 		if (error instanceof ApiClientError) {
 			if (error.status === 400) {
@@ -45,15 +55,6 @@ export async function loginAction(
 					errors: {
 						form: [error.response.error.message],
 					},
-				};
-			}
-
-			if (error.status === 409) {
-				return {
-					defaultValues: {
-						email: formDataEntryToString(formData.get("email")),
-					},
-					sessionLimitReached: true,
 				};
 			}
 		}

@@ -1,5 +1,5 @@
-import { AuthShell } from "@/features/auth/components/auth-shell";
-import LoginForm from "@/features/auth/components/login-form";
+import { AuthShell } from "@/features/auth/components/forms/auth-shell";
+import { LoginForm } from "@/features/auth/components/forms/login-form";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
 

@@ -1,4 +1,4 @@
-export type LoginFormState = {
+export type SessionsVerifyFormState = {
 	defaultValues?: {
 		email?: string;
 	};
@@ -6,5 +6,4 @@ export type LoginFormState = {
 		form?: string[];
 		fieldErrors?: Record<string, string[]>;
 	};
-	sessionLimitReached?: boolean;
 };

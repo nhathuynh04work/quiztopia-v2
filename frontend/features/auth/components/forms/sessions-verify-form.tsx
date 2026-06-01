@@ -1,23 +1,22 @@
 "use client";
 
 import { useActionState } from "react";
-import { loginAction } from "@/features/auth/actions/login";
-import { LoginFormState } from "@/features/auth/types/login-form-state";
 import { AuthField } from "./auth-field";
 import { Button } from "@/components/ui/button";
-import { formStyle, inputStyle, submitBtnStyle } from "../styles/form";
+import { formStyle, inputStyle, submitBtnStyle } from "../../styles/form";
 import { cn } from "@/lib/utils/cn";
-import Link from "next/link";
 import { FormErrors } from "./form-errors";
 import { PasswordField } from "./password-field";
+import { SessionsVerifyFormState } from "../../types/sessions-verify-form-state";
+import { getSessionManagementTokenAction } from "../../actions/get-session-management-token";
 
-const initialState: LoginFormState = {};
+const initialState: SessionsVerifyFormState = {};
 
-export default function LoginForm() {
+export function SessionsVerifyForm() {
 	const [state, formAction, isPending] = useActionState<
-		LoginFormState,
+		SessionsVerifyFormState,
 		FormData
-	>(loginAction, initialState);
+	>(getSessionManagementTokenAction, initialState);
 
 	return (
 		<form action={formAction} className={cn(formStyle)}>
@@ -58,13 +57,6 @@ export default function LoginForm() {
 			<Button type="submit" disabled={isPending} className={submitBtnStyle}>
 				{isPending ? "Logging in..." : "Submit"}
 			</Button>
-
-			<p className="font-semibold text-lg mt-4">
-				Don't have an account?{" "}
-				<Link href="/signup" className="font-bold underline underline-offset-2">
-					Sign up
-				</Link>
-			</p>
 		</form>
 	);
 }

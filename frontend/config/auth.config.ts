@@ -3,6 +3,7 @@ import { appConfig } from "./app.config";
 export const authConfig = {
 	accessTokenExpiresMs: 1000 * 60 * 5,
 	refreshTokenExpiresMs: 1000 * 60 * 60 * 24 * 30,
+	sessionManagementExpiresMs: 1000 * 60 * 15,
 
 	cookie: {
 		httpOnly: true,

@@ -4,5 +4,6 @@ export const authConstants = {
 	COOKIE_NAMES: {
 		ACCESS_TOKEN: "access_token",
 		REFRESH_TOKEN: "refresh_token",
+		SESSION_MANAGEMENT_TOKEN: "session_management_token",
 	},
 };
