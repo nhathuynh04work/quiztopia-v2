@@ -1,9 +1,13 @@
-import { JwtRefreshTokenPayload } from "@/tokens/tokens.type";
+import {
+  AuthTokens,
+  JwtAccessTokenPayload,
+  JwtRefreshTokenPayload,
+  JwtSessionManagementPayload,
+} from "./tokens.type";
 import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { type ConfigType } from "@nestjs/config";
-import { AuthTokens, JwtAccessTokenPayload } from "./tokens.type";
 import { TOKEN_TYPES } from "@/config/constants/auth.constant";
 import { createHash } from "crypto";
 
@@ -58,6 +62,18 @@ export class TokensService {
     return this.jwtService.sign(payload, {
       secret: this.authConfig.jwtRefreshSecret,
       expiresIn: this.authConfig.refreshTokenExpiresMs / 1000,
+    });
+  }
+
+  generateSessionManagementToken(userId: string): string {
+    const payload: JwtSessionManagementPayload = {
+      uid: userId,
+      type: TOKEN_TYPES.SESSION_MANAGEMENT,
+    };
+
+    return this.jwtService.sign(payload, {
+      secret: this.authConfig.jwtSessionManagementSecret,
+      expiresIn: this.authConfig.sessionManagementTokenExpiresMs / 1000,
     });
   }
 }

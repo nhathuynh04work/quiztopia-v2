@@ -12,6 +12,27 @@ export class SessionsService {
     private readonly prisma: PrismaService,
   ) {}
 
+  async getActiveSessionsOfUser(userId: string) {
+    return this.prisma.session.findMany({
+      where: {
+        userId,
+        revokedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      omit: {
+        currentHash: true,
+        previousHash: true,
+        previousValidUntil: true,
+        revokedAt: true,
+        expiresAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
   async revokeSession(sessionId: string) {
     return this.prisma.session.updateMany({
       where: {

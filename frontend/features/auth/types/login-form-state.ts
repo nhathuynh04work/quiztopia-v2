@@ -6,4 +6,5 @@ export type LoginFormState = {
 		form?: string[];
 		fieldErrors?: Record<string, string[]>;
 	};
+	sessionLimitReached?: boolean;
 };
