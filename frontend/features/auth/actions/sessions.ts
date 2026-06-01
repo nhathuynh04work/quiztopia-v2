@@ -8,6 +8,7 @@ import { SessionsVerifyFormState } from "../types/sessions-verify-form-state";
 import { cookies } from "next/headers";
 import { authConstants } from "@/constants/auth";
 import { authConfig } from "@/config/auth.config";
+import { buildAuthHeader } from "@/lib/api/build-auth-header";
 
 export async function getSessionManagementTokenAction(
 	_prevState: SessionsVerifyFormState,
@@ -57,6 +58,35 @@ export async function getSessionManagementTokenAction(
 					},
 				};
 			}
+		}
+
+		throw error;
+	}
+}
+
+export async function revokeSessionAction(sessionId: string): Promise<{
+	error: string | null;
+}> {
+	const sessionManagementToken = (await cookies()).get(
+		authConstants.COOKIE_NAMES.SESSION_MANAGEMENT_TOKEN,
+	)?.value;
+
+	if (!sessionManagementToken) {
+		redirect("/sessions/verify");
+	}
+
+	try {
+		await apiFetch(`/sessions/${sessionId}`, {
+			method: "DELETE",
+			headers: buildAuthHeader(sessionManagementToken),
+		});
+
+		return { error: null };
+	} catch (error) {
+		if (error instanceof ApiClientError) {
+			return {
+				error: error.message,
+			};
 		}
 
 		throw error;

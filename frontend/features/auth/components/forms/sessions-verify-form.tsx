@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils/cn";
 import { FormErrors } from "./form-errors";
 import { PasswordField } from "./password-field";
 import { SessionsVerifyFormState } from "../../types/sessions-verify-form-state";
-import { getSessionManagementTokenAction } from "../../actions/get-session-management-token";
+import { getSessionManagementTokenAction } from "../../actions/sessions";
 
 const initialState: SessionsVerifyFormState = {};
 
