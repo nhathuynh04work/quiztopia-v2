@@ -5,6 +5,7 @@ import { ApiClientError } from "../api/api-client-error";
 import { cache } from "react";
 import { apiFetch } from "../api/api-fetch";
 import { getAccessToken } from "./cookies";
+import { buildAuthHeader } from "../api/build-auth-header";
 
 export const getCurrentUser = cache(async () => {
 	const accessToken = await getAccessToken();
@@ -15,7 +16,7 @@ export const getCurrentUser = cache(async () => {
 
 	try {
 		return await apiFetch<SessionUser>("/auth/me", {
-			headers: { Authorization: `Bearer ${accessToken}` },
+			headers: buildAuthHeader(accessToken),
 		});
 	} catch (error) {
 		if (error instanceof ApiClientError && error.status === 401) {
