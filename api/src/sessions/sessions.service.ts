@@ -22,6 +22,14 @@ export class SessionsService {
       orderBy: {
         createdAt: "desc",
       },
+      omit: {
+        currentHash: true,
+        previousHash: true,
+        previousValidUntil: true,
+        revokedAt: true,
+        expiresAt: true,
+        updatedAt: true,
+      },
     });
   }
 
