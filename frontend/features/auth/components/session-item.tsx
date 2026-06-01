@@ -1,6 +1,7 @@
 import { Cpu, Monitor, Smartphone } from "lucide-react";
 import { Session } from "../types/session";
 import { SessionItemActions } from "./session-item-actions";
+import { format } from "date-fns";
 
 type Props = {
 	session: Session;
@@ -24,7 +25,7 @@ function getLocation(city: string | null, country: string | null) {
 }
 
 export function SessionItem({ session }: Props) {
-	const { deviceType, deviceName, country, city } = session;
+	const { deviceType, deviceName, country, city, createdAt } = session;
 	const DeviceIcon =
 		deviceType && deviceType in deviceIcons
 			? deviceIcons[deviceType as keyof typeof deviceIcons]
@@ -37,7 +38,10 @@ export function SessionItem({ session }: Props) {
 				<p className="font-semibold text-xl">
 					{deviceName ? deviceName : "Unknown device"}
 				</p>
-				<p className="font-semilight text-lg">{getLocation(city, country)}</p>
+				<p className="font-semilight text-lg">
+					{getLocation(city, country)} •{" "}
+					{format(createdAt, "MMM d, yyyy 'at' HH:mm")}
+				</p>
 			</div>
 			<SessionItemActions sessionId={session.id} />
 		</div>
