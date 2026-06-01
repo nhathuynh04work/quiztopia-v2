@@ -10,6 +10,8 @@ import type { ConfigType } from "@nestjs/config";
 import authConfiguration from "@/config/auth.config";
 import { addMilliseconds } from "date-fns";
 import { ActiveSessionLimitReachedError } from "@/common/errors/auth/active-session-limit-reached.error";
+import { LocalLoginDTO } from "./schemas/local-login.schema";
+import { SessionMetadata } from "@/sessions/metadata/session-metadata.type";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 
@@ -32,7 +34,7 @@ export class AuthService {
     return newUser;
   }
 
-  async authenticateWithPassword(email: string, password: string) {
+  async authenticateWithPassword({ email, password }: LocalLoginDTO) {
     const existingUser = await this.usersService.findByEmailWithPassword(email);
     const hashedPassword = existingUser?.password ?? FAKE_HASH;
 
@@ -47,7 +49,7 @@ export class AuthService {
     return safeUser;
   }
 
-  async login(user: AuthUser) {
+  async login(user: AuthUser, metadata: SessionMetadata) {
     return await this.prisma.$transaction(async (tx) => {
       /* 
         This `executeRaw` statement will lock a user row.
@@ -92,6 +94,7 @@ export class AuthService {
           id: sessionId,
           userId: user.id,
           currentHash: refreshTokenHash,
+          ...metadata,
           expiresAt: addMilliseconds(
             new Date(),
             this.authConfig.refreshTokenExpiresMs,
@@ -101,12 +104,5 @@ export class AuthService {
 
       return tokens;
     });
-  }
-
-  async loginWithPassword(email: string, password: string) {
-    const user = await this.authenticateWithPassword(email, password);
-    const tokens = await this.login(user);
-
-    return tokens;
   }
 }

@@ -2,7 +2,7 @@ import { createZodDto } from "nestjs-zod";
 import { PASSWORD_MIN_LENGTH } from "@/config/constants/auth.constant";
 import z from "zod";
 
-const LoginSchema = z.object({
+const LocalLoginSchema = z.object({
   email: z.email({
     error: "Invalid email format",
   }),
@@ -11,4 +11,4 @@ const LoginSchema = z.object({
   }),
 });
 
-export class LoginDTO extends createZodDto(LoginSchema) {}
+export class LocalLoginDTO extends createZodDto(LocalLoginSchema) {}

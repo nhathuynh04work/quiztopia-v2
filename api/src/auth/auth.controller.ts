@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignupDTO } from "./schemas/signup.schema";
-import { LoginDTO } from "./schemas/login.schema";
+import { LocalLoginDTO } from "./schemas/local-login.schema";
 import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
 import type {
   AuthenticatedRequest,
@@ -18,7 +18,9 @@ import type {
 } from "./auth.type";
 import { SessionsService } from "@/sessions/sessions.service";
 import { JwtAccessGuard } from "./guards/jwt-access.guard";
-import { SessionRotationService } from "@/sessions/session-rotation.service";
+import { SessionRotationService } from "@/sessions/rotation/session-rotation.service";
+import { type Request } from "express";
+import { SessionMetadataService } from "@/sessions/metadata/session-metadata.service";
 
 @Controller("auth")
 export class AuthController {
@@ -26,6 +28,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly sessionsService: SessionsService,
     private readonly sessionRotationService: SessionRotationService,
+    private readonly sessionMetadataService: SessionMetadataService,
   ) {}
 
   @Post("signup")
@@ -36,11 +39,10 @@ export class AuthController {
   }
 
   @Post("login")
-  async login(@Body() payload: LoginDTO) {
-    const tokens = await this.authService.loginWithPassword(
-      payload.email,
-      payload.password,
-    );
+  async login(@Body() payload: LocalLoginDTO, @Req() req: Request) {
+    const metadata = this.sessionMetadataService.extract(req);
+    const user = await this.authService.authenticateWithPassword(payload);
+    const tokens = await this.authService.login(user, metadata);
 
     return tokens;
   }

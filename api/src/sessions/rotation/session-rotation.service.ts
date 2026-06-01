@@ -7,7 +7,7 @@ import { PrismaService } from "@/common/prisma/prisma.service";
 import authConfiguration from "@/config/auth.config";
 import { Session } from "@/generated/prisma/client";
 import { TokensService } from "@/tokens/tokens.service";
-import { SessionsService } from "./sessions.service";
+import { SessionsService } from "../sessions.service";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { type Cache } from "cache-manager";
 import { AuthTokens } from "@/tokens/tokens.type";

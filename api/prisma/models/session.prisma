@@ -4,6 +4,14 @@ model Session {
   previousHash       String?
   previousValidUntil DateTime?
 
+  ipAddress   String?
+  country     String?
+  city        String?
+  deviceType  String?
+  deviceName  String?
+  browserName String?
+  osName      String?
+
   expiresAt DateTime
   revokedAt DateTime?
 
