@@ -4,16 +4,18 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-  Logger,
 } from "@nestjs/common";
 import { Response } from "express";
 import { AppError } from "../errors/app-error";
 import { ValidationError } from "../errors/validation/validation.error";
 import { ApiErrorPayload, ApiErrorResponse } from "../types/api.types";
+import { PinoLogger } from "nestjs-pino";
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(GlobalExceptionFilter.name);
+  constructor(private readonly logger: PinoLogger) {
+    this.logger.setContext(GlobalExceptionFilter.name);
+  }
 
   catch(error: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();

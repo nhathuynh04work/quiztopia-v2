@@ -1,7 +1,7 @@
-import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "@/common/prisma/prisma.service";
 import { type ConfigType } from "@nestjs/config";
+import { authConfiguration } from "@/config";
 
 @Injectable()
 export class SessionsService {

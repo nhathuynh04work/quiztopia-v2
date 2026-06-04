@@ -1,22 +1,24 @@
-import authConfiguration from "@/config/auth.config";
-import { Inject, Injectable, Logger } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "@/common/prisma/prisma.service";
 import { hash } from "bcrypt";
 import { SignupDTO } from "@/auth/schemas/signup.schema";
 import { type ConfigType } from "@nestjs/config";
 import { EmailAlreadyExistsError } from "@/common/errors/user/email-already-exists.error";
 import { Prisma } from "@/generated/prisma/client";
+import { PinoLogger } from "nestjs-pino";
+import { authConfiguration } from "@/config";
 
 @Injectable()
 export class UsersService {
-  private readonly logger = new Logger(UsersService.name);
-
   constructor(
-    private readonly prisma: PrismaService,
-
     @Inject(authConfiguration.KEY)
     private readonly authConfig: ConfigType<typeof authConfiguration>,
-  ) {}
+
+    private readonly logger: PinoLogger,
+    private readonly prisma: PrismaService,
+  ) {
+    this.logger.setContext(UsersService.name);
+  }
 
   findById(id: string) {
     return this.prisma.user.findUnique({

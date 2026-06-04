@@ -1,9 +1,13 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
+import { PinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class JobRunnerService {
-  private readonly logger = new Logger(JobRunnerService.name);
   private readonly runningJobs = new Set<string>();
+
+  constructor(private readonly logger: PinoLogger) {
+    this.logger.setContext(JobRunnerService.name);
+  }
 
   async run(jobName: string, operation: () => Promise<void>) {
     if (this.runningJobs.has(jobName)) {
@@ -15,12 +19,12 @@ export class JobRunnerService {
 
     const startedAt = Date.now();
 
-    this.logger.log(`[${jobName}] Started`);
+    this.logger.info(`[${jobName}] Started`);
 
     try {
       await operation();
 
-      this.logger.log(`[${jobName}] Finished in ${Date.now() - startedAt}ms`);
+      this.logger.info(`[${jobName}] Finished in ${Date.now() - startedAt}ms`);
     } catch (err) {
       this.logger.error(
         `[${jobName}] Failed`,
