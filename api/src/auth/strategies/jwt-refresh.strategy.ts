@@ -1,4 +1,3 @@
-import authConfiguration from "@/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-jwt";
@@ -13,6 +12,7 @@ import { JwtRefreshTokenPayload } from "@/tokens/tokens.type";
 import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
 import { Request } from "express";
 import { extractJwtFromAuthBearer } from "../helpers/token-extractor";
+import { authConfiguration } from "@/config";
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(

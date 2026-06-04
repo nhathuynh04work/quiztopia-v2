@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { compare, hashSync } from "bcrypt";
 import { UsersService } from "@/users/users.service";
 import { SignupDTO } from "./schemas/signup.schema";
@@ -7,26 +7,28 @@ import { TokensService } from "@/tokens/tokens.service";
 import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
 import { PrismaService } from "@/common/prisma/prisma.service";
 import type { ConfigType } from "@nestjs/config";
-import authConfiguration from "@/config/auth.config";
 import { addMilliseconds } from "date-fns";
 import { ActiveSessionLimitReachedError } from "@/common/errors/auth/active-session-limit-reached.error";
 import { LocalLoginDTO } from "./schemas/local-login.schema";
 import { SessionMetadata } from "@/sessions/metadata/session-metadata.type";
+import { PinoLogger } from "nestjs-pino";
+import { authConfiguration } from "@/config";
 
 const FAKE_HASH = hashSync("quiztopia-v2-fake", 10);
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
-
   constructor(
     @Inject(authConfiguration.KEY)
     private readonly authConfig: ConfigType<typeof authConfiguration>,
 
+    private readonly logger: PinoLogger,
     private readonly usersService: UsersService,
     private readonly tokensService: TokensService,
     private readonly prisma: PrismaService,
-  ) {}
+  ) {
+    this.logger.setContext(AuthService.name);
+  }
 
   async signup(payload: SignupDTO) {
     const newUser = await this.usersService.create(payload);

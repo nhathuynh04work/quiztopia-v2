@@ -1,21 +1,20 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import type { ConfigType } from "@nestjs/config";
 import { addSeconds } from "date-fns";
 import { InvalidCredentialsError } from "@/common/errors/auth/invalid-credentials.error";
 import { ReplayAttackDetectedError } from "@/common/errors/session/replay-attack-detected.error";
 import { PrismaService } from "@/common/prisma/prisma.service";
-import authConfiguration from "@/config/auth.config";
 import { Session } from "@/generated/prisma/client";
 import { TokensService } from "@/tokens/tokens.service";
 import { SessionsService } from "../sessions.service";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { type Cache } from "cache-manager";
 import { AuthTokens } from "@/tokens/tokens.type";
+import { PinoLogger } from "nestjs-pino";
+import { authConfiguration } from "@/config";
 
 @Injectable()
 export class SessionRotationService {
-  private readonly logger = new Logger(SessionRotationService.name);
-
   constructor(
     @Inject(authConfiguration.KEY)
     private readonly authConfig: ConfigType<typeof authConfiguration>,
@@ -23,10 +22,13 @@ export class SessionRotationService {
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
 
+    private readonly logger: PinoLogger,
     private readonly prisma: PrismaService,
     private readonly tokensService: TokensService,
     private readonly sessionsService: SessionsService,
-  ) {}
+  ) {
+    this.logger.setContext(SessionRotationService.name);
+  }
 
   async rotateSession(sessionId: string, refreshToken: string) {
     const tokenHash = this.tokensService.hashToken(refreshToken);
