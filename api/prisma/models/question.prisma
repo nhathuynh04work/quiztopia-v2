@@ -1,0 +1,23 @@
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TEXT
+}
+
+model Question {
+  id          String       @id @default(uuid())
+  title       String?
+  type        QuestionType
+  points      Int          @default(1000)
+  timeLimitMs Int          @default(20000)
+  order       Int          @default(0)
+  image       String?
+  metadata    Json
+
+  quiz        Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId      String
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([quizId])
+}
