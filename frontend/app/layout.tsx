@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import { getCurrentUser } from "@/lib/auth/get-current-user";
-import { TopBar } from "@/components/layouts/top-bar/top-bar";
-import { MainSidebar } from "@/components/layouts/main-sidebar";
 
 const montserrat = Montserrat({
 	variable: "--font-montserrat",
@@ -21,8 +18,6 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const user = await getCurrentUser();
-
 	return (
 		<html
 			lang="en"
@@ -31,13 +26,7 @@ export default async function RootLayout({
 			<body className="min-h-screen flex flex-col">
 				<Toaster position="bottom-center" />
 
-				<div className="min-h-screen flex flex-col">
-					<TopBar user={user} />
-					<div className="flex flex-1 min-h-0">
-						{user && <MainSidebar />}
-						<div className="flex-1 bg-gray-50">{children}</div>
-					</div>
-				</div>
+				{children}
 			</body>
 		</html>
 	);

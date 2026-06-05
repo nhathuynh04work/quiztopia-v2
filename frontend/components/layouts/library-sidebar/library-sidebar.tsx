@@ -41,7 +41,7 @@ export function LibrarySidebar() {
 	const iconSize = 20;
 
 	return (
-		<nav className="flex flex-col h-full w-3xs shadow-sm border-r border-gray-200 px-3 py-2">
+		<nav className="flex flex-col h-full w-3xs border-r border-gray-200 px-3 py-2">
 			<div className="flex flex-col gap-2 py-4">
 				{items.map((item) => {
 					const isActive = isActivePath(pathname, item.href, { exact: true });
