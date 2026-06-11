@@ -5,11 +5,11 @@ import { DEFAULT_PAGE, DEFAULT_LIMIT } from "../constants/pagination.constant";
 export const PaginationQuerySchema = z.object({
   page: z.preprocess(
     (val) => (val ? parseInt(val as string, 10) : undefined),
-    z.number().int().positive().default(DEFAULT_PAGE)
+    z.number().int().positive().default(DEFAULT_PAGE),
   ),
   limit: z.preprocess(
     (val) => (val ? parseInt(val as string, 10) : undefined),
-    z.number().int().positive().default(DEFAULT_LIMIT)
+    z.number().int().positive().default(DEFAULT_LIMIT),
   ),
 });
 

@@ -1,4 +1,3 @@
-export const DEFAULT_POINTS = 1000;
 export const DEFAULT_TIME_LIMIT_MS = 20000;
 
 export const QUIZ_STATUS_FILTERS = {
@@ -13,4 +12,5 @@ export const QUIZ_STATUS_FILTER_VALUES = [
   QUIZ_STATUS_FILTERS.DRAFT,
 ] as const;
 
-export type QuizStatusFilter = typeof QUIZ_STATUS_FILTERS[keyof typeof QUIZ_STATUS_FILTERS];
+export type QuizStatusFilter =
+  (typeof QUIZ_STATUS_FILTERS)[keyof typeof QUIZ_STATUS_FILTERS];

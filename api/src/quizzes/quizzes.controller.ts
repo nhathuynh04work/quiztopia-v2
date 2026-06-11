@@ -33,7 +33,7 @@ export class QuizzesController {
   @Post()
   async create(
     @Body() payload: CreateQuizDTO,
-    @Req() req: AuthenticatedRequest
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.quizzesService.createQuiz(req.user.id, payload);
   }
@@ -42,7 +42,7 @@ export class QuizzesController {
   @Get()
   async findAll(
     @Req() req: AuthenticatedRequest,
-    @Query() query: GetQuizzesQueryDTO
+    @Query() query: GetQuizzesQueryDTO,
   ) {
     return this.quizzesService.getQuizzes(req.user.id, query);
   }
@@ -54,10 +54,7 @@ export class QuizzesController {
 
   @UseGuards(JwtAccessGuard)
   @Get(":id")
-  async findOne(
-    @Param("id") id: string,
-    @Req() req: AuthenticatedRequest
-  ) {
+  async findOne(@Param("id") id: string, @Req() req: AuthenticatedRequest) {
     return this.quizzesService.getQuizById(req.user.id, id);
   }
 
@@ -66,7 +63,7 @@ export class QuizzesController {
   async update(
     @Param("id") id: string,
     @Body() payload: UpdateQuizDTO,
-    @Req() req: AuthenticatedRequest
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.quizzesService.updateQuiz(req.user.id, id, payload);
   }
@@ -76,17 +73,14 @@ export class QuizzesController {
   async publish(
     @Param("id") id: string,
     @Body() payload: PublishQuizPayloadDTO,
-    @Req() req: AuthenticatedRequest
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.quizzesService.publishQuiz(req.user.id, id, payload);
   }
 
   @UseGuards(OptionalJwtAccessGuard)
   @Get(":id/playable")
-  async findPlayable(
-    @Param("id") id: string,
-    @Req() req: Request
-  ) {
+  async findPlayable(@Param("id") id: string, @Req() req: Request) {
     const user = (req as any).user;
     const userId = user ? user.id : null;
     return this.quizzesService.getPlayableQuiz(userId, id);
@@ -95,10 +89,7 @@ export class QuizzesController {
   @UseGuards(JwtAccessGuard)
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(
-    @Param("id") id: string,
-    @Req() req: AuthenticatedRequest
-  ) {
+  async delete(@Param("id") id: string, @Req() req: AuthenticatedRequest) {
     await this.quizzesService.deleteQuiz(req.user.id, id);
   }
 }

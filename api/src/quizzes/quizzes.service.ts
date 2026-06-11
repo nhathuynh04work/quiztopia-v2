@@ -33,8 +33,10 @@ export class QuizzesService {
         ...quizData,
         userId,
         questions: {
-          create: payload.questions.map((q) => ({
+          create: payload.questions.map((q, index) => ({
+            id: q.id,
             ...this.buildQuestionData(q),
+            order: index,
           })),
         },
       },
@@ -105,7 +107,7 @@ export class QuizzesService {
   async updateQuiz(userId: string, quizId: string, payload: UpdateQuizDTO) {
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: quizId },
-      include: { questions: true },
+      include: { questions: { orderBy: { order: "asc" } } },
     });
 
     if (!quiz) {
@@ -188,9 +190,10 @@ export class QuizzesService {
         title: currentQuiz.title,
         coverImage: currentQuiz.coverImage,
         visibility: currentQuiz.visibility,
-        questions: currentQuiz.questions.map((q) => ({
+        questions: currentQuiz.questions.map((q, index) => ({
           id: q.id,
           ...this.buildQuestionData(q),
+          order: index,
         })),
       };
 
@@ -301,9 +304,7 @@ export class QuizzesService {
     existingQuestions: Question[],
   ) {
     const existingIds = new Set(existingQuestions.map((q) => q.id));
-    const incomingIds = new Set(
-      incomingQuestions.map((q) => q.id).filter((id): id is string => !!id),
-    );
+    const incomingIds = new Set(incomingQuestions.map((q) => q.id));
 
     const toDeleteIds = [...existingIds].filter((id) => !incomingIds.has(id));
     if (toDeleteIds.length > 0) {
@@ -315,19 +316,13 @@ export class QuizzesService {
       });
     }
 
-    const promises = incomingQuestions.map((q) => {
-      if (q.id && existingIds.has(q.id)) {
-        return tx.question.update({
-          where: { id: q.id },
-          data: this.buildQuestionData(q),
-        });
-      }
+    const promises = incomingQuestions.map((q, index) => {
+      const data = { ...this.buildQuestionData(q), order: index };
 
-      return tx.question.create({
-        data: {
-          ...this.buildQuestionData(q),
-          quizId,
-        },
+      return tx.question.upsert({
+        where: { id: q.id },
+        create: { id: q.id, quizId: quizId, ...data },
+        update: data,
       });
     });
 
@@ -348,7 +343,6 @@ export class QuizzesService {
       timeLimitMs: q.timeLimitMs,
       image: q.image,
       metadata: q.metadata as any,
-      order: q.order,
     };
   }
 }

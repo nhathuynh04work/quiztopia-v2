@@ -33,7 +33,10 @@ export class QuizzesValidationService {
     };
   }
 
-  private formatValidationErrors(quiz: any, zodError: z.ZodError): QuizValidationErrors {
+  private formatValidationErrors(
+    quiz: any,
+    zodError: z.ZodError,
+  ): QuizValidationErrors {
     const errors: QuizValidationErrors = { questions: {} };
 
     for (const issue of zodError.issues) {

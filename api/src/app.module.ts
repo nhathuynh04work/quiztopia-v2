@@ -76,4 +76,3 @@ import { QuizzesModule } from "./quizzes/quizzes.module";
   ],
 })
 export class AppModule {}
-

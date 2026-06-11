@@ -3,11 +3,17 @@ enum QuestionType {
   TEXT
 }
 
+enum PointsMode {
+  STANDARD
+  DOUBLE_POINTS
+  NO_POINTS
+}
+
 model Question {
   id          String       @id @default(uuid())
   title       String       @default("")
   type        QuestionType @default(MULTIPLE_CHOICE)
-  points      Int          @default(1000)
+  points      PointsMode   @default(STANDARD)
   timeLimitMs Int          @default(20000)
   order       Int          @default(0)
   image       String?
