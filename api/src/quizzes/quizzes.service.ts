@@ -14,9 +14,9 @@ import {
   QuizNotPlayableError,
 } from "../common/errors/quiz/quiz.errors";
 import { PaginationQueryDTO } from "../common/schemas/pagination.schema";
-import { QUIZ_STATUS_FILTERS } from "./constants/quiz.constant";
 import { QuizzesValidationService } from "./quizzes-validation.service";
 import { DraftQuestionInput } from "./schemas/question.schema";
+import { QUIZ_STATUS_FILTERS } from "./constants/filters";
 
 @Injectable()
 export class QuizzesService {
@@ -188,6 +188,8 @@ export class QuizzesService {
 
       const snapshot = {
         title: currentQuiz.title,
+        description: currentQuiz.description,
+        theme: currentQuiz.theme,
         coverImage: currentQuiz.coverImage,
         visibility: currentQuiz.visibility,
         questions: currentQuiz.questions.map((q, index) => ({

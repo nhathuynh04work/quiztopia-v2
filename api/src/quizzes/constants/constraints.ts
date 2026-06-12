@@ -1,0 +1,9 @@
+export const MAX_QUIZ_TITLE_LENGTH = 95;
+
+export const MAX_QUIZ_DESCRIPTION_LENGTH = 500;
+
+export const MAX_QUESTION_TITLE_LENGTH = 120;
+
+export const MAX_OPTIONS_COUNT = 4;
+
+export const MAX_OPTION_TITLE_LENGTH = 50;

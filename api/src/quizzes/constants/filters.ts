@@ -1,5 +1,3 @@
-export const DEFAULT_TIME_LIMIT_MS = 20000;
-
 export const QUIZ_STATUS_FILTERS = {
   ALL: "all",
   PUBLISHED: "published",

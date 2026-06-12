@@ -6,6 +6,8 @@ enum QuizVisibility {
 model Quiz {
   id               String         @id @default(uuid())
   title            String         @default("")
+  description      String
+  theme            String
   coverImage       String?
   visibility       QuizVisibility @default(PRIVATE)
   publishedDetails Json?
