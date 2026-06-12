@@ -21,7 +21,7 @@ export default async function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${montserrat.variable} h-full antialiased text-xs`}
+			className={`${montserrat.variable} h-full antialiased text-xs scrollbar-thin scrollbar-thumb-gray-300`}
 		>
 			<body className="min-h-screen flex flex-col">
 				<Toaster position="bottom-center" />

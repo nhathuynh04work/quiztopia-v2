@@ -20,7 +20,7 @@ export default async function SessionManagement() {
 				{sessions.length > 0 ? (
 					<SessionsList sessions={sessions} />
 				) : (
-					<p className="border border-blue-500 bg-blue-50 p-4 rounded-sm text-blue-700 font-medium text-lg">
+					<p className="border border-kahoot-blue-light bg-blue-50 p-4 rounded-sm text-blue-700 font-medium text-lg">
 						You have not logged in anywhere.{" "}
 						<Link href="/" className="font-bold underline">
 							Back to home

@@ -29,7 +29,7 @@ export function GuestNav() {
 		<div className="flex items-center gap-6">
 			<Link
 				href="/news"
-				className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition font-semibold ml-6">
+				className="bg-kahoot-blue-light hover:bg-kahoot-blue-dark text-white py-2 px-4 rounded-md transition font-semibold ml-6">
 				News
 			</Link>
 			{items.map((item) => (
