@@ -1,7 +1,7 @@
 import { QUESTION_TYPE } from "@/features/quiz/constants/question-type";
-import { Question } from "@/features/quiz/types/question";
 import { MultipleChoiceAnswerPanel } from "./multiple-choice";
 import { TextAnswerPanel } from "./text";
+import { Question } from "@/features/quiz/types/question";
 
 type Props = {
 	question: Question;

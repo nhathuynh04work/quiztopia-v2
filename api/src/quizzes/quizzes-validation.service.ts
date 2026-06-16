@@ -2,20 +2,20 @@ import { Injectable } from "@nestjs/common";
 import z from "zod";
 import { PublishQuizSchema } from "./schemas/quiz.schema";
 
-export interface QuizValidationErrors {
+export interface ValidationErrors {
   title?: string;
   questionsGlobal?: string;
   questions: Record<string, string[]>;
 }
 
-export interface QuizValidationReport {
+export interface ValidationReport {
   isValid: boolean;
-  errors: QuizValidationErrors | null;
+  errors: ValidationErrors | null;
 }
 
 @Injectable()
 export class QuizzesValidationService {
-  runValidation(quiz: any): QuizValidationReport {
+  runValidation(quiz: any): ValidationReport {
     const parsed = PublishQuizSchema.safeParse({
       title: quiz.title,
       coverImage: quiz.coverImage,
@@ -36,8 +36,8 @@ export class QuizzesValidationService {
   private formatValidationErrors(
     quiz: any,
     zodError: z.ZodError,
-  ): QuizValidationErrors {
-    const errors: QuizValidationErrors = { questions: {} };
+  ): ValidationErrors {
+    const errors: ValidationErrors = { questions: {} };
 
     for (const issue of zodError.issues) {
       const path = issue.path;

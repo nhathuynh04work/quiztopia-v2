@@ -3,6 +3,8 @@ import { Option as OptionType } from "@/features/quiz/types/question/multiple-ch
 import { cn } from "@/lib/utils/cn";
 import { MAX_OPTION_TITLE_LENGTH } from "@/features/quiz/constants/constraints";
 import { Check } from "lucide-react";
+import { useQuizEditorStore } from "../../../hooks/use-quiz-editor-store";
+import { useState } from "react";
 
 type Props = {
 	option: OptionType;
@@ -10,25 +12,32 @@ type Props = {
 };
 
 export function Option({ option, order }: Props) {
+	const setTitle = useQuizEditorStore((s) => s.setOptionTitle);
+	const setIsCorrect = useQuizEditorStore((s) => s.setOptionIsCorrect);
+
 	const { id, title, isCorrect } = option;
+
+	const [draftTitle, setDraftTitle] = useState(title);
+
 	const {
 		backgroundColor,
 		hoverBackgroundColor,
+		borderColor,
 		icon: Icon,
 	} = OPTION_CONFIGS[order];
 
-	const isActive = title.length > 0;
+	const isActive = draftTitle.length > 0;
 
 	return (
 		<div
 			className={cn(
-				"relative flex items-center gap-4 py-2 px-3 bg-white rounded-md transition-all duration-300 group",
-				isActive && `${backgroundColor} hover:${hoverBackgroundColor}`,
+				"relative flex items-center gap-4 py-2 px-3 bg-white rounded-md transition-all duration-300 group border-b-4 border-gray-300",
+				isActive && `${backgroundColor} ${hoverBackgroundColor} ${borderColor}`,
 			)}
 		>
 			{isActive && (
 				<div className="absolute py-2 px-3 text-lg font-semibold text-white top-0 right-0 hidden group-focus-within:block">
-					{MAX_OPTION_TITLE_LENGTH - title.length}
+					{MAX_OPTION_TITLE_LENGTH - draftTitle.length}
 				</div>
 			)}
 			<div
@@ -41,8 +50,11 @@ export function Option({ option, order }: Props) {
 			</div>
 			<textarea
 				name="title"
-				value={title}
-				onChange={(e) => setTitle(e.target.value)}
+				value={draftTitle}
+				onChange={(e) => setDraftTitle(e.target.value)}
+				onBlur={
+					draftTitle !== title ? () => setTitle(id, draftTitle) : undefined
+				}
 				rows={4}
 				maxLength={MAX_OPTION_TITLE_LENGTH}
 				placeholder={`Add answer ${order + 1}`}
@@ -52,7 +64,7 @@ export function Option({ option, order }: Props) {
 				)}
 			/>
 			<div
-				onClick={() => setIsCorrect((prev) => !prev)}
+				onClick={() => setIsCorrect(id, !option.isCorrect)}
 				className={cn(
 					!isActive && "hidden",
 					isCorrect && "bg-[#66bf39]",
@@ -62,7 +74,7 @@ export function Option({ option, order }: Props) {
 				<Check
 					color="white"
 					strokeWidth={4}
-					className={cn(isCorrect ? "visible" : "invisible hover:visible")}
+					className={cn(isCorrect ? "visible" : "invisible")}
 				/>
 			</div>
 		</div>

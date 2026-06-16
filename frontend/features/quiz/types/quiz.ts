@@ -4,6 +4,7 @@ import { QuizVisibility } from "./quiz-visibility";
 export type Quiz = {
 	id: string;
 	title: string;
+	description: string;
 	theme: string;
 	coverImage: null | string;
 	visibility: QuizVisibility;

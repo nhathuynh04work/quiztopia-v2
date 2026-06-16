@@ -1,7 +1,7 @@
-import { descriptionStyle, inputStyle, titleStyle } from "./styles";
-import { SettingCard } from "./setting-card";
 import { cn } from "@/lib/utils/cn";
 import { MAX_QUIZ_TITLE_LENGTH } from "@/features/quiz/constants/constraints";
+import { SettingCard } from "./setting-card";
+import { descriptionStyle, inputStyle, titleStyle } from "./styles";
 
 export function CoverImageSetting() {
 	return (

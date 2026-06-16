@@ -2,17 +2,21 @@ import { Award, Check, ChevronDown } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
-import { PointsMode } from "@/features/quiz/types/points-mode";
 import {
 	POINTS_MODE,
 	POINTS_MODE_CONFIG,
 } from "@/features/quiz/constants/points-mode";
+import { Question } from "@/features/quiz/types/question";
+import { useQuizEditorStore } from "../../../hooks/use-quiz-editor-store";
 
 type Props = {
-	points: PointsMode;
+	question: Question;
 };
 
-export function PointsSelect({ points }: Props) {
+export function PointsSelect({ question }: Props) {
+	const { id, points } = question;
+	const setPoints = useQuizEditorStore((s) => s.setQuestionPoints);
+
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2">
@@ -42,11 +46,14 @@ export function PointsSelect({ points }: Props) {
 							const config = POINTS_MODE_CONFIG[mode];
 
 							return (
-								<Button
+								<DropdownMenu.Item
 									key={mode}
+									onClick={() => setPoints(id, mode)}
 									className={cn(
 										"flex flex-col gap-1 p-4 rounded-sm text-left",
-										isSelected ? "cursor-default" : "hover:bg-gray-100",
+										isSelected
+											? "cursor-default"
+											: "hover:bg-gray-100 cursor-pointer",
 									)}
 								>
 									<div className="flex items-center justify-between">
@@ -56,7 +63,7 @@ export function PointsSelect({ points }: Props) {
 										{isSelected && <Check size={16} />}
 									</div>
 									<p className="font-medium">{config.description}</p>
-								</Button>
+								</DropdownMenu.Item>
 							);
 						})}
 					</DropdownMenu.Content>

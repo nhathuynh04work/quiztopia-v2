@@ -1,11 +1,8 @@
 import { Button } from "@/components/ui/button";
-import {
-	QUESTION_TYPE,
-	QUESTION_TYPE_CONFIG,
-} from "@/features/quiz/constants/question-type";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Plus } from "lucide-react";
 import { useQuizEditorStore } from "../../hooks/use-quiz-editor-store";
+import { DropdownContent } from "./dropdown-content";
 
 export function AddQuestionDropdown() {
 	const setIsAddDropdownOpen = useQuizEditorStore(
@@ -22,27 +19,7 @@ export function AddQuestionDropdown() {
 			</DropdownMenu.Trigger>
 
 			<DropdownMenu.Portal>
-				<DropdownMenu.Content
-					side="right"
-					sideOffset={36}
-					collisionPadding={12}
-					className="w-2xl bg-white grid grid-cols-3 gap-2 p-4 rounded-md filter drop-shadow-md z-50"
-				>
-					<DropdownMenu.Arrow className="fill-white" width={16} height={8} />
-					{Object.values(QUESTION_TYPE).map((type) => {
-						const config = QUESTION_TYPE_CONFIG[type];
-
-						return (
-							<div
-								className="flex flex-col items-center gap-2 px-4 py-8 bg-gray-200 hover:bg-gray-300 transition-all cursor-pointer rounded-sm shadow-sm"
-								key={type}
-							>
-								<img src={config.iconPath} className="max-w-10" />
-								<span className="font-bold text-md">{config.text}</span>
-							</div>
-						);
-					})}
-				</DropdownMenu.Content>
+				<DropdownContent />
 			</DropdownMenu.Portal>
 		</DropdownMenu.Root>
 	);

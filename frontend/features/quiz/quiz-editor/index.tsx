@@ -6,10 +6,14 @@ import { QuestionEditor } from "./question-editor";
 import { SettingMenu } from "./setting-menu";
 import { SettingPanel } from "./setting-panel";
 import { useQuizEditorStore } from "./hooks/use-quiz-editor-store";
+import { useAutoSave } from "./hooks/use-autosave";
 
 export function QuizEditor() {
+	const quizId = useQuizEditorStore((s) => s.quiz.id);
 	const isAddDropdownOpen = useQuizEditorStore((s) => s.isAddDropdownOpen);
 	const isSettingOpen = useQuizEditorStore((s) => s.selectedMenu !== null);
+
+	useAutoSave(quizId);
 
 	return (
 		<div className="flex flex-col h-screen">

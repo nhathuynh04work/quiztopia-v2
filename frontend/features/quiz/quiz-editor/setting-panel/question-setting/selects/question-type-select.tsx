@@ -5,14 +5,18 @@ import {
 	QUESTION_TYPE,
 	QUESTION_TYPE_CONFIG,
 } from "@/features/quiz/constants/question-type";
-import { QuestionType } from "@/features/quiz/types/question-type";
 import { cn } from "@/lib/utils/cn";
+import { Question } from "@/features/quiz/types/question";
+import { useQuizEditorStore } from "../../../hooks/use-quiz-editor-store";
 
 type Props = {
-	type: QuestionType;
+	question: Question;
 };
 
-export function QuestionTypeSelect({ type }: Props) {
+export function QuestionTypeSelect({ question }: Props) {
+	const { id, type } = question;
+	const setType = useQuizEditorStore((s) => s.setQuestionType);
+
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2">
@@ -43,16 +47,19 @@ export function QuestionTypeSelect({ type }: Props) {
 							const config = QUESTION_TYPE_CONFIG[questionType];
 
 							return (
-								<Button
+								<DropdownMenu.Item
 									key={questionType}
+									onClick={() => setType(id, questionType)}
 									className={cn(
 										"flex flex-col border-2 border-transparent items-center gap-2 bg-gray-100 p-4 rounded-sm",
-										isSelected ? "cursor-default border-kahoot-blue-dark" : "hover:bg-gray-300" 
+										isSelected
+											? "cursor-default border-kahoot-blue-dark"
+											: "hover:bg-gray-300 cursor-pointer",
 									)}
 								>
 									<img src={config.iconPath} className="h-12" />
 									<span className="text-black font-bold">{config.text}</span>
-								</Button>
+								</DropdownMenu.Item>
 							);
 						})}
 					</DropdownMenu.Content>

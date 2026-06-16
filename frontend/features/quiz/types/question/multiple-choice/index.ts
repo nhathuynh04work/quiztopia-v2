@@ -1,4 +1,5 @@
-import { QUESTION_TYPE } from "../../../constants/question-type";
+
+import { QUESTION_TYPE } from "@/features/quiz/constants/question-type";
 import { BaseQuestion } from "../base";
 import { Option } from "./option";
 

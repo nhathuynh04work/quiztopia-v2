@@ -11,32 +11,9 @@ import {
   MAX_QUIZ_TITLE_LENGTH,
   MAX_QUIZ_DESCRIPTION_LENGTH,
 } from "../constants/constraints";
-import { DEFAULT_QUIZ_THEME } from "../constants/defaults";
 
-const CreateQuizSchema = z.object({
-  title: z
-    .string()
-    .trim()
-    .max(
-      MAX_QUIZ_TITLE_LENGTH,
-      `Title must be at most ${MAX_QUIZ_TITLE_LENGTH} characters`,
-    )
-    .default(""),
-  description: z
-    .string()
-    .trim()
-    .max(
-      MAX_QUIZ_DESCRIPTION_LENGTH,
-      `Description must be at most ${MAX_QUIZ_DESCRIPTION_LENGTH} characters`,
-    )
-    .default(""),
-  theme: z.string().trim().default(DEFAULT_QUIZ_THEME),
-  coverImage: z.url().nullable(),
-  visibility: z.enum(QuizVisibility).default(QuizVisibility.PRIVATE),
-  questions: z.array(DraftQuestionSchema).min(1, "Quiz must contain questions"),
-});
-
-const UpdateQuizSchema = z.object({
+const UpsertQuizSchema = z.object({
+  id: z.uuid(),
   title: z
     .string()
     .trim()
@@ -104,9 +81,7 @@ export const PublishQuizSchema = z.object({
     .min(1, "Quiz must contain questions"),
 });
 
-export class CreateQuizDTO extends createZodDto(CreateQuizSchema) {}
-
-export class UpdateQuizDTO extends createZodDto(UpdateQuizSchema) {}
+export class UpsertQuizDTO extends createZodDto(UpsertQuizSchema) {}
 
 export class GetQuizzesQueryDTO extends createZodDto(GetQuizzesQuerySchema) {}
 

@@ -1,5 +1,5 @@
 import { AppError } from "../app-error";
-import { QuizValidationErrors } from "../../../quizzes/quizzes-validation.service";
+import { ValidationErrors } from "../../../quizzes/quizzes-validation.service";
 
 export class QuizNotFoundError extends AppError {
   readonly code = "QUIZ_NOT_FOUND";
@@ -23,7 +23,7 @@ export class QuizPublishValidationError extends AppError {
   readonly code = "QUIZ_PUBLISH_VALIDATION";
   readonly statusCode = 400;
 
-  constructor(public readonly errors: QuizValidationErrors) {
+  constructor(public readonly errors: ValidationErrors) {
     super("Quiz validation failed, cannot publish");
   }
 }

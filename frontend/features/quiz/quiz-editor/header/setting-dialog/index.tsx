@@ -1,24 +1,39 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { SettingDialogContent } from "./setting-dialog-content";
 import { useQuizEditorStore } from "../../hooks/use-quiz-editor-store";
 import { cn } from "@/lib/utils/cn";
+import { useState } from "react";
+import { SettingDialogContent } from "./setting-dialog-content";
+import { DialogData } from "./dialog-data";
 
 export function SettingDialog() {
-	const title = useQuizEditorStore((s) => s.quiz.title);
-	const isValid = title.length > 0;
+	const [open, setOpen] = useState(false);
+
+	const quiz = useQuizEditorStore((s) => s.quiz);
+	const setData = useQuizEditorStore((s) => s.setQuizDataUsingDialog);
+
+	const [draft, setDraft] = useState<DialogData>({
+		title: quiz.title,
+		description: quiz.description,
+		visibility: quiz.visibility,
+	});
+
+	const handleDone = () => {
+		setData(draft);
+		setOpen(false);
+	};
 
 	return (
-		<Dialog.Root>
+		<Dialog.Root open={open} onOpenChange={setOpen}>
 			<Dialog.Trigger className="flex items-center gap-2 w-sm border border-gray-200 rounded-md py-2 px-2 cursor-pointer">
 				<span
 					className={cn(
 						"flex-1 text-left text-xl font-extrabold pl-4",
-						isValid ? "text-black-soft" : "text-[#6e6e6e]",
+						quiz.title.length > 0 ? "text-black-soft" : "text-[#6e6e6e]",
 					)}
 				>
-					{isValid ? title : "Enter quiz title..."}
+					{quiz.title.length > 0 ? quiz.title : "Enter quiz title..."}
 				</span>
 				<div className="py-2 px-4 bg-gray-100 font-bold text-lg rounded-sm">
 					Settings
@@ -26,7 +41,11 @@ export function SettingDialog() {
 			</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className="bg-black/70 fixed inset-0" />
-				<SettingDialogContent />
+				<SettingDialogContent
+					draft={draft}
+					setDraft={setDraft}
+					onDone={handleDone}
+				/>
 			</Dialog.Portal>
 		</Dialog.Root>
 	);

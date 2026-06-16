@@ -2,6 +2,7 @@ import { Logo } from "@/components/ui/logo";
 import Link from "next/link";
 import { SettingDialog } from "./setting-dialog";
 import { Button } from "@/components/ui/button";
+import { SavingIndicator } from "./saving-indicator";
 
 export function Header() {
 	return (
@@ -12,6 +13,10 @@ export function Header() {
 				</Link>
 
 				<SettingDialog />
+
+				<div className="ml-6">
+					<SavingIndicator />
+				</div>
 			</div>
 
 			<div className="flex items-center gap-2">

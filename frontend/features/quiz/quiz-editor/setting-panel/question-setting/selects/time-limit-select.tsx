@@ -4,12 +4,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 import { formatTimeLimit } from "@/lib/utils/formatters";
 import { TIME_LIMIT_MS } from "@/features/quiz/constants/time-limits";
+import { Question } from "@/features/quiz/types/question";
+import { useQuizEditorStore } from "../../../hooks/use-quiz-editor-store";
 
 type Props = {
-	timeLimitMs: number;
+	question: Question;
 };
 
-export function TimeLimitSelect({ timeLimitMs }: Props) {
+export function TimeLimitSelect({ question }: Props) {
+	const { id, timeLimitMs } = question;
+	const setLimit = useQuizEditorStore((s) => s.setQuestionTimeLimit);
+
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2">
@@ -37,11 +42,14 @@ export function TimeLimitSelect({ timeLimitMs }: Props) {
 						{TIME_LIMIT_MS.map((limit) => {
 							const isSelected = limit === timeLimitMs;
 							return (
-								<Button
+								<DropdownMenu.Item
 									key={limit}
+									onClick={() => setLimit(id, limit)}
 									className={cn(
 										"flex flex-col gap-1 p-4 rounded-sm text-left",
-										isSelected ? "cursor-default" : "hover:bg-gray-100",
+										isSelected
+											? "cursor-default"
+											: "hover:bg-gray-100 cursor-pointer",
 									)}
 								>
 									<div className="flex items-center justify-between">
@@ -50,7 +58,7 @@ export function TimeLimitSelect({ timeLimitMs }: Props) {
 										</span>
 										{isSelected && <Check size={16} />}
 									</div>
-								</Button>
+								</DropdownMenu.Item>
 							);
 						})}
 					</DropdownMenu.Content>

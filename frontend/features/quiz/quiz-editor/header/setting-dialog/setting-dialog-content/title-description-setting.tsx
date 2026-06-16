@@ -6,7 +6,20 @@ import {
 	MAX_QUIZ_TITLE_LENGTH,
 } from "@/features/quiz/constants/constraints";
 
-export function TitleDescriptionSetting() {
+type Props = {
+	title: string;
+	setTitle: (title: string) => void;
+
+	description: string;
+	setDescription: (description: string) => void;
+};
+
+export function TitleDescriptionSetting({
+	title,
+	setTitle,
+	description,
+	setDescription,
+}: Props) {
 	return (
 		<SettingCard>
 			<div className="w-full flex flex-col gap-6">
@@ -14,8 +27,16 @@ export function TitleDescriptionSetting() {
 					<h3 className={titleStyle}>Title</h3>
 					<p className={descriptionStyle}>Enter a title for your quiz.</p>
 					<div className={cn(inputStyle, "flex")}>
-						<input name="title" type="text" className="flex-1 outline-none" />
-						<span className="text-[#6e6e6e] pl-2">{MAX_QUIZ_TITLE_LENGTH}</span>
+						<input
+							name="title"
+							type="text"
+							className="flex-1 outline-none"
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+						/>
+						<span className="text-[#6e6e6e] pl-2">
+							{MAX_QUIZ_TITLE_LENGTH - title.length}
+						</span>
 					</div>
 				</div>
 				<div className="w-full flex flex-col gap-2">
@@ -28,12 +49,14 @@ export function TitleDescriptionSetting() {
 					</p>
 					<div className={cn(inputStyle, "flex")}>
 						<textarea
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
 							name="description"
 							rows={4}
 							className="flex-1 outline-none resize-none"
 						/>
 						<span className="text-[#6e6e6e] pl-2">
-							{MAX_QUIZ_DESCRIPTION_LENGTH}
+							{MAX_QUIZ_DESCRIPTION_LENGTH - description.length}
 						</span>
 					</div>
 				</div>

@@ -16,10 +16,9 @@ import { QuizzesService } from "./quizzes.service";
 import { JwtAccessGuard } from "../auth/guards/jwt-access.guard";
 import { OptionalJwtAccessGuard } from "../auth/guards/optional-jwt-access.guard";
 import {
-  CreateQuizDTO,
   GetQuizzesQueryDTO,
   PublishQuizPayloadDTO,
-  UpdateQuizDTO,
+  UpsertQuizDTO,
 } from "./schemas/quiz.schema";
 import { PaginationQueryDTO } from "../common/schemas/pagination.schema";
 import type { AuthenticatedRequest } from "../auth/auth.type";
@@ -28,15 +27,6 @@ import { type Request } from "express";
 @Controller("quizzes")
 export class QuizzesController {
   constructor(private readonly quizzesService: QuizzesService) {}
-
-  @UseGuards(JwtAccessGuard)
-  @Post()
-  async create(
-    @Body() payload: CreateQuizDTO,
-    @Req() req: AuthenticatedRequest,
-  ) {
-    return this.quizzesService.createQuiz(req.user.id, payload);
-  }
 
   @UseGuards(JwtAccessGuard)
   @Get()
@@ -59,13 +49,12 @@ export class QuizzesController {
   }
 
   @UseGuards(JwtAccessGuard)
-  @Patch(":id")
-  async update(
-    @Param("id") id: string,
-    @Body() payload: UpdateQuizDTO,
+  @Post()
+  async upsert(
+    @Body() payload: UpsertQuizDTO,
     @Req() req: AuthenticatedRequest,
   ) {
-    return this.quizzesService.updateQuiz(req.user.id, id, payload);
+    return this.quizzesService.upsert(req.user.id, payload.id, payload);
   }
 
   @UseGuards(JwtAccessGuard)

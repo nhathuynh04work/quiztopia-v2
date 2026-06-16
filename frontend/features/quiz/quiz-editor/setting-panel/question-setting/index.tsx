@@ -17,19 +17,17 @@ export function QuestionSetting({ question }: Props) {
 	return (
 		<>
 			<div className="pt-6 pb-8">
-				<QuestionTypeSelect type={question.type} />
+				<QuestionTypeSelect question={question} />
 			</div>
 
 			<Separator />
 
 			<div className="flex-1 flex flex-col gap-6 py-6">
-				<TimeLimitSelect timeLimitMs={question.timeLimitMs} />
-				<PointsSelect points={question.points} />
+				<TimeLimitSelect question={question} />
+				<PointsSelect question={question} />
 
 				{question.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
-					<AllowMultipleSelect
-						allowMultiple={question.metadata.allowMultiple}
-					/>
+					<AllowMultipleSelect question={question} />
 				)}
 			</div>
 

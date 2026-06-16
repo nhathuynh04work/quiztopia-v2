@@ -2,10 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../common/prisma/prisma.service";
 import { Prisma, QuizVisibility, Question } from "../generated/prisma/client";
 import {
-  CreateQuizDTO,
   GetQuizzesQueryDTO,
   PublishQuizPayloadDTO,
-  UpdateQuizDTO,
+  UpsertQuizDTO,
 } from "./schemas/quiz.schema";
 import {
   QuizForbiddenError,
@@ -24,29 +23,6 @@ export class QuizzesService {
     private readonly prisma: PrismaService,
     private readonly validationService: QuizzesValidationService,
   ) {}
-
-  async createQuiz(userId: string, payload: CreateQuizDTO) {
-    const { questions, ...quizData } = payload;
-
-    return this.prisma.quiz.create({
-      data: {
-        ...quizData,
-        userId,
-        questions: {
-          create: payload.questions.map((q, index) => ({
-            id: q.id,
-            ...this.buildQuestionData(q),
-            order: index,
-          })),
-        },
-      },
-      include: {
-        questions: {
-          orderBy: { order: "asc" },
-        },
-      },
-    });
-  }
 
   async getQuizzes(userId: string, query: GetQuizzesQueryDTO) {
     const where: any = { userId };
@@ -104,20 +80,45 @@ export class QuizzesService {
     };
   }
 
-  async updateQuiz(userId: string, quizId: string, payload: UpdateQuizDTO) {
+  async upsert(userId: string, quizId: string, payload: UpsertQuizDTO) {
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: quizId },
       include: { questions: { orderBy: { order: "asc" } } },
     });
 
     if (!quiz) {
-      throw new QuizNotFoundError();
+      return this.prisma.$transaction(async (tx) => {
+        const { id, questions, ...quizData } = payload;
+        const newQuiz = await tx.quiz.create({
+          data: {
+            id: quizId,
+            ...quizData,
+            userId,
+            questions: {
+              create: questions.map((q, index) => ({
+                id: q.id,
+                ...this.buildQuestionData(q),
+                order: index,
+              })),
+            },
+          },
+          include: {
+            questions: {
+              orderBy: { order: "asc" },
+            },
+          },
+        });
+        return {
+          quiz: newQuiz,
+          validation: this.validationService.runValidation(newQuiz),
+        };
+      });
     }
 
     this.verifyOwnership(quiz, userId);
 
     return this.prisma.$transaction(async (tx) => {
-      const { questions, ...quizData } = payload;
+      const { id, questions, ...quizData } = payload;
 
       await tx.quiz.update({
         where: { id: quizId },

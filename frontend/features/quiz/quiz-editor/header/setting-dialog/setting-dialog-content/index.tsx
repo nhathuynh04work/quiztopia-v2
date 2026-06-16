@@ -4,26 +4,23 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Settings } from "lucide-react";
 import { useState } from "react";
-import { TitleDescriptionSetting } from "./title-description-setting";
-import { VisibilitySetting } from "./visibility-setting";
-import { CoverImageSetting } from "./cover-image-setting";
 import { FolderSetting } from "./folder-setting";
 import { LanguageSetting } from "./language-setting";
 import { LobbyVideoSetting } from "./lobby-video-setting";
 import { LobbyMusicSetting } from "./lobby-music-setting";
+import { TitleDescriptionSetting } from "./title-description-setting";
+import { VisibilitySetting } from "./visibility-setting";
+import { CoverImageSetting } from "./cover-image-setting";
+import { TABS } from "../tabs";
+import { DialogData } from "../dialog-data";
 
-const tabs = [
-	{
-		value: "basic-info",
-		name: "Basic information",
-	},
-	{
-		value: "live-game",
-		name: "Live game",
-	},
-] as const;
+type Props = {
+	draft: DialogData;
+	setDraft: React.Dispatch<React.SetStateAction<DialogData>>;
+	onDone: () => void;
+};
 
-export function SettingDialogContent() {
+export function SettingDialogContent({ draft, setDraft, onDone }: Props) {
 	const [currentTab, setCurrentTab] = useState<"basic-info" | "live-game">(
 		"basic-info",
 	);
@@ -46,22 +43,21 @@ export function SettingDialogContent() {
 				</div>
 
 				<div className="flex gap-2">
-					<Dialog.Close asChild>
-						<Button className="py-2 px-4 bg-gray-200 hover:bg-gray-300 font-bold text-lg rounded-sm">
-							Cancel
-						</Button>
+					<Dialog.Close className="py-2 px-4 bg-gray-200 hover:bg-gray-300 font-bold text-lg rounded-sm">
+						Cancel
 					</Dialog.Close>
-					<Dialog.Close asChild>
-						<Button className="py-2 px-4 bg-kahoot-blue-light hover:bg-kahoot-blue-dark font-bold text-lg rounded-sm text-white">
-							Done
-						</Button>
-					</Dialog.Close>
+					<Button
+						onClick={onDone}
+						className="py-2 px-4 bg-kahoot-blue-light hover:bg-kahoot-blue-dark font-bold text-lg rounded-sm text-white"
+					>
+						Done
+					</Button>
 				</div>
 			</header>
 
 			<div className="flex flex-1">
 				<div className="w-xs flex flex-col">
-					{tabs.map((tab) => {
+					{TABS.map((tab) => {
 						const isActive = currentTab === tab.value;
 						return (
 							<Button
@@ -72,7 +68,7 @@ export function SettingDialogContent() {
 									isActive && "border-l-kahoot-blue-dark bg-gray-50 font-bold",
 								)}
 							>
-								{tab.name}
+								{tab.title}
 							</Button>
 						);
 					})}
@@ -82,8 +78,20 @@ export function SettingDialogContent() {
 					{currentTab === "basic-info" ? (
 						<>
 							<div className="flex flex-col gap-6 col-span-3">
-								<TitleDescriptionSetting />
-								<VisibilitySetting />
+								<TitleDescriptionSetting
+									title={draft.title}
+									setTitle={(title) => setDraft({ ...draft, title })}
+									description={draft.description}
+									setDescription={(description) =>
+										setDraft({ ...draft, description })
+									}
+								/>
+								<VisibilitySetting
+									visibility={draft.visibility}
+									setVisibility={(visibility) =>
+										setDraft({ ...draft, visibility })
+									}
+								/>
 							</div>
 
 							<div className="flex flex-col gap-6 col-span-2">

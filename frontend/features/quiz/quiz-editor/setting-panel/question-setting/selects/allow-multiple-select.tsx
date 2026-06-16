@@ -2,12 +2,17 @@ import { Check, ChevronDown, Shapes } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
+import { MultipleChoiceQuestion } from "@/features/quiz/types/question/multiple-choice";
 
 type Props = {
-	allowMultiple: boolean;
+	question: MultipleChoiceQuestion;
 };
 
-export function AllowMultipleSelect({ allowMultiple }: Props) {
+export function AllowMultipleSelect({ question }: Props) {
+	const {
+		metadata: { allowMultiple },
+	} = question;
+
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2">
@@ -32,10 +37,10 @@ export function AllowMultipleSelect({ allowMultiple }: Props) {
 						align="end"
 						className="w-(--radix-dropdown-menu-trigger-width) bg-white flex flex-col p-2 rounded-md border border-gray-200 shadow-sm"
 					>
-						<Button
+						<DropdownMenu.Item
 							className={cn(
 								"flex flex-col gap-1 p-4 rounded-sm text-left",
-								!allowMultiple ? "cursor-default" : "hover:bg-gray-100",
+								!allowMultiple ? "cursor-default" : "hover:bg-gray-100 cursor-pointer",
 							)}
 						>
 							<div className="flex items-center justify-between">
@@ -47,11 +52,11 @@ export function AllowMultipleSelect({ allowMultiple }: Props) {
 							<p className="font-medium">
 								Participants can only select one of the answers
 							</p>
-						</Button>
-						<Button
+						</DropdownMenu.Item>
+						<DropdownMenu.Item
 							className={cn(
 								"flex flex-col gap-1 p-4 rounded-sm text-left",
-								allowMultiple ? "cursor-default" : "hover:bg-gray-100",
+								allowMultiple ? "cursor-default" : "hover:bg-gray-100 cursor-pointer",
 							)}
 						>
 							<div className="flex items-center justify-between">
@@ -63,7 +68,7 @@ export function AllowMultipleSelect({ allowMultiple }: Props) {
 							<p className="font-medium">
 								Participants can select multiple answers before submitting
 							</p>
-						</Button>
+						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Portal>
 			</DropdownMenu.Root>

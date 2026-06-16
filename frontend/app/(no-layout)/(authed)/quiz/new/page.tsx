@@ -1,9 +1,9 @@
 import { QuizEditor } from "@/features/quiz/quiz-editor";
 import { QuizEditorProvider } from "@/features/quiz/quiz-editor/providers/quiz-editor-provider";
-import { buildBlankQuiz } from "@/features/quiz/utils/build-blank-quiz";
+import { buildDefaultQuiz } from "@/features/quiz/utils/build-quiz";
 
 export default function QuizNew() {
-	const quiz = buildBlankQuiz();
+	const quiz = buildDefaultQuiz();
 
 	return (
 		<QuizEditorProvider initialQuiz={quiz}>

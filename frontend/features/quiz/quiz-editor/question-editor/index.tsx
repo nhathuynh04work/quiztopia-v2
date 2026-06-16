@@ -14,13 +14,14 @@ export function QuestionEditor() {
 
 	return (
 		<div
+			key={question.id}
 			className={`w-full h-full bg-center bg-cover flex flex-col items-center py-16 px-6 gap-6`}
 			style={{
 				backgroundImage: `url(/themes/${theme}.webp)`,
 			}}
 		>
 			<div className="w-full">
-				<QuestionTitle title={question.title} />
+				<QuestionTitle question={question} />
 			</div>
 
 			<div className="w-2xl">
