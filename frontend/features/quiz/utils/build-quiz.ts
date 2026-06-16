@@ -1,7 +1,9 @@
+import { MAX_OPTIONS_COUNT } from "../constants/constraints";
 import { QUESTION_TYPE } from "../constants/question-type";
 import { QUIZ_VISIBILITY } from "../constants/quiz-visibility";
 import { Quiz } from "../types/quiz";
-import { buildDefaultQuestion } from "./build-question";
+import { buildDefaultOption } from "./build-option";
+import { buildQuestion } from "./build-question";
 
 export function buildDefaultQuiz(): Quiz {
 	return {
@@ -12,7 +14,7 @@ export function buildDefaultQuiz(): Quiz {
 		coverImage: null,
 		visibility: QUIZ_VISIBILITY.PRIVATE,
 		publishedDetails: null,
-		questions: [buildDefaultQuestion()],
+		questions: [buildQuestion(QUESTION_TYPE.MULTIPLE_CHOICE)],
 	};
 }
 
@@ -48,5 +50,31 @@ export function buildUpsertPayload(quiz: Quiz): Quiz {
 	return {
 		...quiz,
 		questions: filtered,
+	};
+}
+
+export function buildDisplayPayload(quiz: Quiz): Quiz {
+	const filled = quiz.questions.map((question) => {
+		if (question.type === QUESTION_TYPE.MULTIPLE_CHOICE) {
+			const options = question.metadata.options;
+
+			return {
+				...question,
+				metadata: {
+					...question.metadata,
+					options:
+						options.length < MAX_OPTIONS_COUNT
+							? options.concat(Array.from({ length: 2 }, buildDefaultOption))
+							: options,
+				},
+			};
+		}
+
+		return question;
+	});
+
+	return {
+		...quiz,
+		questions: filled,
 	};
 }

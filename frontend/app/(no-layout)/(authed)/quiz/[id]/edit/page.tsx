@@ -2,6 +2,7 @@ import { getQuizAction } from "@/features/quiz/actions/get-quiz";
 import { QuizEditor } from "@/features/quiz/quiz-editor";
 import { QuizEditorProvider } from "@/features/quiz/quiz-editor/providers/quiz-editor-provider";
 import { Quiz } from "@/features/quiz/types/quiz";
+import { buildDisplayPayload } from "@/features/quiz/utils/build-quiz";
 import { ApiClientError } from "@/lib/api/api-client-error";
 import { notFound, redirect } from "next/navigation";
 
@@ -34,7 +35,10 @@ export default async function QuizEdit({ params }: Props) {
 	}
 
 	return (
-		<QuizEditorProvider initialQuiz={quiz}>
+		<QuizEditorProvider
+			initialQuiz={buildDisplayPayload(quiz)}
+			isPersisted={true}
+		>
 			<QuizEditor />
 		</QuizEditorProvider>
 	);
