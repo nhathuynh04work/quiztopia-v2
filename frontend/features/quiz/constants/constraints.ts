@@ -7,3 +7,7 @@ export const MAX_QUESTION_TITLE_LENGTH = 120;
 export const MAX_OPTIONS_COUNT = 4;
 
 export const MAX_OPTION_TITLE_LENGTH = 50;
+
+export const MAX_ACCEPTED_ANSWER_COUNT = 4;
+
+export const MAX_ACCEPTED_ANSWER_LENGTH = 20;

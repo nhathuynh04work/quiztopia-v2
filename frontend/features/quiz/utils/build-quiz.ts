@@ -37,7 +37,7 @@ export function buildUpsertPayload(quiz: Quiz): Quiz {
 				...question,
 				metadata: {
 					...question.metadata,
-					options: question.metadata.acceptedAnswers.filter(
+					acceptedAnswers: question.metadata.acceptedAnswers.filter(
 						(answer) => answer.length > 0,
 					),
 				},
@@ -64,8 +64,25 @@ export function buildDisplayPayload(quiz: Quiz): Quiz {
 					...question.metadata,
 					options:
 						options.length < MAX_OPTIONS_COUNT
-							? options.concat(Array.from({ length: 2 }, buildDefaultOption))
+							? options.concat(
+									Array.from(
+										{ length: MAX_OPTIONS_COUNT - options.length },
+										buildDefaultOption,
+									),
+								)
 							: options,
+				},
+			};
+		}
+
+		if (question.type === QUESTION_TYPE.TEXT) {
+			const answers = question.metadata.acceptedAnswers;
+
+			return {
+				...question,
+				metadata: {
+					...question.metadata,
+					acceptedAnswers: answers.length < 1 ? [""] : answers,
 				},
 			};
 		}

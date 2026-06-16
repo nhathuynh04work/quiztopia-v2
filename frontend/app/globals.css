@@ -10,6 +10,8 @@
 	--kahoot-yellow-dark: #c79200;
 	--kahoot-green-light: #26890c;
 	--kahoot-green-dark: #237e0b;
+	--kahoot-teal-light: #0ca3a3;
+	--kahoot-teal-dark: #069696;
 	--background: #ffffff;
 	--foreground: #171717;
 	--black-soft: #333;
@@ -25,6 +27,8 @@
 	--color-kahoot-yellow-dark: var(--kahoot-yellow-dark);
 	--color-kahoot-green-light: var(--kahoot-green-light);
 	--color-kahoot-green-dark: var(--kahoot-green-dark);
+	--color-kahoot-teal-light: var(--kahoot-teal-light);
+	--color-kahoot-teal-dark: var(--kahoot-teal-dark);
 	--color-kahoot-purple: var(--kahoot-purple);
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);

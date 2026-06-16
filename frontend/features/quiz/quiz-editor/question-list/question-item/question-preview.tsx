@@ -44,11 +44,11 @@ export function QuestionPreview({ question }: Props) {
 							return (
 								<div
 									key={option ? option.id : index}
-									className="rounded-xs border border-gray-200 w-full flex items-center"
+									className="rounded-xs border border-gray-200 w-full flex items-center px-1"
 								>
 									<div className="flex-1"></div>
 									{option && option.isCorrect && (
-										<div className="h-3/4 aspect-square rounded-full bg-[#66bf39]"></div>
+										<div className="h-9/10 aspect-square rounded-full bg-[#66bf39]"></div>
 									)}
 								</div>
 							);

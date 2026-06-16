@@ -1,7 +1,9 @@
+import { MAX_OPTIONS_COUNT } from "../constants/constraints";
 import { QUESTION_DEFAULT_DATA } from "../constants/question-default-data";
 import { QUESTION_TYPE } from "../constants/question-type";
 import { Question } from "../types/question";
 import { QuestionType } from "../types/question-type";
+import { buildDefaultOption } from "./build-option";
 
 export function buildQuestion(type: QuestionType): Question {
 	const base = {
@@ -18,7 +20,7 @@ export function buildQuestion(type: QuestionType): Question {
 			type: type,
 			metadata: {
 				allowMultiple: QUESTION_DEFAULT_DATA.ALLOW_MULTIPLE,
-				options: [],
+				options: Array.from({ length: MAX_OPTIONS_COUNT }, buildDefaultOption),
 			},
 		};
 	}
@@ -27,7 +29,7 @@ export function buildQuestion(type: QuestionType): Question {
 		...base,
 		type: type,
 		metadata: {
-			acceptedAnswers: [],
+			acceptedAnswers: [""],
 		},
 	};
 }

@@ -53,7 +53,15 @@ export function Option({ option, order }: Props) {
 				value={draftTitle}
 				onChange={(e) => setDraftTitle(e.target.value)}
 				onBlur={
-					draftTitle !== title ? () => setTitle(id, draftTitle) : undefined
+					draftTitle !== title
+						? () => {
+								setTitle(id, draftTitle);
+
+								if (draftTitle.length === 0) {
+									setIsCorrect(id, false);
+								}
+							}
+						: undefined
 				}
 				rows={4}
 				maxLength={MAX_OPTION_TITLE_LENGTH}
