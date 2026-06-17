@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { QuizzesController } from "./quizzes.controller";
 import { QuizzesService } from "./quizzes.service";
-import { QuizzesValidationService } from "./quizzes-validation.service";
+import { QuizzesValidationService } from "./validation/quizzes-validation.service";
 
 @Module({
   controllers: [QuizzesController],

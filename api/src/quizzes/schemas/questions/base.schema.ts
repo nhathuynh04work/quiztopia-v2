@@ -22,7 +22,7 @@ export const BaseQuestionPublishSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(1, "Missing question text")
+    .min(1, "Missing question title")
     .max(
       MAX_QUESTION_TITLE_LENGTH,
       `Question text must be at most ${MAX_QUESTION_TITLE_LENGTH} characters`,

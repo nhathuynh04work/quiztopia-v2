@@ -9,11 +9,10 @@ import {
 import {
   QuizForbiddenError,
   QuizNotFoundError,
-  QuizPublishValidationError,
   QuizNotPlayableError,
 } from "../common/errors/quiz/quiz.errors";
 import { PaginationQueryDTO } from "../common/schemas/pagination.schema";
-import { QuizzesValidationService } from "./quizzes-validation.service";
+import { QuizzesValidationService } from "./validation/quizzes-validation.service";
 import { DraftQuestionInput } from "./schemas/question.schema";
 import { QUIZ_STATUS_FILTERS } from "./constants/filters";
 
@@ -75,8 +74,8 @@ export class QuizzesService {
     this.verifyOwnership(quiz, userId);
 
     return {
-      ...quiz,
-      validation: this.validationService.runValidation(quiz),
+      quiz,
+      errors: this.validationService.runValidation(quiz),
     };
   }
 
@@ -109,8 +108,7 @@ export class QuizzesService {
           },
         });
         return {
-          quiz: newQuiz,
-          validation: this.validationService.runValidation(newQuiz),
+          errors: this.validationService.runValidation(newQuiz),
         };
       });
     }
@@ -141,8 +139,7 @@ export class QuizzesService {
       }
 
       return {
-        quiz: finalQuiz,
-        validation: this.validationService.runValidation(finalQuiz),
+        errors: this.validationService.runValidation(finalQuiz),
       };
     });
   }
@@ -181,10 +178,9 @@ export class QuizzesService {
         });
       }
 
-      const validationReport =
-        this.validationService.runValidation(currentQuiz);
-      if (!validationReport.isValid) {
-        throw new QuizPublishValidationError(validationReport.errors!);
+      const errors = this.validationService.runValidation(currentQuiz);
+      if (errors !== null) {
+        return { errors };
       }
 
       const snapshot = {
@@ -200,22 +196,14 @@ export class QuizzesService {
         })),
       };
 
-      const updatedQuiz = await tx.quiz.update({
+      await tx.quiz.update({
         where: { id: quizId },
         data: {
           publishedDetails: snapshot,
         },
-        include: {
-          questions: {
-            orderBy: { order: "asc" },
-          },
-        },
       });
 
-      return {
-        quiz: updatedQuiz,
-        validation: { isValid: true, errors: null },
-      };
+      return { errors: null };
     });
   }
 
