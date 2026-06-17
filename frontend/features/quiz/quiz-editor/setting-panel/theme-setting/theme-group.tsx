@@ -13,7 +13,7 @@ export function ThemeGroup({ group }: Props) {
 
 	return (
 		<div className="flex flex-col">
-			<header className="flex items-center justify-between text-[#6e6e6e]">
+			<header className="flex items-center justify-between text-kahoot-gray">
 				<span className="text-xl font-medium ">{group.name}</span>
 				<Button
 					onClick={() => setShow((prev) => !prev)}

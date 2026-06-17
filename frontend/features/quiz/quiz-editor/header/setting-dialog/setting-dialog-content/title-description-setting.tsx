@@ -34,7 +34,7 @@ export function TitleDescriptionSetting({
 							value={title}
 							onChange={(e) => setTitle(e.target.value)}
 						/>
-						<span className="text-[#6e6e6e] pl-2">
+						<span className="text-kahoot-gray pl-2">
 							{MAX_QUIZ_TITLE_LENGTH - title.length}
 						</span>
 					</div>
@@ -42,7 +42,7 @@ export function TitleDescriptionSetting({
 				<div className="w-full flex flex-col gap-2">
 					<h3 className={titleStyle}>
 						Description{" "}
-						<span className="text-[#6e6e6e] font-medium">(Optional)</span>
+						<span className="text-kahoot-gray font-medium">(Optional)</span>
 					</h3>
 					<p className={descriptionStyle}>
 						Provide a short description for your quiz to increase visibility.
@@ -55,7 +55,7 @@ export function TitleDescriptionSetting({
 							rows={4}
 							className="flex-1 outline-none resize-none"
 						/>
-						<span className="text-[#6e6e6e] pl-2">
+						<span className="text-kahoot-gray pl-2">
 							{MAX_QUIZ_DESCRIPTION_LENGTH - description.length}
 						</span>
 					</div>

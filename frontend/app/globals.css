@@ -12,13 +12,14 @@
 	--kahoot-green-dark: #237e0b;
 	--kahoot-teal-light: #0ca3a3;
 	--kahoot-teal-dark: #069696;
+	--kahoot-gray: #6e6e6e;
+
 	--background: #ffffff;
 	--foreground: #171717;
 	--black-soft: #333;
 }
 
 @theme inline {
-	--color-black-soft: var(--black-soft);
 	--color-kahoot-blue-light: var(--kahoot-blue-light);
 	--color-kahoot-blue-dark: var(--kahoot-blue-dark);
 	--color-kahoot-red-light: var(--kahoot-red-light);
@@ -30,8 +31,11 @@
 	--color-kahoot-teal-light: var(--kahoot-teal-light);
 	--color-kahoot-teal-dark: var(--kahoot-teal-dark);
 	--color-kahoot-purple: var(--kahoot-purple);
+	--color-kahoot-gray: var(--kahoot-gray);
+
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
+	--color-black-soft: var(--black-soft);
 	--font-sans: var(--font-montserrat);
 }
 

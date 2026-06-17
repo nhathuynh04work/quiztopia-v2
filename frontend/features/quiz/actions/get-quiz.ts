@@ -5,6 +5,8 @@ import { apiFetch } from "@/lib/api/api-fetch";
 import { buildAuthHeader } from "@/lib/api/build-auth-header";
 import { getAccessToken } from "@/lib/auth/cookies";
 import { Quiz } from "../types/quiz";
+import { QuizValidationError } from "../types/validation-result";
+import { notFound, redirect } from "next/navigation";
 
 export async function getQuizAction(quizId: string) {
 	const accessToken = await getAccessToken();
@@ -14,12 +16,29 @@ export async function getQuizAction(quizId: string) {
 	}
 
 	try {
-		return apiFetch<Quiz>(`/quizzes/${quizId}`, {
-			headers: {
-				...buildAuthHeader(accessToken),
+		return apiFetch<{ quiz: Quiz; errors: QuizValidationError | null }>(
+			`/quizzes/${quizId}`,
+			{
+				headers: {
+					...buildAuthHeader(accessToken),
+				},
 			},
-		});
+		);
 	} catch (error) {
+		if (error instanceof ApiClientError) {
+			if (error.status === 401) {
+				redirect("/");
+			}
+
+			if (error.status === 403) {
+				redirect("/quiz/forbidden");
+			}
+
+			if (error.status === 404) {
+				notFound();
+			}
+		}
+
 		throw error;
 	}
 }

@@ -28,7 +28,7 @@ export function TextAnswerPanel({ metadata }: Props) {
 			<div
 				onClick={hasLessThanTwoAnswers ? handleAddAnswer : undefined}
 				className={cn(
-					"px-4 py-4 text-2xl text-white font-semibold bg-[#0000008c] backdrop-blur-md rounded-md",
+					"px-6 py-6 text-2xl text-white font-bold bg-[#0000008c] backdrop-blur-md rounded-md",
 					hasLessThanTwoAnswers && "cursor-pointer underline",
 				)}
 			>
@@ -46,7 +46,7 @@ export function TextAnswerPanel({ metadata }: Props) {
 					<Button
 						onClick={handleAddAnswer}
 						className={cn(
-							"px-4 py-4 text-2xl text-white font-semibold bg-[#0000008c] backdrop-blur-md underline rounded-md",
+							"px-4 py-4 text-xl text-white font-bold bg-[#0000008c] backdrop-blur-md underline rounded-md",
 							"justify-self-start self-center",
 						)}
 					>

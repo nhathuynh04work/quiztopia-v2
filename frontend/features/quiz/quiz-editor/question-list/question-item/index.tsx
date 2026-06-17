@@ -26,7 +26,7 @@ export function QuestionItem({ question, order }: Props) {
 			<div className="flex-1 min-w-0 flex flex-col gap-1">
 				<span
 					className={cn(
-						"font-bold text-md text-[#6e6e6e]",
+						"font-bold text-md text-kahoot-gray",
 						isActive && "text-black",
 					)}
 				>

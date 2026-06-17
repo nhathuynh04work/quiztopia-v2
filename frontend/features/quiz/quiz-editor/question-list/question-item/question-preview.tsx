@@ -3,6 +3,8 @@ import { Image } from "lucide-react";
 import { useQuizEditorStore } from "../../hooks/use-quiz-editor-store";
 import { cn } from "@/lib/utils/cn";
 import { QUESTION_TYPE } from "@/features/quiz/constants/question-type";
+import { ErrorTooltip } from "./error-tooltip";
+import { useShallow } from "zustand/shallow";
 
 type Props = {
 	question: Question;
@@ -10,19 +12,24 @@ type Props = {
 
 export function QuestionPreview({ question }: Props) {
 	const { id, title, timeLimitMs, type, metadata } = question;
-	const isActive = useQuizEditorStore((s) => s.selectedQuestionId === id);
-	const setSelected = useQuizEditorStore((s) => s.setSelectedQuestionId);
+	const { isActive, setSelected, errors } = useQuizEditorStore(
+		useShallow((s) => ({
+			isActive: s.selectedQuestionId === id,
+			setSelected: s.setSelectedQuestionId,
+			errors: s.errors.questions.find((error) => error.id === id),
+		})),
+	);
 
 	return (
 		<div
 			onClick={() => setSelected(id)}
 			className={cn(
-				"w-full rounded-lg border-3 border-transparent group-hover:border-gray-400 bg-[#f2f2f2] cursor-grabbing flex flex-col py-2 px-4 gap-4 items-center",
+				"relative w-full rounded-lg border-3 border-transparent group-hover:border-gray-400 bg-[#f2f2f2] cursor-grabbing flex flex-col py-2 px-4 gap-4 items-center",
 				isActive &&
 					"border-kahoot-blue-dark group-hover:border-kahoot-blue-dark bg-white",
 			)}
 		>
-			<p className="text-md text-center font-semibold text-[#6e6e6e] truncate w-full min-w-0">
+			<p className="text-md text-center font-semibold text-kahoot-gray truncate w-full min-w-0">
 				{title.length > 0 ? title : "Question"}
 			</p>
 
@@ -67,6 +74,8 @@ export function QuestionPreview({ question }: Props) {
 					</div>
 				)}
 			</div>
+
+			{errors && <ErrorTooltip isActive={isActive} errors={errors.errors} />}
 		</div>
 	);
 }

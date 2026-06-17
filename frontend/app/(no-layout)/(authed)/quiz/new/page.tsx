@@ -11,6 +11,7 @@ export default function QuizNew() {
 	return (
 		<QuizEditorProvider
 			initialQuiz={buildDisplayPayload(quiz)}
+			errors={{ title: "", questions: [] }}
 			isPersisted={false}
 		>
 			<QuizEditor />

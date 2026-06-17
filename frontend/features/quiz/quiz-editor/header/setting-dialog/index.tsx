@@ -30,7 +30,7 @@ export function SettingDialog() {
 				<span
 					className={cn(
 						"flex-1 text-left text-xl font-extrabold pl-4",
-						quiz.title.length > 0 ? "text-black-soft" : "text-[#6e6e6e]",
+						quiz.title.length > 0 ? "text-black-soft" : "text-kahoot-gray",
 					)}
 				>
 					{quiz.title.length > 0 ? quiz.title : "Enter quiz title..."}

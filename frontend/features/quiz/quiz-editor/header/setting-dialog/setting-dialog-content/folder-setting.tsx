@@ -11,7 +11,7 @@ export function FolderSetting() {
 				<p className={descriptionStyle}>Choose the folder to save your quiz.</p>
 				<div className={cn(inputStyle, "flex")}>
 					<input name="title" type="text" className="flex-1 outline-none" />
-					<span className="text-[#6e6e6e] pl-2">{MAX_QUIZ_TITLE_LENGTH}</span>
+					<span className="text-kahoot-gray pl-2">{MAX_QUIZ_TITLE_LENGTH}</span>
 				</div>
 			</div>
 		</SettingCard>

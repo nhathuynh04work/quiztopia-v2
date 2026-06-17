@@ -11,9 +11,11 @@ import { QUESTION_TYPE } from "../../constants/question-type";
 import { EditorStatus } from "../../types/editor-status";
 import { EDITOR_STATUS } from "../constants/editor-status";
 import { MAX_ACCEPTED_ANSWER_COUNT } from "../../constants/constraints";
+import { QuizValidationError } from "../../types/validation-result";
 
 type State = {
 	quiz: Quiz;
+	errors: QuizValidationError;
 	isPersisted: boolean;
 
 	selectedMenu: SettingMenu;
@@ -24,6 +26,7 @@ type State = {
 
 type Action = {
 	markSaved: () => void;
+	setErrors: (errors: QuizValidationError) => void;
 	setSelectedMenu: (menu: SettingMenu) => void;
 	setIsAddDropdownOpen: (open: boolean) => void;
 	setSelectedQuestionId: (questionId: string) => void;
@@ -47,11 +50,16 @@ type Action = {
 
 export type QuizEditorStore = State & Action;
 
-export function createQuizEditorStore(initialQuiz: Quiz, isPersisted: boolean) {
+export function createQuizEditorStore(
+	initialQuiz: Quiz,
+	isPersisted: boolean,
+	errors: QuizValidationError,
+) {
 	return createStore<QuizEditorStore>()(
 		subscribeWithSelector(
 			immer((set) => ({
 				quiz: initialQuiz,
+				errors: errors,
 				isPersisted: isPersisted,
 				selectedMenu: "themes",
 				selectedQuestionId: initialQuiz.questions.at(0)?.id ?? "",
@@ -61,6 +69,10 @@ export function createQuizEditorStore(initialQuiz: Quiz, isPersisted: boolean) {
 				markSaved: () =>
 					set((s) => {
 						s.isPersisted = true;
+					}),
+				setErrors: (errors) =>
+					set((s) => {
+						s.errors = errors;
 					}),
 				setSelectedMenu: (menu) =>
 					set((s) => {

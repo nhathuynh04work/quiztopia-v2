@@ -7,7 +7,7 @@ import { apiFetch } from "@/lib/api/api-fetch";
 import { buildAuthHeader } from "@/lib/api/build-auth-header";
 import { QuizValidationError } from "../types/validation-result";
 
-export async function upsertQuizAction(quiz: Quiz) {
+export async function publishQuizAction(quiz: Quiz) {
 	const accessToken = await getAccessToken();
 
 	if (!accessToken) {
@@ -16,7 +16,7 @@ export async function upsertQuizAction(quiz: Quiz) {
 
 	try {
 		return apiFetch<{ errors: QuizValidationError | null }>(
-			`/quizzes`,
+			`/quizzes/${quiz.id}/publish`,
 			{
 				method: "POST",
 				headers: buildAuthHeader(accessToken),

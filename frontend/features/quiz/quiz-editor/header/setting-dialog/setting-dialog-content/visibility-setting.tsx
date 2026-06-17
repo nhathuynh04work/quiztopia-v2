@@ -39,7 +39,7 @@ export function VisibilitySetting({ visibility, setVisibility }: Props) {
 										isActive ? "border-8 border-kahoot-blue-dark" : "border border-black group-hover:border-kahoot-blue-dark",
 									)}
 								/>
-								<div className="flex flex-col gap-2 text-xl font-medium text-[#6e6e6e]">
+								<div className="flex flex-col gap-2 text-xl font-medium text-kahoot-gray">
 									<span>{config.title}</span>
 									<p>{config.description}</p>
 								</div>

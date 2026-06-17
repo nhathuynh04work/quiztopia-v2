@@ -15,7 +15,7 @@ export function QuestionEditor() {
 	return (
 		<div
 			key={question.id}
-			className={`w-full h-full bg-center bg-cover flex flex-col items-center py-16 px-6 gap-6`}
+			className={`w-full min-h-full bg-center bg-cover flex flex-col items-center py-16 px-6 gap-6`}
 			style={{
 				backgroundImage: `url(/themes/${theme}.webp)`,
 			}}
