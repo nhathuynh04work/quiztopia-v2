@@ -11,7 +11,7 @@ import { QUESTION_TYPE } from "../../constants/question-type";
 import { EditorStatus } from "../../types/editor-status";
 import { EDITOR_STATUS } from "../constants/editor-status";
 import { MAX_ACCEPTED_ANSWER_COUNT } from "../../constants/constraints";
-import { QuizValidationError } from "../../types/validation-result";
+import { QuizValidationError } from "../../types/validation-error";
 
 type State = {
 	quiz: Quiz;
@@ -33,6 +33,7 @@ type Action = {
 	setStatus: (status: EditorStatus) => void;
 
 	setQuizDataUsingDialog: (payload: DialogData) => void;
+	setQuizTitleAndDescription: (title: string, description: string) => void;
 	setQuizTheme: (theme: string) => void;
 
 	addQuestion: (type: QuestionType) => void;
@@ -94,6 +95,11 @@ export function createQuizEditorStore(
 				setQuizDataUsingDialog: (payload) =>
 					set((s) => {
 						s.quiz = { ...s.quiz, ...payload };
+					}),
+				setQuizTitleAndDescription: (title, description) =>
+					set((s) => {
+						s.quiz.title = title;
+						s.quiz.description = description;
 					}),
 				setQuizTheme: (theme) =>
 					set((s) => {

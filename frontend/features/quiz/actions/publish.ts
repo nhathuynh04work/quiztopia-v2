@@ -5,7 +5,7 @@ import { Quiz } from "../types/quiz";
 import { ApiClientError } from "@/lib/api/api-client-error";
 import { apiFetch } from "@/lib/api/api-fetch";
 import { buildAuthHeader } from "@/lib/api/build-auth-header";
-import { QuizValidationError } from "../types/validation-result";
+import { QuizValidationError } from "../types/validation-error";
 
 export async function publishQuizAction(quiz: Quiz) {
 	const accessToken = await getAccessToken();

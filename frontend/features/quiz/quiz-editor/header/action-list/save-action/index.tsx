@@ -4,7 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { usePublishQuiz } from "../../../hooks/mutations/use-publish-quiz";
 import { buildUpsertPayload } from "@/features/quiz/utils/build-quiz";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { ValidationReport } from "./validation-report";
+import { ValidationError } from "./validation-error";
 import { ValidResult } from "./valid-result";
 import { Loading } from "./loading";
 
@@ -55,7 +55,7 @@ export function SaveAction() {
 					{isPending && <Loading />}
 					{isSuccess && !data.errors && <ValidResult />}
 					{isSuccess && data.errors && (
-						<ValidationReport errors={data.errors} />
+						<ValidationError errors={data.errors} retry={publish} />
 					)}
 				</Dialog.Content>
 			</Dialog.Portal>

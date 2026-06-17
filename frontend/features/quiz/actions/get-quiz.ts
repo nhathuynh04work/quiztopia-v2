@@ -5,7 +5,7 @@ import { apiFetch } from "@/lib/api/api-fetch";
 import { buildAuthHeader } from "@/lib/api/build-auth-header";
 import { getAccessToken } from "@/lib/auth/cookies";
 import { Quiz } from "../types/quiz";
-import { QuizValidationError } from "../types/validation-result";
+import { QuizValidationError } from "../types/validation-error";
 import { notFound, redirect } from "next/navigation";
 
 export async function getQuizAction(quizId: string) {

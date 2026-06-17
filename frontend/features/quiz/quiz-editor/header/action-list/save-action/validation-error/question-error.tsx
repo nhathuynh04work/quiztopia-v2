@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { QUESTION_TYPE_CONFIG } from "@/features/quiz/constants/question-type";
 import { useQuizEditorStore } from "@/features/quiz/quiz-editor/hooks/use-quiz-editor-store";
-import { QuestionValidationError } from "@/features/quiz/types/validation-result";
+import { QuestionValidationError } from "@/features/quiz/types/validation-error";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Image } from "lucide-react";
 import { useShallow } from "zustand/shallow";

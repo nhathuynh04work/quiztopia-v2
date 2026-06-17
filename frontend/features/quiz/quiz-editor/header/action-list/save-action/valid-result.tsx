@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { MonitorUp, Play, Share } from "lucide-react";
+import Link from "next/link";
 
 export function ValidResult() {
 	return (
@@ -50,7 +51,8 @@ export function ValidResult() {
 						Back to edit
 					</Button>
 				</DialogClose>
-				<Button
+				<Link
+					href="/library"
 					className={cn(
 						"bg-kahoot-blue-light hover:bg-kahoot-blue-dark border-b-4",
 						"border-blue-900 hover:border-b-2 hover:translate-y-[2px]",
@@ -58,7 +60,7 @@ export function ValidResult() {
 					)}
 				>
 					Done
-				</Button>
+				</Link>
 			</div>
 		</div>
 	);

@@ -19,13 +19,25 @@ export function SettingDialog() {
 		visibility: quiz.visibility,
 	});
 
+	const handleOpenChange = (open: boolean) => {
+		if (open) {
+			setDraft({
+				title: quiz.title,
+				description: quiz.description,
+				visibility: quiz.visibility,
+			});
+		}
+
+		setOpen(open);
+	};
+
 	const handleDone = () => {
 		setData(draft);
 		setOpen(false);
 	};
 
 	return (
-		<Dialog.Root open={open} onOpenChange={setOpen}>
+		<Dialog.Root open={open} onOpenChange={handleOpenChange}>
 			<Dialog.Trigger className="flex items-center gap-2 w-sm border border-gray-200 rounded-md py-2 px-2 cursor-pointer">
 				<span
 					className={cn(

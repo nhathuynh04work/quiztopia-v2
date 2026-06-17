@@ -3,7 +3,7 @@
 import { createContext, ReactNode, useRef } from "react";
 import { Quiz } from "../../types/quiz";
 import { createQuizEditorStore } from "../stores/quiz-editor-store";
-import { QuizValidationError } from "../../types/validation-result";
+import { QuizValidationError } from "../../types/validation-error";
 
 export const QuizEditorContext = createContext<ReturnType<
 	typeof createQuizEditorStore
