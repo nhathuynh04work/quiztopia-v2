@@ -1,14 +1,7 @@
-export const QUIZ_STATUS_FILTERS = {
-  ALL: "all",
-  PUBLISHED: "published",
-  DRAFT: "draft",
+export const QUIZ_STATUS_FILTER = {
+  PUBLISHED: "PUBLISHED",
+  DRAFT: "DRAFT",
 } as const;
 
-export const QUIZ_STATUS_FILTER_VALUES = [
-  QUIZ_STATUS_FILTERS.ALL,
-  QUIZ_STATUS_FILTERS.PUBLISHED,
-  QUIZ_STATUS_FILTERS.DRAFT,
-] as const;
-
 export type QuizStatusFilter =
-  (typeof QUIZ_STATUS_FILTERS)[keyof typeof QUIZ_STATUS_FILTERS];
+  (typeof QUIZ_STATUS_FILTER)[keyof typeof QUIZ_STATUS_FILTER];

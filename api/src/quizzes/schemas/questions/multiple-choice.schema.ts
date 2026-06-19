@@ -72,9 +72,7 @@ export const MultipleChoiceMetadataPublishSchema = z
     },
   )
   .refine(
-    (data) =>
-      !data.allowMultiple ||
-      data.options.some((o) => o.isCorrect),
+    (data) => !data.allowMultiple || data.options.some((o) => o.isCorrect),
     {
       message: "At least one correct answer is required",
       path: ["options"],

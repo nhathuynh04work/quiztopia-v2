@@ -2,11 +2,8 @@ import z from "zod";
 import { createZodDto } from "nestjs-zod";
 import { DraftQuestionSchema, PublishQuestionSchema } from "./question.schema";
 import { QuizVisibility } from "@/generated/prisma/enums";
-import { PaginationQuerySchema } from "@/common/schemas/pagination.schema";
-import {
-  QUIZ_STATUS_FILTER_VALUES,
-  QUIZ_STATUS_FILTERS,
-} from "../constants/filters";
+import { CursorPaginationQuerySchema } from "@/common/schemas/cursor-pagination.schema";
+import { QUIZ_STATUS_FILTER } from "../constants/filters";
 import {
   MAX_QUIZ_TITLE_LENGTH,
   MAX_QUIZ_DESCRIPTION_LENGTH,
@@ -34,8 +31,8 @@ const UpsertQuizSchema = z.object({
   questions: z.array(DraftQuestionSchema).min(1, "Quiz must contain questions"),
 });
 
-export const GetQuizzesQuerySchema = PaginationQuerySchema.extend({
-  status: z.enum(QUIZ_STATUS_FILTER_VALUES).default(QUIZ_STATUS_FILTERS.ALL),
+export const GetQuizzesQuerySchema = CursorPaginationQuerySchema.extend({
+  status: z.enum(QUIZ_STATUS_FILTER),
 });
 
 const PublishQuizPayloadSchema = z.object({

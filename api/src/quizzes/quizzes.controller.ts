@@ -19,7 +19,7 @@ import {
   PublishQuizPayloadDTO,
   UpsertQuizDTO,
 } from "./schemas/quiz.schema";
-import { PaginationQueryDTO } from "../common/schemas/pagination.schema";
+import { CursorPaginationQueryDTO } from "../common/schemas/cursor-pagination.schema";
 import type { AuthenticatedRequest } from "../auth/auth.type";
 import { type Request } from "express";
 
@@ -37,7 +37,7 @@ export class QuizzesController {
   }
 
   @Get("discover")
-  async discover(@Query() query: PaginationQueryDTO) {
+  async discover(@Query() query: CursorPaginationQueryDTO) {
     return this.quizzesService.getDiscoverQuizzes(query);
   }
 
@@ -60,7 +60,7 @@ export class QuizzesController {
   @Post(":id/publish")
   async publish(
     @Param("id") id: string,
-    @Body() payload: PublishQuizPayloadDTO,
+    @Body() payload: UpsertQuizDTO,
     @Req() req: AuthenticatedRequest,
   ) {
     return this.quizzesService.publishQuiz(req.user.id, id, payload);
