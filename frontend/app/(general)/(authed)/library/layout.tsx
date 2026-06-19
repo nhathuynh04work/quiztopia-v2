@@ -11,7 +11,7 @@ export default function LibraryPageLayout({
 			<div className="bg-white h-full">
 				<LibrarySidebar />
 			</div>
-			<div>{children}</div>
+			<div className="flex-1">{children}</div>
 		</div>
 	);
 }

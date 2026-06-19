@@ -12,20 +12,17 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useQuizEditorStore } from "@/features/quiz/quiz-editor/hooks/use-quiz-editor-store";
-import { Quiz } from "@/features/quiz/types/quiz";
-import { buildUpsertPayload } from "@/features/quiz/utils/build-quiz";
 import { useShallow } from "zustand/shallow";
 
 type Props = {
-	retry: (quiz: Quiz) => void;
+	retry: () => void;
 };
 
 export function MissingTitle({ retry }: Props) {
-	const { initialDesc, setData, quiz } = useQuizEditorStore(
+	const { initialDesc, setData } = useQuizEditorStore(
 		useShallow((s) => ({
 			initialDesc: s.quiz.description,
 			setData: s.setQuizTitleAndDescription,
-			quiz: s.quiz,
 		})),
 	);
 	const [title, setTitle] = useState("");
@@ -98,7 +95,7 @@ export function MissingTitle({ retry }: Props) {
 				<Button
 					onClick={() => {
 						setData(title, description);
-						retry(buildUpsertPayload({ ...quiz, title, description }));
+						retry();
 					}}
 					className={cn(
 						"bg-kahoot-green-light hover:bg-kahoot-green-dark border-b-4",

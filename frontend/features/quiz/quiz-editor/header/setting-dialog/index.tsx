@@ -41,7 +41,7 @@ export function SettingDialog() {
 			<Dialog.Trigger className="flex items-center gap-2 w-sm border border-gray-200 rounded-md py-2 px-2 cursor-pointer">
 				<span
 					className={cn(
-						"flex-1 text-left text-xl font-extrabold pl-4",
+						"flex-1 text-left text-xl font-extrabold pl-4 truncate",
 						quiz.title.length > 0 ? "text-black-soft" : "text-kahoot-gray",
 					)}
 				>

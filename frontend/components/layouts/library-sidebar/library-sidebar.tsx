@@ -3,16 +3,13 @@
 import Link from "next/link";
 import {
 	BadgeQuestionMark,
-	FolderClosed,
 	LibraryBig,
-	Plus,
 	Presentation,
 	Trash2,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { isActivePath } from "@/lib/utils/active-link";
 import { cn } from "@/lib/utils/cn";
-import { Button } from "../../ui/button";
 import { Separator } from "../separator";
 import { FoldersNav } from "./folders-nav";
 
@@ -44,7 +41,7 @@ export function LibrarySidebar() {
 		<nav className="flex flex-col h-full w-3xs border-r border-gray-200 px-3 py-2">
 			<div className="flex flex-col gap-2 py-4">
 				{items.map((item) => {
-					const isActive = isActivePath(pathname, item.href, { exact: true });
+					const isActive = isActivePath(pathname, item.href, { exact: false });
 
 					return (
 						<Link

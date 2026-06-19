@@ -1,8 +1,8 @@
-import { MAX_OPTIONS_COUNT } from "../constants/constraints";
-import { QUESTION_DEFAULT_DATA } from "../constants/question-default-data";
-import { QUESTION_TYPE } from "../constants/question-type";
-import { Question } from "../types/question";
-import { QuestionType } from "../types/question-type";
+import { MAX_OPTIONS_COUNT } from "../../constants/constraints";
+import { QUESTION_DEFAULT_DATA } from "../../constants/question-default-data";
+import { QUESTION_TYPE } from "../../constants/question-type";
+import { Question } from "../../types/question";
+import { QuestionType } from "../../types/question-type";
 import { buildDefaultOption } from "./build-option";
 
 export function buildQuestion(type: QuestionType): Question {

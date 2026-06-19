@@ -1,7 +1,7 @@
-import { getQuizAction } from "@/features/quiz/actions/get-quiz";
+import { getQuiz } from "@/features/quiz/queries/get-quiz";
 import { QuizEditor } from "@/features/quiz/quiz-editor";
 import { QuizEditorProvider } from "@/features/quiz/quiz-editor/providers/quiz-editor-provider";
-import { buildDisplayPayload } from "@/features/quiz/utils/build-quiz";
+import { buildDisplayPayload } from "@/features/quiz/quiz-editor/utils/build-quiz";
 
 type Props = {
 	params: Promise<{ id: string }>;
@@ -9,7 +9,7 @@ type Props = {
 
 export default async function QuizEdit({ params }: Props) {
 	const { id } = await params;
-	const { quiz, errors } = await getQuizAction(id);
+	const { quiz, errors } = await getQuiz(id);
 
 	return (
 		<QuizEditorProvider

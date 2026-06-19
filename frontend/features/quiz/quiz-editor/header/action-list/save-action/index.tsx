@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { useQuizEditorStore } from "../../../hooks/use-quiz-editor-store";
 import * as Dialog from "@radix-ui/react-dialog";
 import { usePublishQuiz } from "../../../hooks/mutations/use-publish-quiz";
-import { buildUpsertPayload } from "@/features/quiz/utils/build-quiz";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ValidationError } from "./validation-error";
 import { ValidResult } from "./valid-result";
@@ -33,7 +32,7 @@ export function SaveAction() {
 		<Dialog.Root>
 			<Dialog.Trigger asChild>
 				<Button
-					onClick={() => publish(buildUpsertPayload(quiz))}
+					onClick={() => publish()}
 					className="py-3 px-6 bg-kahoot-blue-light hover:bg-kahoot-blue-dark font-bold text-lg rounded-sm text-white"
 				>
 					Save

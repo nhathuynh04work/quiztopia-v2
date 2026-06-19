@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils/cn";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { BadgeQuestionMark, LibraryBig, Presentation } from "lucide-react";
 import Link from "next/link";
@@ -25,11 +27,21 @@ const items = [
 	},
 ];
 
-export function CreateMenu() {
+export function CreateResourceDropdown() {
 	return (
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger className="bg-kahoot-blue-light hover:bg-kahoot-blue-dark py-3 px-8 rounded-sm text-lg text-white font-bold cursor-pointer">
-				Create
+			<DropdownMenu.Trigger asChild>
+				<Button
+					className={cn(
+						"py-3 px-8 rounded-sm",
+						"bg-kahoot-blue-light hover:bg-kahoot-blue-dark",
+						"border-b-4 border-blue-900",
+						"hover:border-b-2 hover:border-t-2 hover:border-t-transparent hover:translate-y-[2px]",
+						"font-bold text-lg text-white",
+					)}
+				>
+					Create
+				</Button>
 			</DropdownMenu.Trigger>
 
 			<DropdownMenu.Portal>

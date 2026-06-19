@@ -3,7 +3,7 @@ import { QuizEditorProvider } from "@/features/quiz/quiz-editor/providers/quiz-e
 import {
 	buildDefaultQuiz,
 	buildDisplayPayload,
-} from "@/features/quiz/utils/build-quiz";
+} from "@/features/quiz/quiz-editor/utils/build-quiz";
 
 export default function QuizNew() {
 	const quiz = buildDefaultQuiz();

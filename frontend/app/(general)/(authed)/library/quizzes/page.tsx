@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default async function Quizzes() {
-	return <div>quizzes</div>;
+	return redirect("/library/quizzes/all");
 }

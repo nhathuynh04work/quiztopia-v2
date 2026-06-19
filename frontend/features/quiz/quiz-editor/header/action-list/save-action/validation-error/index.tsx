@@ -4,12 +4,10 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { QuizValidationError } from "@/features/quiz/types/validation-error";
 import { QuestionError } from "./question-error";
 import { MissingTitle } from "./missing-title";
-import { Quiz } from "@/features/quiz/types/quiz";
 import Link from "next/link";
-
 type Props = {
 	errors: QuizValidationError;
-	retry: (quiz: Quiz) => void;
+	retry: () => void;
 };
 
 export function ValidationError({ errors, retry }: Props) {
@@ -42,7 +40,7 @@ export function ValidationError({ errors, retry }: Props) {
 						</Button>
 					</DialogClose>
 					<Link
-						href="/library"
+						href="/library/quizzes/drafts"
 						className={cn(
 							"bg-kahoot-green-light hover:bg-kahoot-green-dark border-b-4",
 							"border-green-900 hover:border-b-2 hover:translate-y-[2px]",

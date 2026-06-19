@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 
 import { ApiClientError } from "@/lib/api/api-client-error";
 import { apiFetch } from "@/lib/api/api-fetch";
@@ -8,7 +8,7 @@ import { Quiz } from "../types/quiz";
 import { QuizValidationError } from "../types/validation-error";
 import { notFound, redirect } from "next/navigation";
 
-export async function getQuizAction(quizId: string) {
+export async function getQuiz(quizId: string) {
 	const accessToken = await getAccessToken();
 
 	if (!accessToken) {

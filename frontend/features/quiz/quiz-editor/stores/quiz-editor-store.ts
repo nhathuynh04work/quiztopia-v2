@@ -3,8 +3,8 @@ import { SettingMenu } from "../types/setting-menu";
 import { Quiz } from "../../types/quiz";
 import { immer } from "zustand/middleware/immer";
 import { subscribeWithSelector } from "zustand/middleware";
+import { DebouncedFunc } from "lodash";
 import { QuestionType } from "../../types/question-type";
-import { buildQuestion } from "../../utils/build-question";
 import { PointsMode } from "../../types/points-mode";
 import { DialogData } from "../header/setting-dialog/dialog-data";
 import { QUESTION_TYPE } from "../../constants/question-type";
@@ -12,6 +12,7 @@ import { EditorStatus } from "../../types/editor-status";
 import { EDITOR_STATUS } from "../constants/editor-status";
 import { MAX_ACCEPTED_ANSWER_COUNT } from "../../constants/constraints";
 import { QuizValidationError } from "../../types/validation-error";
+import { buildQuestion } from "../utils/build-question";
 
 type State = {
 	quiz: Quiz;
@@ -22,6 +23,7 @@ type State = {
 	selectedQuestionId: string;
 	isAddDropdownOpen: boolean;
 	status: EditorStatus;
+	scheduledUpsert: DebouncedFunc<() => void> | null;
 };
 
 type Action = {
@@ -47,6 +49,7 @@ type Action = {
 
 	addAcceptedAnswer: (questionId: string) => void;
 	setAcceptedAnswer: (order: number, answer: string) => void;
+	setScheduledUpsert: (debounced: DebouncedFunc<() => void> | null) => void;
 };
 
 export type QuizEditorStore = State & Action;
@@ -62,6 +65,7 @@ export function createQuizEditorStore(
 				quiz: initialQuiz,
 				errors: errors,
 				isPersisted: isPersisted,
+				scheduledUpsert: null,
 				selectedMenu: "themes",
 				selectedQuestionId: initialQuiz.questions.at(0)?.id ?? "",
 				isAddDropdownOpen: false,
@@ -90,6 +94,10 @@ export function createQuizEditorStore(
 				setStatus: (status) =>
 					set((s) => {
 						s.status = status;
+					}),
+				setScheduledUpsert: (debounced) =>
+					set((s) => {
+						s.scheduledUpsert = debounced;
 					}),
 
 				setQuizDataUsingDialog: (payload) =>

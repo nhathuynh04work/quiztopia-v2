@@ -10,11 +10,11 @@ export default async function GeneralLayout({
 	const user = await getCurrentUser();
 
 	return (
-		<div className="min-h-screen flex flex-col">
+		<div className="h-screen flex flex-col overflow-hidden">
 			<TopBar user={user} />
-			<div className="flex flex-1 min-h-0">
+			<div className="flex flex-1 min-h-0 overflow-hidden">
 				{user && <MainSidebar />}
-				<div className="flex-1 bg-[#f2f2f2]">{children}</div>
+				<div className="flex-1 bg-[#f2f2f2] overflow-hidden">{children}</div>
 			</div>
 		</div>
 	);

@@ -1,7 +1,8 @@
-import { MAX_OPTIONS_COUNT } from "../constants/constraints";
-import { QUESTION_TYPE } from "../constants/question-type";
-import { QUIZ_VISIBILITY } from "../constants/quiz-visibility";
-import { Quiz } from "../types/quiz";
+
+import { MAX_OPTIONS_COUNT } from "../../constants/constraints";
+import { QUESTION_TYPE } from "../../constants/question-type";
+import { QUIZ_VISIBILITY } from "../../constants/quiz-visibility";
+import { Quiz } from "../../types/quiz";
 import { buildDefaultOption } from "./build-option";
 import { buildQuestion } from "./build-question";
 

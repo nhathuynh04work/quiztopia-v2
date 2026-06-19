@@ -37,6 +37,22 @@
 	--color-foreground: var(--foreground);
 	--color-black-soft: var(--black-soft);
 	--font-sans: var(--font-montserrat);
+
+	--animate-hover-bounce: hover-bounce 200ms ease-out;
+
+	@keyframes hover-bounce {
+		0% {
+			transform: scale(1);
+		}
+
+		50% {
+			transform: scale(0.98);
+		}
+
+		100% {
+			transform: scale(1);
+		}
+	}
 }
 
 body {

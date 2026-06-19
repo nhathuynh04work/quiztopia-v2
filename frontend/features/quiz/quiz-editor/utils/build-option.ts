@@ -1,4 +1,4 @@
-import { Option } from "../types/question/multiple-choice/option";
+import { Option } from "../../types/question/multiple-choice/option";
 
 export function buildDefaultOption(): Option {
 	return {
