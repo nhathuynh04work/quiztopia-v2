@@ -49,6 +49,7 @@ export async function apiFetch<T>(
 		...init,
 		headers: {
 			...forwardedHeaders,
+			"Content-Type": "application/json",
 			...init?.headers,
 		},
 	});

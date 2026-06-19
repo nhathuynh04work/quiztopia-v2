@@ -17,6 +17,7 @@ import { randomUUID } from "crypto";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 import { GlobalExceptionFilter } from "./common/filters/global-exception.filter";
 import { ZodValidationPipe } from "./common/pipes/zod-validation.pipe";
+import { QuizzesModule } from "./quizzes/quizzes.module";
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { ZodValidationPipe } from "./common/pipes/zod-validation.pipe";
     SessionsModule,
     TokensModule,
     JobsModule,
+    QuizzesModule,
   ],
   controllers: [AppController],
   providers: [

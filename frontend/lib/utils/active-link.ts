@@ -7,5 +7,5 @@ export function isActivePath(
 		return pathname === href;
 	}
 
-	return pathname.startsWith(href);
+	return pathname.includes(href);
 }

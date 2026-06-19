@@ -2,7 +2,7 @@ import { SessionUser } from "@/features/auth/types/session-user";
 
 const COLORS = [
 	"bg-red-500",
-	"bg-blue-500",
+	"bg-kahoot-blue-light",
 	"bg-green-500",
 	"bg-purple-500",
 	"bg-pink-500",

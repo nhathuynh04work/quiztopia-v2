@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils/cn";
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -5,8 +6,12 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export function Button({ children, className, ...props }: Props) {
+	const { disabled } = props;
 	return (
-		<button {...props} className={`cursor-pointer ${className ?? ""}`}>
+		<button
+			{...props}
+			className={cn(!disabled && "cursor-pointer", className ?? "")}
+		>
 			{children}
 		</button>
 	);

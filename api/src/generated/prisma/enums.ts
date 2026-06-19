@@ -9,7 +9,26 @@
 * 🟢 You can import this file directly.
 */
 
+export const QuestionType = {
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  TEXT: 'TEXT'
+} as const
+
+export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const PointsMode = {
+  STANDARD: 'STANDARD',
+  DOUBLE_POINTS: 'DOUBLE_POINTS',
+  NO_POINTS: 'NO_POINTS'
+} as const
+
+export type PointsMode = (typeof PointsMode)[keyof typeof PointsMode]
+
+
+export const QuizVisibility = {
+  PRIVATE: 'PRIVATE',
+  PUBLIC: 'PUBLIC'
+} as const
+
+export type QuizVisibility = (typeof QuizVisibility)[keyof typeof QuizVisibility]
