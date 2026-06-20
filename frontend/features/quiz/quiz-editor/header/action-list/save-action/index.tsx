@@ -40,7 +40,7 @@ export function SaveAction() {
 			</Dialog.Trigger>
 
 			<Dialog.Portal>
-				<Dialog.Overlay className="bg-black/70 fixed inset-0" />
+				<Dialog.Overlay className="bg-overlay fixed inset-0" />
 				<Dialog.Content className="bg-white rounded-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
 					<VisuallyHidden asChild>
 						<Dialog.Description>
