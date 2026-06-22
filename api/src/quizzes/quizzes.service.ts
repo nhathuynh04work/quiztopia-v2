@@ -1,29 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../common/prisma/prisma.service";
-import { isAfter } from "date-fns";
-import {
-  Prisma,
-  QuizVisibility,
-  Question,
-  Quiz,
-} from "../generated/prisma/client";
-import {
-  GetQuizzesQueryDTO,
-  UpsertQuizDTO,
-} from "./schemas/quiz.schema";
-import {
-  QuizForbiddenError,
-  QuizNotFoundError,
-  QuizNotPlayableError,
-} from "../common/errors/quiz/quiz.errors";
-import { CursorPaginationQueryDTO } from "../common/schemas/cursor-pagination.schema";
+import { Prisma, Question } from "../generated/prisma/client";
+import { UpsertQuizDTO } from "./schemas/quiz.schema";
+import { QuizNotFoundError } from "../common/errors/quiz/quiz.errors";
 import { QuizzesValidationService } from "./validation/quizzes-validation.service";
 import { DraftQuestionInput } from "./schemas/question.schema";
-import { QUIZ_STATUS_FILTER } from "./constants/filters";
-import { paginateWithCursor } from "../common/prisma/cursor-pagination.helper";
-import { QuizWithUser, QuizListItem } from "./types/quiz-list-item.type";
 import { PublishedDetails } from "./types/published-details.type";
 import { PinoLogger } from "nestjs-pino";
+import { verifyQuizOwnership } from "./helpers/quiz-ownership.helper";
 
 @Injectable()
 export class QuizzesService {
@@ -32,93 +16,6 @@ export class QuizzesService {
     private readonly prisma: PrismaService,
     private readonly validationService: QuizzesValidationService,
   ) {}
-
-  async getQuizzes(userId: string, query: GetQuizzesQueryDTO) {
-    const where: Prisma.QuizWhereInput = {
-      userId,
-      publishedDetails:
-        query.status === QUIZ_STATUS_FILTER.DRAFT
-          ? { equals: Prisma.DbNull }
-          : { not: Prisma.DbNull },
-    };
-
-    const { data, nextCursor } = await paginateWithCursor<
-      QuizWithUser & { _count: { questions: number } },
-      "createdAt"
-    >({
-      delegate: this.prisma.quiz,
-      query,
-      where,
-      orderByField: "createdAt",
-      orderDirection: "desc",
-      include: {
-        user: {
-          select: {
-            firstName: true,
-            lastName: true,
-          },
-        },
-        _count: {
-          select: {
-            questions: true,
-          },
-        },
-      },
-    });
-
-    const mapped = data.map((quiz): QuizListItem => {
-      const published =
-        query.status === QUIZ_STATUS_FILTER.PUBLISHED
-          ? (quiz.publishedDetails as unknown as PublishedDetails)
-          : null;
-
-      return {
-        id: quiz.id,
-        title: published ? published.title : quiz.title,
-        description: published ? published.description : quiz.description,
-        theme: published ? published.theme : quiz.theme,
-        coverImage: published ? published.coverImage : quiz.coverImage,
-        visibility: published ? published.visibility : quiz.visibility,
-        lastModified: quiz.updatedAt,
-        user: {
-          name: `${quiz.user.firstName} ${quiz.user.lastName}`,
-          avatar: null,
-        },
-        questionCount: published
-          ? published.questions.length
-          : quiz._count.questions,
-        isDraft: published === null,
-        hasUnsavedChanges: this.hasUnsavedChanges(quiz),
-      };
-    });
-
-    return {
-      data: mapped,
-      nextCursor,
-    };
-  }
-
-  async getQuizById(userId: string, quizId: string) {
-    const quiz = await this.prisma.quiz.findUnique({
-      where: { id: quizId },
-      include: {
-        questions: {
-          orderBy: { order: "asc" },
-        },
-      },
-    });
-
-    if (!quiz) {
-      throw new QuizNotFoundError();
-    }
-
-    this.verifyOwnership(quiz, userId);
-
-    return {
-      quiz,
-      errors: this.validationService.runValidation(quiz),
-    };
-  }
 
   async upsert(userId: string, quizId: string, payload: UpsertQuizDTO) {
     const quiz = await this.prisma.quiz.findUnique({
@@ -155,10 +52,11 @@ export class QuizzesService {
       };
     }
 
-    this.verifyOwnership(quiz, userId);
+    verifyQuizOwnership(quiz, userId);
 
     return this.prisma.$transaction(async (tx) => {
-      const { id, questions, ...quizData } = payload;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id: _, questions, ...quizData } = payload;
 
       await tx.quiz.update({
         where: { id: quizId },
@@ -186,11 +84,7 @@ export class QuizzesService {
     });
   }
 
-  async publishQuiz(
-    userId: string,
-    quizId: string,
-    payload: UpsertQuizDTO,
-  ) {
+  async publishQuiz(userId: string, quizId: string, payload: UpsertQuizDTO) {
     const result = await this.upsert(userId, quizId, payload);
     if (result.errors !== null) {
       return { errors: result.errors };
@@ -228,89 +122,11 @@ export class QuizzesService {
       where: { id: quizId },
       data: {
         updatedAt: now,
-        publishedDetails: snapshot as any,
+        publishedDetails: snapshot as unknown as Prisma.InputJsonValue,
       },
     });
 
     return { errors: null };
-  }
-
-  async getPlayableQuiz(userId: string | null, quizId: string) {
-    const quiz = await this.prisma.quiz.findUnique({
-      where: { id: quizId },
-    });
-
-    if (!quiz) {
-      throw new QuizNotFoundError();
-    }
-
-    if (!quiz.publishedDetails) {
-      throw new QuizNotPlayableError();
-    }
-
-    if (quiz.visibility === QuizVisibility.PRIVATE) {
-      this.verifyOwnership(quiz, userId);
-    }
-
-    return {
-      id: quiz.id,
-      userId: quiz.userId,
-      visibility: quiz.visibility,
-      createdAt: quiz.createdAt,
-      updatedAt: quiz.updatedAt,
-      ...(quiz.publishedDetails as Record<string, unknown>),
-    };
-  }
-
-  async getDiscoverQuizzes(query: CursorPaginationQueryDTO) {
-    const where: Prisma.QuizWhereInput = {
-      visibility: QuizVisibility.PUBLIC,
-      publishedDetails: { not: Prisma.DbNull },
-    };
-
-    const { data, nextCursor } = await paginateWithCursor<
-      QuizWithUser,
-      "updatedAt"
-    >({
-      delegate: this.prisma.quiz,
-      query,
-      where,
-      orderByField: "updatedAt",
-      orderDirection: "desc",
-      include: {
-        user: {
-          select: {
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
-    });
-
-    const mapped = data.map((quiz): QuizListItem => {
-      const published = quiz.publishedDetails as unknown as PublishedDetails;
-      return {
-        id: quiz.id,
-        title: published.title,
-        description: published.description,
-        theme: published.theme,
-        coverImage: published.coverImage,
-        visibility: published.visibility,
-        lastModified: quiz.updatedAt,
-        user: {
-          name: `${quiz.user.firstName} ${quiz.user.lastName}`,
-          avatar: null,
-        },
-        questionCount: published.questions.length,
-        isDraft: false,
-        hasUnsavedChanges: false,
-      };
-    });
-
-    return {
-      data: mapped,
-      nextCursor,
-    };
   }
 
   async deleteQuiz(userId: string, quizId: string) {
@@ -322,7 +138,7 @@ export class QuizzesService {
       throw new QuizNotFoundError();
     }
 
-    this.verifyOwnership(quiz, userId);
+    verifyQuizOwnership(quiz, userId);
 
     await this.prisma.quiz.delete({
       where: { id: quizId },
@@ -363,19 +179,6 @@ export class QuizzesService {
     await Promise.all(promises);
   }
 
-  private verifyOwnership(quiz: { userId: string }, userId: string | null) {
-    if (!userId || quiz.userId !== userId) {
-      throw new QuizForbiddenError();
-    }
-  }
-
-  private hasUnsavedChanges(quiz: Quiz) {
-    const published =
-      quiz.publishedDetails as unknown as PublishedDetails | null;
-
-    return published ? isAfter(quiz.updatedAt, published.publishedAt) : false;
-  }
-
   private buildQuestionData(question: DraftQuestionInput | Question) {
     return {
       title: question.title,
@@ -383,7 +186,7 @@ export class QuizzesService {
       points: question.points,
       timeLimitMs: question.timeLimitMs,
       image: question.image,
-      metadata: question.metadata as any,
+      metadata: question.metadata as unknown as Prisma.InputJsonValue,
     };
   }
 }
