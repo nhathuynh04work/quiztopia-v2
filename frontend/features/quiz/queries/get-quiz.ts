@@ -8,7 +8,7 @@ import { Quiz } from "../types/quiz";
 import { QuizValidationError } from "../types/validation-error";
 import { notFound, redirect } from "next/navigation";
 
-export async function getQuiz(quizId: string) {
+export async function getQuizForEditor(quizId: string) {
 	const accessToken = await getAccessToken();
 
 	if (!accessToken) {
