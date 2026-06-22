@@ -1,6 +1,5 @@
 import { createStore } from "zustand";
 import { SettingMenu } from "../types/setting-menu";
-import { Quiz } from "../../types/quiz";
 import { immer } from "zustand/middleware/immer";
 import { subscribeWithSelector } from "zustand/middleware";
 import { DebouncedFunc } from "lodash";
@@ -13,9 +12,10 @@ import { EDITOR_STATUS } from "../constants/editor-status";
 import { MAX_ACCEPTED_ANSWER_COUNT } from "../../constants/constraints";
 import { QuizValidationError } from "../../types/validation-error";
 import { buildQuestion } from "../utils/build-question";
+import { QuizForEditor } from "../types/quiz-for-editor";
 
 type State = {
-	quiz: Quiz;
+	quiz: QuizForEditor;
 	errors: QuizValidationError;
 	isPersisted: boolean;
 
@@ -55,7 +55,7 @@ type Action = {
 export type QuizEditorStore = State & Action;
 
 export function createQuizEditorStore(
-	initialQuiz: Quiz,
+	initialQuiz: QuizForEditor,
 	isPersisted: boolean,
 	errors: QuizValidationError,
 ) {

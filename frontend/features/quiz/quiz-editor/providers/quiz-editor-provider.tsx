@@ -1,16 +1,16 @@
 "use client";
 
 import { createContext, ReactNode, useRef } from "react";
-import { Quiz } from "../../types/quiz";
 import { createQuizEditorStore } from "../stores/quiz-editor-store";
 import { QuizValidationError } from "../../types/validation-error";
+import { QuizForEditor } from "../types/quiz-for-editor";
 
 export const QuizEditorContext = createContext<ReturnType<
 	typeof createQuizEditorStore
 > | null>(null);
 
 type Props = {
-	initialQuiz: Quiz;
+	initialQuiz: QuizForEditor;
 	isPersisted: boolean;
 	errors: QuizValidationError;
 	children: ReactNode;

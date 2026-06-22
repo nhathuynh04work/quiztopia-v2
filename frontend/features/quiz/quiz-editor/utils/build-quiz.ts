@@ -2,11 +2,12 @@
 import { MAX_OPTIONS_COUNT } from "../../constants/constraints";
 import { QUESTION_TYPE } from "../../constants/question-type";
 import { QUIZ_VISIBILITY } from "../../constants/quiz-visibility";
-import { Quiz } from "../../types/quiz";
+import { QuizForEditor } from "../types/quiz-for-editor";
+import { QuizUpsertPayload } from "../types/quiz-upsert-payload";
 import { buildDefaultOption } from "./build-option";
 import { buildQuestion } from "./build-question";
 
-export function buildDefaultQuiz(): Quiz {
+export function buildDefaultQuiz(): QuizForEditor {
 	return {
 		id: crypto.randomUUID(),
 		title: "",
@@ -14,12 +15,11 @@ export function buildDefaultQuiz(): Quiz {
 		theme: "standard",
 		coverImage: null,
 		visibility: QUIZ_VISIBILITY.PRIVATE,
-		publishedDetails: null,
 		questions: [buildQuestion(QUESTION_TYPE.MULTIPLE_CHOICE)],
 	};
 }
 
-export function buildUpsertPayload(quiz: Quiz): Quiz {
+export function buildUpsertPayload(quiz: QuizForEditor): QuizUpsertPayload {
 	const filtered = quiz.questions.map((question) => {
 		if (question.type === QUESTION_TYPE.MULTIPLE_CHOICE) {
 			return {
@@ -54,7 +54,7 @@ export function buildUpsertPayload(quiz: Quiz): Quiz {
 	};
 }
 
-export function buildDisplayPayload(quiz: Quiz): Quiz {
+export function buildDisplayPayload(quiz: QuizForEditor): QuizForEditor {
 	const filled = quiz.questions.map((question) => {
 		if (question.type === QUESTION_TYPE.MULTIPLE_CHOICE) {
 			const options = question.metadata.options;
