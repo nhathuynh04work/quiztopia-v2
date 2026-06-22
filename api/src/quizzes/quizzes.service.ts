@@ -15,7 +15,9 @@ export class QuizzesService {
     private readonly logger: PinoLogger,
     private readonly prisma: PrismaService,
     private readonly validationService: QuizzesValidationService,
-  ) {}
+  ) {
+    this.logger.setContext(QuizzesService.name);
+  }
 
   async upsert(userId: string, quizId: string, payload: UpsertQuizDTO) {
     const quiz = await this.prisma.quiz.findUnique({
@@ -55,7 +57,6 @@ export class QuizzesService {
     verifyQuizOwnership(quiz, userId);
 
     return this.prisma.$transaction(async (tx) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id: _, questions, ...quizData } = payload;
 
       await tx.quiz.update({

@@ -16,7 +16,11 @@ import { QuizzesRetrievalService } from "./retrieval/quizzes-retrieval.service";
 import { JwtAccessGuard } from "../auth/guards/jwt-access.guard";
 import { GetQuizzesQueryDTO, UpsertQuizDTO } from "./schemas/quiz.schema";
 import { CursorPaginationQueryDTO } from "../common/schemas/cursor-pagination.schema";
-import type { AuthenticatedRequest } from "../auth/auth.type";
+import type {
+  AuthenticatedRequest,
+  OptionallyAuthenticatedRequest,
+} from "../auth/auth.type";
+import { OptionalJwtAccessGuard } from "@/auth/guards/optional-jwt-access.guard";
 
 @Controller("quizzes")
 export class QuizzesController {
@@ -42,14 +46,26 @@ export class QuizzesController {
     return this.quizzesRetrievalService.getQuizListItemsForDiscover(query);
   }
 
+  @UseGuards(OptionalJwtAccessGuard)
   @Get(":id")
-  async findForDrawer(@Param("id") id: string) {
-    return this.quizzesRetrievalService.getQuizForDrawer(id);
+  async findForDrawer(
+    @Param("id") id: string,
+    @Req() req: OptionallyAuthenticatedRequest,
+  ) {
+    const user = req.user;
+
+    return this.quizzesRetrievalService.getQuizForDrawer(
+      user ? user.id : null,
+      id,
+    );
   }
 
   @UseGuards(JwtAccessGuard)
   @Get(":id/edit")
-  async findForEditor(@Param("id") id: string, @Req() req: AuthenticatedRequest) {
+  async findForEditor(
+    @Param("id") id: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
     return this.quizzesRetrievalService.getQuizForEditor(req.user.id, id);
   }
 

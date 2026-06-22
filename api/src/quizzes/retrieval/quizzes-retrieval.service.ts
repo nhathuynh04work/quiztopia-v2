@@ -21,13 +21,17 @@ import {
 } from "./quiz-retrieval.type";
 import { PublishedDetails } from "../types/published-details.type";
 import { verifyQuizOwnership } from "../helpers/quiz-ownership.helper";
+import { PinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class QuizzesRetrievalService {
   constructor(
+    private readonly logger: PinoLogger,
     private readonly prisma: PrismaService,
     private readonly validationService: QuizzesValidationService,
-  ) {}
+  ) {
+    this.logger.setContext(QuizzesRetrievalService.name);
+  }
 
   async getQuizListItemsOfUser(userId: string, query: GetQuizzesQueryDTO) {
     const where: Prisma.QuizWhereInput = {
@@ -187,15 +191,16 @@ export class QuizzesRetrievalService {
     };
   }
 
-  async getQuizForDrawer(quizId: string) {
+  async getQuizForDrawer(userId: string | null, quizId: string) {
     const quiz = await this.prisma.quiz.findFirst({
       where: {
         id: quizId,
-        visibility: QuizVisibility.PUBLIC,
         publishedDetails: { not: Prisma.DbNull },
       },
       select: {
         id: true,
+        userId: true,
+        visibility: true,
         publishedDetails: true,
         user: {
           select: {
@@ -213,6 +218,10 @@ export class QuizzesRetrievalService {
 
     if (!quiz) {
       throw new QuizNotFoundError();
+    }
+
+    if (quiz.visibility === QuizVisibility.PRIVATE) {
+      verifyQuizOwnership(quiz, userId);
     }
 
     const published = quiz.publishedDetails as unknown as PublishedDetails;

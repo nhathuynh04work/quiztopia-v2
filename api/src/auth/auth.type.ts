@@ -16,6 +16,10 @@ export interface AuthenticatedRequest extends Request {
   user: AuthUser;
 }
 
+export interface OptionallyAuthenticatedRequest extends Request {
+  user?: AuthUser;
+}
+
 export interface RefreshAuthenticatedRequest extends Request {
   user: RefreshAuthUser;
 }

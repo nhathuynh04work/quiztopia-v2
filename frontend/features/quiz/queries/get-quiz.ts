@@ -6,7 +6,6 @@ import { buildAuthHeader } from "@/lib/api/build-auth-header";
 import { getAccessToken } from "@/lib/auth/cookies";
 import { QuizValidationError } from "../types/validation-error";
 import { notFound, redirect } from "next/navigation";
-import { QuizForDrawer } from "../quiz-drawer/types/quiz-for-drawer";
 import { QuizForEditor } from "../quiz-editor/types/quiz-for-editor";
 
 export async function getQuizForEditor(quizId: string) {
@@ -42,8 +41,4 @@ export async function getQuizForEditor(quizId: string) {
 
 		throw error;
 	}
-}
-
-export async function getQuizForDrawer(quizId: string) {
-	return apiFetch<{ quiz: QuizForDrawer }>(`/quizzes/${quizId}`);
 }
