@@ -1,14 +1,11 @@
 import { Description, Title } from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { useDrawerStore } from "../quiz-library/stores/use-drawer-store";
 
-export function Metadata() {
-	const { id } = useDrawerStore();
+type Props = {
+	id: string;
+};
 
-	if (!id) {
-		return null;
-	}
-
+export function Metadata({ id }: Props) {
 	return (
 		<>
 			<VisuallyHidden asChild>

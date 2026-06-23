@@ -1,7 +1,7 @@
 import { MainSidebar } from "@/components/layouts/main-sidebar";
 import { TopBar } from "@/components/layouts/top-bar/top-bar";
-import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { QuizDrawer } from "@/features/quiz/quiz-drawer";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 
 export default async function GeneralLayout({
 	children,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useDrawerStore } from "../../quiz-library/stores/use-drawer-store";
+import { useDrawerStore } from "./use-drawer-store";
 
 export function useSyncDrawerWithUrl() {
 	const setId = useDrawerStore((s) => s.setId);

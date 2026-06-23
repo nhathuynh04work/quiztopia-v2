@@ -5,7 +5,7 @@ export type QuizForDrawer = QuizBase & {
 	questions: Question[];
 	user: {
 		name: string;
-		avatar: null;
+		avatar: string | null;
 	};
 	hasUnsavedChanges: boolean;
 };

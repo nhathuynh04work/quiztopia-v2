@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ActionDropdownMenu } from "./action-dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useDrawerStore } from "../stores/use-drawer-store";
+import { useDrawerStore } from "../../quiz-drawer/hooks/use-drawer-store";
 
 type Props = {
 	quiz: QuizListItem;
