@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { useQuizEditorStore } from "../../../hooks/use-quiz-editor-store";
 import * as Dialog from "@radix-ui/react-dialog";
 import { usePublishQuiz } from "../../../hooks/mutations/use-publish-quiz";

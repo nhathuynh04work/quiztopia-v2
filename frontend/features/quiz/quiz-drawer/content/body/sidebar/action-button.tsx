@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils/cn";
 import { ChevronRight, LucideIcon } from "lucide-react";
 import { ButtonHTMLAttributes } from "react";

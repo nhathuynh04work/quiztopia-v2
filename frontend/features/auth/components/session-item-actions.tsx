@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { revokeSessionAction } from "../actions/sessions";
 import { useEffect, useTransition } from "react";
 import toast from "react-hot-toast";

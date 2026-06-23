@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { Plus } from "lucide-react";
 
 export function MediaUpload() {

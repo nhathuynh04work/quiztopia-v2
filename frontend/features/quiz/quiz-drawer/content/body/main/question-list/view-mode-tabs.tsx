@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { VIEW_MODE, VIEW_MODE_CONFIG, ViewMode } from "./view-mode";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils/cn";
 
 type Props = {

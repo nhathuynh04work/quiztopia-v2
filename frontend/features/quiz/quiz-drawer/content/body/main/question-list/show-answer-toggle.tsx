@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { Eye, EyeOff } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 

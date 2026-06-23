@@ -9,7 +9,7 @@ import {
 } from "../../../setting-dialog/setting-dialog-content/styles";
 import { cn } from "@/lib/utils/cn";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { useState } from "react";
 import { useQuizEditorStore } from "@/features/quiz/quiz-editor/hooks/use-quiz-editor-store";
 import { useShallow } from "zustand/shallow";

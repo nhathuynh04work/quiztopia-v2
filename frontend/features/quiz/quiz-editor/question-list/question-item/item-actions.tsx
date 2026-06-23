@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { Copy, Trash2 } from "lucide-react";
 
 const size = 12;

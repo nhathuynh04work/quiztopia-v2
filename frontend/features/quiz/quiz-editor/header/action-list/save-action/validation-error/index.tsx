@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils/cn";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { QuizValidationError } from "@/features/quiz/types/validation-error";

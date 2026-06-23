@@ -2,7 +2,7 @@ import { TextMetadata } from "@/features/quiz/types/question/text";
 import { AnswerItem } from "./answer-item";
 import { MAX_ACCEPTED_ANSWER_COUNT } from "@/features/quiz/constants/constraints";
 import { cn } from "@/lib/utils/cn";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { useQuizEditorStore } from "../../../hooks/use-quiz-editor-store";
 
 type Props = {

@@ -1,6 +1,6 @@
 import { Check, ChevronDown, Clock12 } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils/cn";
 import { formatTimeLimit } from "@/lib/utils/formatters";
 import { TIME_LIMIT_MS } from "@/features/quiz/constants/time-limits";

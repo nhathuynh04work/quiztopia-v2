@@ -4,7 +4,7 @@ import { FallbackCover } from "./fallback-cover";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ActionDropdownMenu } from "./action-dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { useDrawerStore } from "../../quiz-drawer/hooks/use-drawer-store";
 
 type Props = {

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Plus } from "lucide-react";
 import { useQuizEditorStore } from "../../hooks/use-quiz-editor-store";

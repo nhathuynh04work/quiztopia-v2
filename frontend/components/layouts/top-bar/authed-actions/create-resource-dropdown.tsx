@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils/cn";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { BadgeQuestionMark, LibraryBig, Presentation } from "lucide-react";

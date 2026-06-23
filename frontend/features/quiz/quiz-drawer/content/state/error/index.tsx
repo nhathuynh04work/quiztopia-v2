@@ -6,10 +6,10 @@ import { NotFound } from "./not-found";
 import { GeneralError } from "./general";
 import { NavActions } from "../../header/nav-actions";
 import { useDrawerStore } from "@/features/quiz/quiz-drawer/hooks/use-drawer-store";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils/cn";
 import Link from "next/link";
-import { ReloadButton } from "@/components/ui/reload-button";
+import { ReloadButton } from "@/components/button/reload-button";
 
 type Props = {
 	error: unknown;

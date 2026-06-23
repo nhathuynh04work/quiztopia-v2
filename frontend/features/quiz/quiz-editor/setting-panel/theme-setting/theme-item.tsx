@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { THEMES } from "@/features/quiz/constants/themes";
 import { useQuizEditorStore } from "../../hooks/use-quiz-editor-store";
 import { cn } from "@/lib/utils/cn";

@@ -1,6 +1,6 @@
 import { Check, ChevronDown, Shapes } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils/cn";
 import { MultipleChoiceQuestion } from "@/features/quiz/types/question/multiple-choice";
 

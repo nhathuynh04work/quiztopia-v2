@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { isActivePath } from "@/lib/utils/active-link";
 import { cn } from "@/lib/utils/cn";
 import { Folder, FolderClosed, FolderOpen, Plus } from "lucide-react";

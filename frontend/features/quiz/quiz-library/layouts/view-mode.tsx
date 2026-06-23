@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { VIEW_MODE, VIEW_MODE_CONFIG } from "../constants/view-mode";
 import { useQuizLibraryStore } from "../stores/use-quiz-library-store";
 import { cn } from "@/lib/utils/cn";

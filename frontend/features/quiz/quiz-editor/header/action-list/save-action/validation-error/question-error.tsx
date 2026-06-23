@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { QUESTION_TYPE_CONFIG } from "@/features/quiz/constants/question-type";
 import { useQuizEditorStore } from "@/features/quiz/quiz-editor/hooks/use-quiz-editor-store";
 import { QuestionValidationError } from "@/features/quiz/types/validation-error";

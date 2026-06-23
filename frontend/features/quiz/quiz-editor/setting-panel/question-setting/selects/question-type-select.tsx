@@ -1,6 +1,6 @@
 import { ChevronDown, MessageCircleQuestionMark } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import {
 	QUESTION_TYPE,
 	QUESTION_TYPE_CONFIG,

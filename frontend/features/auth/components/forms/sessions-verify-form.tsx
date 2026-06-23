@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { AuthField } from "./auth-field";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { formStyle, inputStyle, submitBtnStyle } from "../../styles/form";
 import { cn } from "@/lib/utils/cn";
 import { FormErrors } from "./form-errors";

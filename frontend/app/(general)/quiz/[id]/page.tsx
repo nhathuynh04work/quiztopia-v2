@@ -5,7 +5,7 @@ import { QuizDetailsClient } from "@/features/quiz/quiz-details/quiz-details-cli
 import { NotFound } from "@/features/quiz/quiz-drawer/content/state/error/not-found";
 import { Forbidden } from "@/features/quiz/quiz-drawer/content/state/error/forbidden";
 import { GeneralError } from "@/features/quiz/quiz-drawer/content/state/error/general";
-import { ReloadButton } from "@/components/ui/reload-button";
+import { ReloadButton } from "@/components/button/reload-button";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 

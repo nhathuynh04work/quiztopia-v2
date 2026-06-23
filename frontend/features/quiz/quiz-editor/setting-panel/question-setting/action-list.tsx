@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { useQuizEditorStore } from "../../hooks/use-quiz-editor-store";
 
 export function QuestionSettingActionList() {

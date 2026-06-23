@@ -11,7 +11,7 @@ import {
 import { usePathname } from "next/navigation";
 import { isActivePath } from "@/lib/utils/active-link";
 import { cn } from "@/lib/utils/cn";
-import { Button } from "../ui/button";
+import { Button } from "../button";
 
 const items = [
 	{

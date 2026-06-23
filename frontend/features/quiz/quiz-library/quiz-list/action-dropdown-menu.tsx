@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";

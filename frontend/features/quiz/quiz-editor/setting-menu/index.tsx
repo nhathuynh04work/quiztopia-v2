@@ -1,5 +1,5 @@
 import { Separator } from "@/components/layouts/separator";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { Palette, SlidersVertical } from "lucide-react";
 import { useShallow } from "zustand/shallow";
 import { cn } from "@/lib/utils/cn";
