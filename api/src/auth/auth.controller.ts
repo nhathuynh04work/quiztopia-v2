@@ -77,7 +77,14 @@ export class AuthController {
   @UseGuards(JwtAccessGuard)
   @Get("me")
   getCurrentUser(@Req() req: AuthenticatedRequest) {
-    return req.user;
+    const { id, email, firstName, lastName } = req.user;
+
+    return {
+      id,
+      email,
+      name: `${firstName} ${lastName}`,
+      avatar: null,
+    };
   }
 
   @Post("/session-management-token")

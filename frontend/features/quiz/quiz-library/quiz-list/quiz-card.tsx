@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ActionDropdownMenu } from "./action-dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useDrawerStore } from "../../quiz-drawer/hooks/use-drawer-store";
 
 type Props = {
 	quiz: QuizListItem;
@@ -12,6 +13,7 @@ type Props = {
 
 export function QuizCard({ quiz }: Props) {
 	const router = useRouter();
+	const open = useDrawerStore((s) => s.open);
 	const {
 		id,
 		title,
@@ -23,8 +25,11 @@ export function QuizCard({ quiz }: Props) {
 	} = quiz;
 
 	const handleOpen = () => {
-		const path = isDraft ? `/quiz/${id}/edit` : `/quiz/${id}`;
-		router.push(path);
+		if (isDraft) {
+			router.push(`/quiz/${id}/edit`);
+		} else {
+			open(id);
+		}
 	};
 
 	return (
@@ -71,7 +76,7 @@ export function QuizCard({ quiz }: Props) {
 				{!isDraft && (
 					<div
 						className={cn(
-							"absolute z-100 inset-0 p-4 bg-black/70",
+							"absolute z-100 inset-0 p-4 bg-overlay",
 							"flex flex-col items-center justify-center gap-2",
 							"text-white font-bold",
 							"invisible group-hover:visible",

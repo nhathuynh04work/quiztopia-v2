@@ -26,7 +26,7 @@ export function QuizEditor() {
 
 				<div className="flex-1 h-full flex relative">
 					{isAddDropdownOpen && (
-						<div className="absolute inset-0 bg-black/70 z-40 pointer-events-none" />
+						<div className="absolute inset-0 bg-overlay z-40 pointer-events-none" />
 					)}
 
 					<div className="flex-1 h-full overflow-y-scroll">

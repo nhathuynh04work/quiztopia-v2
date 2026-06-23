@@ -23,7 +23,7 @@ export function Option({ option, order }: Props) {
 		backgroundColor,
 		hoverBackgroundColor,
 		borderColor,
-		icon: Icon,
+		Icon,
 	} = OPTION_CONFIGS[order];
 
 	const isActive = draftTitle.length > 0;

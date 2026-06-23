@@ -12,39 +12,61 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { QuizzesService } from "./quizzes.service";
+import { QuizzesRetrievalService } from "./retrieval/quizzes-retrieval.service";
 import { JwtAccessGuard } from "../auth/guards/jwt-access.guard";
-import { OptionalJwtAccessGuard } from "../auth/guards/optional-jwt-access.guard";
-import {
-  GetQuizzesQueryDTO,
-  PublishQuizPayloadDTO,
-  UpsertQuizDTO,
-} from "./schemas/quiz.schema";
+import { GetQuizzesQueryDTO, UpsertQuizDTO } from "./schemas/quiz.schema";
 import { CursorPaginationQueryDTO } from "../common/schemas/cursor-pagination.schema";
-import type { AuthenticatedRequest } from "../auth/auth.type";
-import { type Request } from "express";
+import type {
+  AuthenticatedRequest,
+  OptionallyAuthenticatedRequest,
+} from "../auth/auth.type";
+import { OptionalJwtAccessGuard } from "@/auth/guards/optional-jwt-access.guard";
 
 @Controller("quizzes")
 export class QuizzesController {
-  constructor(private readonly quizzesService: QuizzesService) {}
+  constructor(
+    private readonly quizzesService: QuizzesService,
+    private readonly quizzesRetrievalService: QuizzesRetrievalService,
+  ) {}
 
   @UseGuards(JwtAccessGuard)
   @Get()
-  async findAll(
+  async findQuizzesOfUser(
     @Req() req: AuthenticatedRequest,
     @Query() query: GetQuizzesQueryDTO,
   ) {
-    return this.quizzesService.getQuizzes(req.user.id, query);
+    return this.quizzesRetrievalService.getQuizListItemsOfUser(
+      req.user.id,
+      query,
+    );
   }
 
   @Get("discover")
-  async discover(@Query() query: CursorPaginationQueryDTO) {
-    return this.quizzesService.getDiscoverQuizzes(query);
+  async findQuizzesForDiscover(@Query() query: CursorPaginationQueryDTO) {
+    return this.quizzesRetrievalService.getQuizListItemsForDiscover(query);
+  }
+
+  @UseGuards(OptionalJwtAccessGuard)
+  @Get(":id")
+  async findForDrawer(
+    @Param("id") id: string,
+    @Req() req: OptionallyAuthenticatedRequest,
+  ) {
+    const user = req.user;
+
+    return this.quizzesRetrievalService.getQuizForDrawer(
+      user ? user.id : null,
+      id,
+    );
   }
 
   @UseGuards(JwtAccessGuard)
-  @Get(":id")
-  async findOne(@Param("id") id: string, @Req() req: AuthenticatedRequest) {
-    return this.quizzesService.getQuizById(req.user.id, id);
+  @Get(":id/edit")
+  async findForEditor(
+    @Param("id") id: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.quizzesRetrievalService.getQuizForEditor(req.user.id, id);
   }
 
   @UseGuards(JwtAccessGuard)
@@ -64,14 +86,6 @@ export class QuizzesController {
     @Req() req: AuthenticatedRequest,
   ) {
     return this.quizzesService.publishQuiz(req.user.id, id, payload);
-  }
-
-  @UseGuards(OptionalJwtAccessGuard)
-  @Get(":id/playable")
-  async findPlayable(@Param("id") id: string, @Req() req: Request) {
-    const user = (req as any).user;
-    const userId = user ? user.id : null;
-    return this.quizzesService.getPlayableQuiz(userId, id);
   }
 
   @UseGuards(JwtAccessGuard)

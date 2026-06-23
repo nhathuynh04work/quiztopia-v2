@@ -52,7 +52,7 @@ export function SettingDialog() {
 				</div>
 			</Dialog.Trigger>
 			<Dialog.Portal>
-				<Dialog.Overlay className="bg-black/70 fixed inset-0" />
+				<Dialog.Overlay className="bg-overlay fixed inset-0" />
 				<SettingDialogContent
 					draft={draft}
 					setDraft={setDraft}

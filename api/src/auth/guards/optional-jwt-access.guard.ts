@@ -7,6 +7,6 @@ export class OptionalJwtAccessGuard extends AuthGuard(
   AUTH_STRATEGY_NAMES.JWT_ACCESS,
 ) {
   override handleRequest(err: any, user: any) {
-    return user || null;
+    return user || undefined;
   }
 }

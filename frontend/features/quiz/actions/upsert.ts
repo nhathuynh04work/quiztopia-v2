@@ -1,13 +1,13 @@
 "use server";
 
 import { getAccessToken } from "@/lib/auth/cookies";
-import { Quiz } from "../types/quiz";
 import { ApiClientError } from "@/lib/api/api-client-error";
 import { apiFetch } from "@/lib/api/api-fetch";
 import { buildAuthHeader } from "@/lib/api/build-auth-header";
 import { QuizValidationError } from "../types/validation-error";
+import { QuizUpsertPayload } from "../quiz-editor/types/quiz-upsert-payload";
 
-export async function upsertQuizAction(quiz: Quiz) {
+export async function upsertQuizAction(quiz: QuizUpsertPayload) {
 	const accessToken = await getAccessToken();
 
 	if (!accessToken) {
@@ -15,14 +15,11 @@ export async function upsertQuizAction(quiz: Quiz) {
 	}
 
 	try {
-		return apiFetch<{ errors: QuizValidationError | null }>(
-			`/quizzes`,
-			{
-				method: "POST",
-				headers: buildAuthHeader(accessToken),
-				body: JSON.stringify(quiz),
-			},
-		);
+		return apiFetch<{ errors: QuizValidationError | null }>(`/quizzes`, {
+			method: "POST",
+			headers: buildAuthHeader(accessToken),
+			body: JSON.stringify(quiz),
+		});
 	} catch (error) {
 		throw error;
 	}

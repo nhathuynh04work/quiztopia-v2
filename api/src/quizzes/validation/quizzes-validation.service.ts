@@ -9,9 +9,7 @@ import { Question, Quiz } from "@/generated/prisma/client";
 
 @Injectable()
 export class QuizzesValidationService {
-  runValidation(
-    quiz: Quiz & { questions: Question[] },
-  ): QuizValidationError | null {
+  runValidation(quiz: any): QuizValidationError | null {
     const parsed = PublishQuizSchema.safeParse({
       title: quiz.title,
       description: quiz.description,
@@ -29,7 +27,7 @@ export class QuizzesValidationService {
   }
 
   private formatValidationErrors(
-    quiz: Quiz & { questions: Question[] },
+    quiz: any,
     zodError: z.ZodError,
   ): QuizValidationError {
     const result: QuizValidationError = {
