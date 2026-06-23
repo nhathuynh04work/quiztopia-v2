@@ -17,7 +17,7 @@ export function QuestionItem({ theme, question, showAnswer, mode }: Props) {
 		<div
 			className={cn(
 				"w-full rounded-md aspect-2/1 flex flex-col justify-between items-center bg-center bg-cover",
-				mode === VIEW_MODE.GRID && "text-lg p-2",
+				mode === VIEW_MODE.GRID && "p-2",
 				mode === VIEW_MODE.LIST && "text-3xl p-4",
 			)}
 			style={{

@@ -14,20 +14,23 @@ const CONFIG = {
 	[VIEW_MODE.LIST]: {
 		iconSize: 24,
 		optionPadding: "p-4",
+		fontSize: "text-xl",
 	},
 	[VIEW_MODE.GRID]: {
 		iconSize: 14,
-		optionPadding: "p-2.5",
+		optionPadding: "p-2",
+		fontSize: "text-sm",
 	},
 	[VIEW_MODE.COMPACT]: {
 		iconSize: 24,
 		optionPadding: "p-4",
+		fontSize: "text-3xl",
 	},
 };
 
 export function MultipleChoice({ mode, question, showAnswer }: Props) {
 	const { options } = question.metadata;
-	const { iconSize, optionPadding } = CONFIG[mode];
+	const { iconSize, optionPadding, fontSize } = CONFIG[mode];
 
 	return (
 		<div className="w-full grid grid-cols-2 gap-2">
@@ -51,7 +54,14 @@ export function MultipleChoice({ mode, question, showAnswer }: Props) {
 
 						{showAnswer && (
 							<>
-								<p className="flex-1 text-white font-semibold break-all">{title}</p>
+								<p
+									className={cn(
+										"flex-1 text-white font-semibold leading-none break-all",
+										fontSize,
+									)}
+								>
+									{title}
+								</p>
 								<Check
 									size={iconSize}
 									className={cn(
