@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { QuizListItem } from "../types/quiz-list-item";
-import { FallbackCover } from "./fallback-cover";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ActionDropdownMenu } from "./action-dropdown-menu";
 import { Button } from "@/components/button";
 import { useDrawerStore } from "../../quiz-drawer/hooks/use-drawer-store";
+import Link from "next/link";
+import { QuizFallbackCover } from "@/components/ui/quiz-fallback-cover";
 
 type Props = {
 	quiz: QuizListItem;
@@ -54,7 +55,7 @@ export function QuizCard({ quiz }: Props) {
 				{coverImage ? (
 					<img src={coverImage} className="object-cover object-center" />
 				) : (
-					<FallbackCover />
+					<QuizFallbackCover />
 				)}
 
 				<div className="absolute bottom-2 right-2 py-0.5 px-1.5 rounded-sm bg-black-soft text-white text-sm font-semibold">
@@ -82,9 +83,12 @@ export function QuizCard({ quiz }: Props) {
 							"invisible group-hover:visible",
 						)}
 					>
-						<Button className="w-full bg-kahoot-blue-light hover:bg-kahoot-blue-dark border-b-3 border-b-[#0c4386] p-2 rounded-sm">
+						<Link
+							href={`/play/${id}`}
+							className="w-full bg-kahoot-blue-light hover:bg-kahoot-blue-dark border-b-3 border-b-[#0c4386] p-2 rounded-sm text-center"
+						>
 							Host live
-						</Button>
+						</Link>
 						<Button className="hover:bg-white/10 rounded-sm px-4 py-2">
 							Assign
 						</Button>

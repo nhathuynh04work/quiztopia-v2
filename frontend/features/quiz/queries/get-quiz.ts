@@ -7,6 +7,7 @@ import { getAccessToken } from "@/lib/auth/cookies";
 import { QuizValidationError } from "../types/validation-error";
 import { notFound, redirect } from "next/navigation";
 import { QuizForEditor } from "../quiz-editor/types/quiz-for-editor";
+import { QuizForGameSetup } from "../types/quiz-for-game-setup";
 
 export async function getQuizForEditor(quizId: string) {
 	const accessToken = await getAccessToken();
@@ -41,4 +42,13 @@ export async function getQuizForEditor(quizId: string) {
 
 		throw error;
 	}
+}
+
+export async function getQuizForGameSetup(quizId: string) {
+	const accessToken = await getAccessToken();
+	const headers = accessToken ? buildAuthHeader(accessToken) : undefined;
+
+	return apiFetch<{ quiz: QuizForGameSetup }>(`/quizzes/${quizId}/setup`, {
+		headers,
+	});
 }

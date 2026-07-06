@@ -1,4 +1,4 @@
-import { FallbackCover } from "@/features/quiz/quiz-library/quiz-list/fallback-cover";
+import { QuizFallbackCover } from "@/components/ui/quiz-fallback-cover";
 import { Grid2X2, Play, User } from "lucide-react";
 import { QuizForDrawer } from "../../../types/quiz-for-drawer";
 
@@ -12,7 +12,7 @@ export function GeneralInfo({ quiz }: Props) {
 	return (
 		<div className="flex items-start gap-20">
 			<div className="w-9/40 rounded-lg overflow-hidden shrink-0">
-				<FallbackCover />
+				<QuizFallbackCover />
 			</div>
 
 			<div className="flex flex-col">
