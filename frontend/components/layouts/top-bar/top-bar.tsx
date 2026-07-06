@@ -4,7 +4,7 @@ import { AuthedActions } from "./authed-actions/authed-actions";
 import { GuestNav } from "./guest-nav";
 import { GuestActions } from "./guest-actions";
 import { Logo } from "@/components/ui/logo";
-import { SearchBar } from "@/components/search/search-bar";
+import { SearchBar } from "@/features/search/search-bar";
 
 type Props = {
 	user: SessionUser | null;
