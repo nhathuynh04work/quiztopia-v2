@@ -54,7 +54,21 @@ export class QuizzesController {
   ) {
     const user = req.user;
 
-    return this.quizzesRetrievalService.getQuizForDrawer(
+    return this.quizzesRetrievalService.getQuizForDetailsPage(
+      user ? user.id : null,
+      id
+    );
+  }
+
+  @UseGuards(OptionalJwtAccessGuard)
+  @Get(":id/setup")
+  async findForGameSetup(
+    @Param("id") id: string,
+    @Req() req: OptionallyAuthenticatedRequest,
+  ) {
+    const user = req.user;
+
+    return this.quizzesRetrievalService.getQuizForGameSetup(
       user ? user.id : null,
       id,
     );

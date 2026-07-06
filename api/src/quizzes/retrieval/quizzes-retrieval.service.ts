@@ -18,6 +18,7 @@ import {
   QuizListItem,
   QuizForEditor,
   QuizForDrawer,
+  QuizForGameSetup,
 } from "./quiz-retrieval.type";
 import { PublishedDetails } from "../types/published-details.type";
 import { verifyQuizOwnership } from "../helpers/quiz-ownership.helper";
@@ -191,7 +192,7 @@ export class QuizzesRetrievalService {
     };
   }
 
-  async getQuizForDrawer(userId: string | null, quizId: string) {
+  async getQuizForDetailsPage(userId: string | null, quizId: string) {
     const quiz = await this.prisma.quiz.findFirst({
       where: {
         id: quizId,
@@ -235,6 +236,53 @@ export class QuizzesRetrievalService {
       visibility: published.visibility,
       questions: published.questions as Question[],
       hasUnsavedChanges: this.hasUnsavedChanges(quiz),
+      user: {
+        name: `${quiz.user.firstName} ${quiz.user.lastName}`,
+        avatar: null,
+      },
+    };
+
+    return {
+      quiz: mapped,
+    };
+  }
+
+  async getQuizForGameSetup(userId: string | null, quizId: string) {
+    const quiz = await this.prisma.quiz.findFirst({
+      where: {
+        id: quizId,
+        publishedDetails: { not: Prisma.DbNull },
+      },
+      select: {
+        id: true,
+        userId: true,
+        visibility: true,
+        publishedDetails: true,
+        coverImage: true,
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    if (!quiz) {
+      throw new QuizNotFoundError();
+    }
+
+    if (quiz.visibility === QuizVisibility.PRIVATE) {
+      verifyQuizOwnership(quiz, userId);
+    }
+
+    const published = quiz.publishedDetails as unknown as PublishedDetails;
+
+    const mapped: QuizForGameSetup = {
+      id: quiz.id,
+      title: published.title,
+      theme: published.theme,
+      coverImage: published.coverImage,
       user: {
         name: `${quiz.user.firstName} ${quiz.user.lastName}`,
         avatar: null,
